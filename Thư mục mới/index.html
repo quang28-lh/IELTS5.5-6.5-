@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Luyện thi IELTS Listening</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+            display: flex;
+            justify-content: center;
+            padding: 50px 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            width: 800px; /* Mở rộng sảnh chính */
+        }
+        h1 { color: #d32f2f; margin-bottom: 10px; font-size: 32px; text-transform: uppercase;}
+        p { color: #555; margin-bottom: 40px; font-size: 18px; }
+        
+        /* CÔNG NGHỆ CHIA LƯỚI GRID */
+        .grid-layout {
+            display: grid;
+            /* Tự động chia cột: mỗi khối nhỏ nhất 200px, lớn nhất chia đều chỗ trống */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; 
+        }
+
+        .test-btn {
+            background-color: #f8f9fa;
+            color: #1976D2;
+            text-decoration: none;
+            padding: 25px 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #bbdefb;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .test-btn span { font-size: 30px; margin-bottom: 10px; } /* Icon cuốn sách to lên */
+
+        .test-btn:hover {
+            background-color: #2196F3;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(33, 150, 243, 0.3);
+            border-color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bách khoa toàn thư IELTS Listening</h1>
+        <p>Mục tiêu: Chinh phục Band 5.5 - 6.0 🎯</p>
+        
+        <div class="grid-layout">
+            <a href="test1.html" class="test-btn"><span>📘</span> Cam 4 - Test 1</a>
+            <a href="test2.html" class="test-btn"><span>📗</span> Cam 4 - Test 2</a>
+            <a href="test3.html" class="test-btn"><span>📙</span> Cam 4 - Test 3</a>
+            <a href="test4.html" class="test-btn"><span>📙</span> Cam 4 - Test 4</a>
+            
+            <a href="#" class="test-btn" style="opacity: 0.5;"><span>🔒</span> Test 5 (Đang xây)</a>
+            <a href="#" class="test-btn" style="opacity: 0.5;"><span>🔒</span> Test 6 (Đang xây)</a>
+        </div>
+    </div>
+
+</body>
+</html>

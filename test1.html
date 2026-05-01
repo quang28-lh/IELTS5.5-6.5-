@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Luyện thi IELTS Listening - Test 1</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); display: flex; justify-content: center; padding: 40px 0; margin: 0; min-height: 100vh; }
+        .ielts-container { background-color: #ffffff; width: 850px; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .header { border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { color: #d32f2f; margin: 0; font-size: 26px; text-transform: uppercase; }
+        .band-target { background-color: #4CAF50; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        audio { width: 100%; margin-bottom: 30px; }
+        .question-box { background-color: #f8f9fa; padding: 25px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 30px; text-align: left; line-height: 1.8; }
+        .question-title { font-weight: bold; text-transform: uppercase; text-align: center; margin-bottom: 15px; font-size: 18px; color: #1976D2; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background-color: white; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+        th { background-color: #e3f2fd; color: #1976D2; }
+        input[type="text"] { padding: 5px 8px; border: 0; border-bottom: 2px dashed #666; background-color: transparent; width: 160px; font-size: 16px; color: #d32f2f; font-weight: bold; transition: 0.3s; }
+        input[type="text"]:focus { border-bottom: 2px solid #2196F3; outline: none; }
+        .submit-btn { background-color: #d32f2f; color: white; border: none; padding: 15px; font-size: 18px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+        .submit-btn:hover { background-color: #b71c1c; transform: translateY(-2px); }
+        .transcript-btn { background-color: #2196F3; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; }
+        .transcript-box { margin-top: 25px; padding: 25px; background-color: #f1f8e9; border: 1px solid #c5e1a5; border-radius: 8px; display: none; text-align: left; line-height: 1.6; }
+        .highlight { background-color: #ffeb3b; font-weight: bold; padding: 2px 5px; border-radius: 3px; color: #d32f2f; }
+        .home-btn { background-color: #607D8B; color: white; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; margin-top: 15px; font-weight: bold; }
+        .audio-controls {
+    background: #f1f3f4;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+}
+.speed-selector {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+.speed-btn {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 5px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.3s;
+}
+.speed-btn:hover { background-color: #e0e0e0; }
+.speed-btn.active {
+    background-color: #1976D2;
+    color: white;
+    border-color: #1976D2;
+}
+    </style>
+</head>
+<body>
+
+    <div class="ielts-container">
+        <div class="header">
+            <h1>Listening - Test 1</h1>
+            <div class="band-target">Target: 5.5 - 6.0</div>
+        </div>
+        
+<div class="audio-controls">
+    <audio id="ielts-audio" controls>
+        <source src="test1.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="speed-selector">
+        <button class="speed-btn" onclick="changeSpeed(0.75)">0.75x</button>
+        <button class="speed-btn active" onclick="changeSpeed(1)">1.0x</button>
+        <button class="speed-btn" onclick="changeSpeed(1.25)">1.25x</button>
+        <button class="speed-btn" onclick="changeSpeed(1.5)">1.5x</button>
+    </div>
+</div>
+
+        <p><strong>Questions 1–4:</strong> Complete the notes below. Write <strong>NO MORE THAN THREE WORDS AND/OR A NUMBER</strong>.</p>
+        <div class="question-box">
+            <div class="question-title">NOTES ON SOCIAL PROGRAMME</div>
+            <strong>Visit places which have:</strong>
+            <ul>
+                <li>historical interest</li>
+                <li>good <strong>1.</strong> <input type="text" id="q1"></li>
+                <li><strong>2.</strong> <input type="text" id="q2"></li>
+            </ul>
+            <strong>Note:</strong> special trips organised for groups of <strong>3.</strong> <input type="text" style="width: 100px;"> people<br>
+            <strong>To reserve a seat:</strong> sign name on the <strong>4.</strong> <input type="text"> 3 days in advance
+        </div>
+
+        <p><strong>Questions 5–8:</strong> Complete the table below.</p>
+        <table>
+            <tr><th>Place</th><th>Date</th><th>Optional extra</th></tr>
+            <tr><td>St Ives</td><td><strong>5.</strong> <input type="text"></td><td>Hepworth Museum</td></tr>
+            <tr><td>London</td><td>16th Feb</td><td><strong>6.</strong> <input type="text"></td></tr>
+            <tr><td><strong>7.</strong> <input type="text"></td><td>3rd March</td><td>S.S. Great Britain</td></tr>
+            <tr><td>Bath</td><td>23rd March</td><td><strong>8.</strong> <input type="text"></td></tr>
+        </table>
+        
+        <p><strong>Questions 9–10:</strong></p>
+        <div style="text-align: left; padding: 10px;">
+            Read the <strong>9.</strong> <input type="text" style="width: 180px;"> or see Social Assistant: Jane <strong>10.</strong> <input type="text" style="width: 120px;">
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="checkAnswers()">Nộp Bài & Lưu Lịch Sử</button>
+        <button class="transcript-btn" onclick="toggleTranscript()">Xem Transcript & Đáp án Chi Tiết</button>
+        <a href="index.html" class="home-btn">🔙 Quay lại Sảnh chính</a>
+
+        <div id="transcript-box" class="transcript-box">
+            <h3 style="color: #2e7d32; border-bottom: 2px solid #c5e1a5;">Tapescript (Full Transcript)</h3>
+            <p><strong>Official:</strong> Good morning.</p>
+            <p><strong>Student:</strong> Good morning. How can I help you?</p>
+            <p><strong>Official:</strong> I understand that the school organises trips to different places...</p>
+            <p><strong>Student:</strong> Yes, we run five every month... places of historical interest, and also which offer a <span class="highlight">variety of shopping [1]</span> because our students always ask about that. And then we go for ones where we know there are <span class="highlight">guided tours [2]</span> because this gives a good focus.</p>
+            <p><strong>Official:</strong> How much do they cost?</p>
+            <p><strong>Student:</strong> It varies... between five and fifteen pounds a head. Oh, and we do offer to arrange special trips if there are <span class="highlight">more than 12 [3]</span> people.</p>
+            <p><strong>Student:</strong> You sign your name on the <span class="highlight">notice board [4]</span>. Do you know where it is?</p>
+            <hr>
+            <p><strong>Student:</strong> Right, well... The first one is St Ives, that's on the <span class="highlight">13th of February [5]</span>...</p>
+            <p><strong>Student:</strong> Then there’s a London trip... the optional extra is the <span class="highlight">Tower of London [6]</span>.</p>
+            <p><strong>Student:</strong> After that there’s <span class="highlight">Bristol [7]</span> on the 3rd of March. The optional extra is a visit to the S.S. Great Britain.</p>
+            <p><strong>Student:</strong> And the last one is to Bath on the 23rd of March... visit the <span class="highlight">American Museum [8]</span>. Well worth a visit.</p>
+            <p><strong>Student:</strong> For more information, have a look in the <span class="highlight">student newspaper [9]</span>. Or have a word with my assistant. Her name is Jane <span class="highlight">Yentob [10]</span>.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf846RI3kuxaWv_BCo3g4atdYK0iG98ds",
+            authDomain: "luyen-nghe-ielts.firebaseapp.com",
+            projectId: "luyen-nghe-ielts",
+            storageBucket: "luyen-nghe-ielts.firebasestorage.app",
+            messagingSenderId: "965541526782",
+            appId: "1:965541526782:web:e54be5c7780feb197839af"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+// Hàm điều khiển tốc độ audio
+        window.changeSpeed = function(rate) {
+            const audio = document.getElementById('ielts-audio');
+            const buttons = document.querySelectorAll('.speed-btn');
+            
+            if (audio) {
+                audio.playbackRate = rate;
+                // Cập nhật trạng thái màu sắc cho các nút
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.innerText === rate + 'x' || btn.innerText === rate + '.0x') {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        };
+        const answers = [
+            ["shopping", "variety of shopping"], ["guided tours", "guided tour"],
+            ["more than 12", "12"], ["notice board", "noticeboard"],
+            ["13th of february", "13 february", "13th february"], ["tower of london"],
+            ["bristol"], ["american museum"], ["student newspaper"], ["yentob"]
+        ];
+
+        window.checkAnswers = async function() {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            const submitBtn = document.getElementById('submit-btn');
+            let score = 0;
+
+            inputs.forEach((input, index) => {
+                let userAnswer = input.value.toLowerCase().trim();
+                if (userAnswer !== "" && answers[index].includes(userAnswer)) {
+                    input.style.color = "#4CAF50";
+                    input.style.borderBottom = "2px solid #4CAF50";
+                    score++;
+                } else {
+                    input.style.color = "#d32f2f";
+                    input.style.borderBottom = "2px solid #d32f2f";
+                    input.value = (userAnswer || "Trống") + " -> " + answers[index][0];
+                }
+                input.disabled = true;
+            });
+
+            submitBtn.innerHTML = `Kết quả: ${score}/10. Đang lưu...`;
+            const user = auth.currentUser;
+            if (user) {
+                try {
+                    await addDoc(collection(db, "results"), {
+                        userId: user.uid, userEmail: user.email,
+                        testName: "Cam 4 - Test 1", score: `${score}/10`,
+                        createdAt: serverTimestamp()
+                    });
+                    submitBtn.innerHTML = `Đã lưu thành công! Đúng ${score}/10.`;
+                } catch (e) { alert("Lỗi lưu điểm!"); }
+            }
+        };
+
+        window.toggleTranscript = function() {
+            const box = document.getElementById("transcript-box");
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+            if(box.style.display === "block") box.scrollIntoView({ behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho Từ Vựng Chuyên Sâu - IELTS PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1e293b;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        /* --- Header & Navigation --- */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: white;
+            color: #1e293b;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .back-btn:hover {
+            background: #f8fafc;
+            color: #d32f2f;
+            border-color: #d32f2f;
+            transform: translateX(-5px);
+            box-shadow: 0 10px 15px -3px rgba(211, 47, 47, 0.1);
+        }
+
+        .back-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: scale(1.2);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--secondary);
+            font-size: 28px;
+            letter-spacing: -1px;
+        }
+
+        /* --- Flashcard Grid --- */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            align-items: start; /* Giữ các thẻ luôn thẳng hàng ngang */
+        }
+
+        /* --- Hiệu ứng lật thẻ 3D --- */
+        .flashcard {
+            background-color: transparent;
+            width: 100%;
+            height: 250px; /* Khóa cứng chiều cao */
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* --- Hợp nhất CSS Mặt Trước & Mặt Sau --- */
+        .front, .back {
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px; /* Khớp với .flashcard-inner */
+            overflow: hidden;
+            box-sizing: border-box;
+            border: none !important;
+        }
+
+        /* Mặt trước (Chứa ảnh) */
+        .front {
+            background-size: cover;
+            background-position: center;
+            padding: 0 !important;
+        }
+
+        .front-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .front h2 { 
+            color: white !important; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+            margin: 0; 
+            font-size: 24px; 
+        }
+        
+        .front p { 
+            color: rgba(255,255,255,0.8) !important; 
+            margin: 5px 0 0 0; 
+            font-style: italic; 
+        }
+
+        /* Mặt sau (Chứa nghĩa và ví dụ) */
+        .back {
+            background-color: #ffffff;
+            color: #1e293b;
+            transform: rotateY(180deg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        /* Huy hiệu cấp độ (Level Badge) */
+        .level-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        /* --- GIAO DIỆN DARK MODE --- */
+        body.dark-theme {
+            --bg: #0f172a; /* Nền xanh đen huyền bí */
+            --secondary: #f8fafc; /* Chữ màu trắng sáng */
+        }
+
+        /* Đổi màu các thẻ con khi ở chế độ Dark Mode */
+        body.dark-theme .back-btn,
+        body.dark-theme .back {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+
+        body.dark-theme .back-btn:hover {
+            background-color: #d32f2f !important; /* Vẫn giữ màu đỏ đặc trưng khi hover */
+            color: white !important;
+        }
+
+        /* Nút Toggle Dark Mode */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(100, 116, 139, 0.2);
+        }
+        /* --- KHU VỰC AVATAR --- */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 5px 5px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-right: 5px;
+        }
+
+        /* Đồng bộ Avatar với Dark Mode */
+        body.dark-theme .user-profile {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        
+        body.dark-theme .user-profile:hover {
+            background: #334155;
+        }
+        
+        body.dark-theme .user-name {
+            color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+       <div class="nav-header">
+            <a href="index.html" class="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" style="width:18px; height:18px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="topic-badge" id="topic-name">Đang tải...</div>
+                
+                <button class="theme-toggle" id="theme-toggle-btn" title="Bật/Tắt Dark Mode">
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+                </button>
+
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=K+S&background=d32f2f&color=fff&rounded=true&bold=true" alt="Avatar" class="avatar-img">
+                    <span class="user-name">Kỹ sư</span>
+                </div>
+            </div>
+        </div>
+
+        <h1 id="page-title">Flashcards Từ Vựng</h1>
+        <p style="color: #64748b; margin-bottom: 40px;">Chạm vào thẻ để xem nghĩa và ví dụ thực tế.</p>
+
+        <div class="vocab-grid" id="vocab-container">
+        </div>
+    </div>
+
+    <script>
+        const vocabData = {
+            "Travel": [
+                {
+                    word: "Destination", type: "Noun", meaning: "Điểm đến",
+                    example: "After ten hours of driving, we finally reached our destination.",
+                    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Itinerary", type: "Noun", meaning: "Lịch trình",
+                    example: "We have a very tight itinerary for our three-day trip to Hanoi.",
+                    imageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Accommodation", type: "Noun", meaning: "Chỗ ở",
+                    example: "Hotel accommodation is included in the price of the tour.",
+                    imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Sightseeing", type: "Noun", meaning: "Tham quan",
+                    example: "We did a lot of sightseeing on our first day in London.",
+                    imageUrl: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Attraction", type: "Noun", meaning: "Điểm thu hút",
+                    example: "The Eiffel Tower is a major tourist attraction.",
+                    imageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Journey", type: "Noun", meaning: "Hành trình",
+                    example: "The journey from London to Edinburgh takes about five hours by train.",
+                    imageUrl: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Trip", type: "Noun", meaning: "Chuyến đi ngắn",
+                    example: "We're taking a short trip to the mountains this weekend.",
+                    imageUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Voyage", type: "Noun", meaning: "Hành trình đường biển/không gian",
+                    example: "The Titanic sank on its maiden voyage in 1912.",
+                    imageUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Backpacking", type: "Noun/Verb", meaning: "Du lịch bụi",
+                    example: "They went backpacking across Southeast Asia for six months.",
+                    imageUrl: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Tourist", type: "Noun", meaning: "Khách du lịch",
+                    example: "The city was crowded with foreign tourists in the summer.",
+                    imageUrl: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Guide", type: "Noun", level: "A2", meaning: "Hướng dẫn viên",
+                    example: "The tour guide was very helpful during our trip.",
+                    imageUrl: "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Reservation", type: "Noun", meaning: "Sự đặt chỗ",
+                    example: "I'd like to make a reservation for a table of four, please.",
+                    imageUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Check-in", type: "Noun/Verb", meaning: "Làm thủ tục vào",
+                    example: "Please proceed to the check-in desk at least two hours before departure.",
+                    imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Departure", type: "Noun", level: "A2", meaning: "Khởi hành",
+                    example: "The departure board showed that our flight was on time.",
+                    imageUrl: "https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Arrival", type: "Noun", meaning: "Đến nơi",
+                    example: "We were waiting in the arrival hall for our friends to land.",
+                    imageUrl: "https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Passport", type: "Noun", meaning: "Hộ chiếu",
+                    example: "You must show your passport at the border.",
+                    imageUrl: "./images/passport.jpg"
+                },
+                {
+                    word: "Visa", type: "Noun", level: "A2", meaning: "Thị thực",
+                    example: "He had to wait for three weeks to get his travel visa.",
+                    imageUrl: "./images/visa.jpg"
+                },
+                {
+                    word: "Luggage", type: "Noun", meaning: "Hành lý",
+                    example: "The airline lost my luggage on the way to Japan.",
+                    imageUrl: "https://images.unsplash.com/photo-1581553680321-4fffae59fccd?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Suitcase", type: "Noun", level: "A1", meaning: "Vali",
+                    example: "I took my heaviest suitcase because I was going for a month.",
+                    imageUrl: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Boarding pass", type: "Noun", level: "A2", meaning: "Thẻ lên máy bay",
+                    example: "Please show your boarding pass at the gate.",
+                    imageUrl: "./images/boarding-pass.jpg"
+                },
+                {
+                    word: "Travel insurance", type: "Noun", meaning: "Bảo hiểm du lịch",
+                    example: "It's always wise to take out travel insurance before going abroad.",
+                    imageUrl: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Cultural experience", type: "Noun", meaning: "Trải nghiệm văn hóa",
+                    example: "The trip provided a wonderful cultural experience for the whole family.",
+                    imageUrl: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Local cuisine", type: "Noun", meaning: "Ẩm thực địa phương",
+                    example: "I love trying the local cuisine whenever I travel to a new country.",
+                    imageUrl: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Explore", type: "Verb", meaning: "Khám phá",
+                    example: "We spent the whole day exploring the ancient ruins.",
+                    imageUrl: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=400&auto=format&fit=crop"
+                },
+                {
+                    word: "Relaxation", type: "Noun", meaning: "Sự thư giãn",
+                    example: "A week at the beach provided the perfect relaxation after a busy year.",
+                    imageUrl: "https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?q=80&w=400&auto=format&fit=crop"
+                }
+            ],
+            "Environment": [
+                {
+                    word: "Biodiversity", type: "noun", meaning: "Đa dạng sinh học",
+                    example: "Pollution is a threat to biodiversity.",
+                    imageUrl: "https://images.unsplash.com/photo-1500673922987-e212871fec22?q=80&w=400&auto=format&fit=crop"
+                }
+            ]
+        };
+        
+        // Lấy chủ đề từ URL (ví dụ: ?topic=Travel)
+        const urlParams = new URLSearchParams(window.location.search);
+        const topic = urlParams.get('topic') || "Travel"; // Mặc định là Travel cho dễ test
+
+        document.getElementById('topic-name').innerText = `CHỦ ĐỀ: ${topic.toUpperCase()}`;
+        document.getElementById('page-title').innerText = `Từ vựng chủ đề ${topic}`;
+
+        const container = document.getElementById('vocab-container');
+        const words = vocabData[topic] || [];
+
+        if (words.length === 0) {
+            container.innerHTML = "<p style='text-align:center; color:#64748b; padding:40px; grid-column: 1 / -1;'>Dữ liệu từ vựng cho chủ đề này đang được cập nhật...</p>";
+        } else {
+            words.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'flashcard';
+                card.onclick = () => card.classList.toggle('flipped');
+
+                // Logic nền xám thay cho trắng nếu ảnh lỗi
+                const bgStyle = item.imageUrl ? `background-image: url('${item.imageUrl}');` : `background-color: #475569;`;
+                
+                // Thêm logic hiển thị Badge Level nếu có dữ liệu
+                const levelHtml = item.level ? `<div class="level-badge">${item.level}</div>` : '';
+
+                card.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="front" style="${bgStyle}">
+                            ${levelHtml}
+                            <div class="front-overlay">
+                                <h2>${item.word}</h2>
+                                <p>(${item.type})</p>
+                            </div>
+                        </div>
+                        <div class="back">
+                            <div class="meaning">${item.meaning}</div>
+                            <div class="example"><b>Example:</b> "${item.example}"</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+    <script>
+        // --- LOGIC DARK MODE TOÀN CỤC ---
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        
+        // Kiểm tra xem nút có tồn tại không để tránh lỗi
+        if (themeBtn) {
+            // 1. Kiểm tra bộ nhớ xem trước đó người dùng có đang bật Dark Mode không
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+
+            // 2. Lắng nghe sự kiện click
+            themeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                
+                // 3. Lưu lại trạng thái vào bộ nhớ của trình duyệt
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

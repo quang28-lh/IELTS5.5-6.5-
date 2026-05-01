@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bách Khoa Toàn Thư IELTS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            /* Màu đỏ Bách Khoa */
+            --secondary: #1976d2;
+            /* Màu xanh chuyên nghiệp */
+            --success: #4CAF50;
+            --bg: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* Header Section */
+        .header-box {
+            background: white;
+            padding: 25px 35px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .user-pill {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #fecaca;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stats-card,
+        .chart-card {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: #f1f5f9;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--success), #81c784);
+            height: 100%;
+            width: 0%;
+            transition: 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Search & Filter Section */
+        .filter-row {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        #search-input {
+            flex: 2;
+            min-width: 250px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            outline: none;
+            transition: 0.2s;
+            font-size: 15px;
+            background: white;
+        }
+
+        #search-input:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+        }
+
+        #category-filter {
+            flex: 1;
+            min-width: 160px;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095.1c3.6-3.6%205.4-7.8%205.4-12.9%200-5-1.8-9.3-5.4-12.9z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 16px top 50%;
+            background-size: 12px auto;
+            padding-right: 40px;
+        }
+
+        /* Test Grid - Tự động tạo thẻ bài thi */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .test-card.completed {
+            border-left: 6px solid var(--success);
+        }
+
+        .test-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .high-score {
+            font-size: 13px;
+            color: var(--secondary);
+            font-weight: 700;
+            background: #e0f2fe;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 12px 0;
+        }
+
+        .btn-go {
+            background: #1e293b;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        .btn-go:hover {
+            background: var(--primary);
+        }
+
+        #login-overlay {
+            position: fixed;
+            inset: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        /* Scrollbar xịn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        /* Card gợi ý từ vựng Pro */
+        .vocab-promo-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            display: none;
+            /* Ẩn đi, chỉ hiện khi chọn chủ đề */
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vocab-promo-info h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #fbbf24;
+        }
+
+        .vocab-promo-info p {
+            margin: 5px 0 0 0;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .btn-study-vocab {
+            background: white;
+            color: #1e293b;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 13px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-study-vocab:hover {
+            background: #fbbf24;
+            color: #1e293b;
+            transform: scale(1.05);
+        }
+
+        /* --- KHU VỰC CHUYÊN MỤC --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: #1e293b;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: #d32f2f;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .cat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .cat-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+        }
+
+        .cat-desc {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* --- GIAO DIỆN DANH SÁCH BÀI THI --- */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .test-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .test-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Viền trái trạng thái */
+        .card-done {
+            border-left: 6px solid #22c55e;
+        }
+
+        /* Đã làm - Xanh lá */
+        .card-new {
+            border-left: 6px solid #cbd5e1;
+        }
+
+        /* Chưa làm - Xám */
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag-type {
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-band {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid #f1f5f9;
+        }
+
+        .test-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .score-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            width: max-content;
+        }
+
+        .score-has {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .score-none {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .btn-test {
+            background: #1e293b;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            width: 100%;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .btn-test:hover {
+            background: #334155;
+        }
+
+        /* Dark Mode Tương thích */
+        body.dark-theme .test-card {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        body.dark-theme .test-title {
+            color: #f8fafc;
+        }
+
+        body.dark-theme .tag-band,
+        body.dark-theme .score-none {
+            background: #334155;
+            color: #cbd5e1;
+            border-color: #475569;
+        }
+
+        body.dark-theme .score-has {
+            background: #0c4a6e;
+            color: #38bdf8;
+        }
+
+        body.dark-theme .btn-test {
+            background: #3b82f6;
+        }
+
+        /* Đồng bộ Dark Mode cho Cánh cửa */
+        body.dark-theme .category-card {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #334155;
+        }
+
+        body.dark-theme .category-card:hover {
+            border-color: #ef4444;
+        }
+
+        body.dark-theme .cat-desc {
+            color: #94a3b8;
+        }
+
+        /* --- GIAO DIỆN DARK MODE --- */
+        body.dark-theme {
+            --bg: #0f172a;
+            --secondary: #f8fafc;
+        }
+
+        /* Đổi màu các thành phần ở sảnh */
+        body.dark-theme .topic-card {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        body.dark-theme .topic-card h2 {
+            color: #f8fafc;
+        }
+
+        body.dark-theme .topic-card p {
+            color: #94a3b8;
+        }
+
+        /* Nút Toggle Dark Mode */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(100, 116, 139, 0.2);
+        }
+
+        /* --- KHU VỰC AVATAR --- */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px 10px 5px 5px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-right: 5px;
+        }
+
+        /* Đồng bộ Avatar với Dark Mode */
+        body.dark-theme .user-profile {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        body.dark-theme .user-profile:hover {
+            background: #334155;
+        }
+
+        body.dark-theme .user-name {
+            color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-overlay" style="display: none;">
+        <h2 style="font-size: 32px; margin-bottom: 8px; letter-spacing: -1px;">Dừng lại một chút! 🛑</h2>
+        <p style="color: #64748b; margin-bottom: 24px; font-size: 16px;">Bạn cần đăng nhập để truy cập Bách Khoa Toàn
+            Thư.</p>
+        <a href="login.html" class="btn-go" style="padding: 16px 48px;">Đăng nhập ngay</a>
+    </div>
+
+    <div class="container" id="main-content">
+        <div class="header-box" style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="margin: 0;">🎓 HỆ THỐNG HỌC TẬP PRO</h1>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+
+                <button class="theme-toggle" id="theme-toggle-btn" title="Bật/Tắt Dark Mode">
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                    </svg>
+                </button>
+
+                <div class="user-pill"
+                    style="display: flex; align-items: center; gap: 10px; padding: 5px 15px 5px 5px; background: #f8fafc; border-radius: 30px; border: 1px solid #e2e8f0;">
+                    <img id="user-avatar-img"
+                        src="https://ui-avatars.com/api/?name=K+S&background=d32f2f&color=fff&rounded=true&bold=true"
+                        alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; cursor: pointer;"
+                        title="Nhấn để đổi Avatar">
+
+                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+
+                    <span id="user-email" style="font-weight: 600; font-size: 14px; color: #1e293b;">Đang tải...</span>
+
+                    <button class="logout-btn" id="btn-logout"
+                        style="border: none; background: #fee2e2; color: #ef4444; padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s;">Đăng
+                        xuất</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NÚT QUAY LẠI SẢNH CHÍNH -->
+        <a href="index.html" class="back-btn"
+            style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #64748b; font-weight: bold; margin-bottom: 20px; transition: 0.3s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Quay lại Sảnh chính
+        </a>
+
+        <!-- NÚT QUAY LẠI -->
+        <a href="ielts.html" class="back-btn"
+            style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #64748b; font-weight: bold; margin-bottom: 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Quay lại 4 Kỹ năng
+        </a>
+
+        <!-- TIÊU ĐỀ -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 24px;">🎯</span>
+            <h2 style="margin: 0; font-size: 20px; color: #1e293b; font-weight: 800; text-transform: uppercase;">Danh
+                sách bài thi</h2>
+        </div>
+
+        <!-- LƯỚI BÀI THI -->
+        <div class="test-grid" id="test-list-container">
+
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="stats-card">
+                <h3 style="margin:0 0 15px 0; font-size: 18px;">📊 Tổng quan</h3>
+                <div class="progress-container">
+                    <strong style="font-size: 14px; color: #475569;">Tiến độ hoàn thành:</strong>
+                    <p id="progress-label" style="font-size: 13px; color: #64748b; margin: 4px 0 10px 0;">Đang tính
+                        toán...</p>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3 style="margin:0 0 20px 0; font-size: 18px;">📈 Biểu đồ tiến bộ (7 bài gần nhất)</h3>
+                <div style="height: 230px; position: relative;">
+                    <canvas id="scoreChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <input type="text" id="search-input" placeholder="🔍 Tìm tên bài thi (ví dụ: Cam 4)...">
+            <select id="category-filter">
+                <option value="all">Tất cả chủ đề</option>
+                <option value="Travel">Travel</option>
+                <option value="Environment">Environment</option>
+                <option value="Education">Education</option>
+                <option value="General">General/IELTS</option>
+            </select>
+        </div>
+        <div id="vocab-suggestion" class="vocab-promo-card">
+            <div class="vocab-promo-info">
+                <h3 id="vocab-title">Chủ đề: Travel</h3>
+                <p>Nâng cấp vốn từ Band 7.0+ để không bỏ lỡ từ khóa nào khi nghe!</p>
+            </div>
+            <a href="#" id="vocab-link" class="btn-study-vocab">Mở Kho Từ Vựng 📖</a>
+        </div>
+        <h2 style="margin: 0 0 20px 0; font-size: 20px; color: #334155;">
+            🎯 DANH SÁCH BÀI THI
+        </h2>
+        <div id="vocab-suggestion" class="vocab-promo-card">
+            <div class="vocab-promo-info">
+                <h3 id="vocab-title">Chủ đề: Travel</h3>
+                <p>Nâng cấp vốn từ Band 7.0+ để bứt phá kỹ năng Listening!</p>
+            </div>
+            <a href="#" id="vocab-link" class="btn-study-vocab">Học từ vựng 📖</a>
+        </div>
+        <div class="test-grid" id="test-list">
+        </div>
+    </div>
+
+    <script type="module">
+        import { allTests } from './data.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf846RI3kuxaWv_BCo3g4atdYK0iG98ds",
+            authDomain: "luyen-nghe-ielts.firebaseapp.com",
+            projectId: "luyen-nghe-ielts",
+            storageBucket: "luyen-nghe-ielts.firebasestorage.app",
+            messagingSenderId: "965541526782",
+            appId: "1:965541526782:web:e54be5c7780feb197839af"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Biến lưu trữ điểm số toàn cục để phục vụ việc lọc dữ liệu nhanh
+        let globalHighScores = {};
+
+        onAuthStateChanged(auth, async (user) => {
+            const overlay = document.getElementById('login-overlay');
+            const emailDisplay = document.getElementById('user-email');
+
+            if (user) {
+                // CẬP NHẬT AVATAR KHI ĐĂNG NHẬP
+                const avatarImg = document.getElementById('user-avatar-img');
+                if (avatarImg) {
+                    if (user.photoURL) {
+                        avatarImg.src = user.photoURL; // Nếu có ảnh up rồi thì lấy
+                    } else {
+                        // Nếu chưa có ảnh thì lấy chữ cái đầu của email
+                        avatarImg.src = `https://ui-avatars.com/api/?name=${user.email[0]}&background=d32f2f&color=fff&rounded=true&bold=true`;
+                    }
+                }
+                if (emailDisplay) emailDisplay.innerText = user.email;
+                if (overlay) overlay.style.display = 'none';
+                // Gọi hàm khởi tạo Dashboard sau khi đã đăng nhập
+                await initDashboard(user.uid);
+            } else {
+                if (overlay) overlay.style.display = 'flex';
+            }
+        });
+
+        async function initDashboard(uid) {
+            try {
+                const resultsRef = collection(db, "results");
+                // Lọc theo UserID và sắp xếp theo thời gian mới nhất lên đầu
+                const q = query(resultsRef, where("userId", "==", uid), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                let allResults = [];
+                let highScores = {};
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    allResults.push(data);
+                    // Chuẩn hóa ID bài test để khớp với data.js
+                    const tId = data.testId.replace("Test ", "");
+                    // Chỉ lưu điểm cao nhất của bài test đó
+                    if (!highScores[tId] || data.score > highScores[tId]) {
+                        highScores[tId] = data.score;
+                    }
+                });
+
+                globalHighScores = highScores;
+
+                // Vẽ giao diện Dashboard
+                renderTests(highScores);
+                updateProgress(Object.keys(highScores).length);
+
+                // Chỉ vẽ biểu đồ nếu người dùng đã làm ít nhất một bài test
+                if (allResults.length > 0) {
+                    // Đảo ngược 7 kết quả gần nhất để vẽ từ cũ đến mới
+                    renderChart(allResults.slice(0, 7).reverse());
+                }
+
+            } catch (error) {
+                console.error("Lỗi khởi tạo Dashboard:", error);
+                // Nếu mất danh sách bài thi, bạn hãy nhấn F12 kiểm tra xem có link tạo Index của Firebase không
+            }
+        }
+
+        // Hàm tạo danh sách bài thi động và lọc
+        function renderTests(highScores, searchTerm = "", category = "all") {
+            const list = document.getElementById('test-list');
+            if (!list) return;
+            list.innerHTML = '';
+
+            Object.keys(allTests).forEach(id => {
+                const test = allTests[id];
+                const score = highScores[id];
+                const isDone = score !== undefined;
+
+                // Xử lý thông minh: Dùng giá trị mặc định nếu chưa có category/level trong data.js
+                const testCategory = test.category || "General";
+                const testLevel = test.level || "Band 5.5+";
+
+                // Logic lọc dữ liệu dựa trên ô tìm kiếm và bộ lọc chủ đề
+                const matchesSearch = test.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const matchesCategory = category === "all" || testCategory === category;
+
+                if (matchesSearch && matchesCategory) {
+                    const card = document.createElement('div');
+                    // Thêm class 'completed' nếu đã làm bài để có viền xanh lá
+                    card.className = `test-card ${isDone ? 'completed' : ''}`;
+                    card.innerHTML = `
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 11px; color: var(--secondary); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">${testCategory}</span>
+                            <span style="font-size: 10px; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; font-weight: 600; color: #64748b;">${testLevel}</span>
+                        </div>
+                        <div class="test-title">${test.title}</div>
+                        ${isDone ? `<div class="high-score">⭐ Best Score: ${score}/10</div>` : '<div class="high-score" style="background:#f1f5f9; color:#94a3b8">Chưa làm bài</div>'}
+                    </div>
+                    <a href="test.html?id=${id}" class="btn-go">${isDone ? 'LÀM LẠI' : 'BẮT ĐẦU'}</a>
+                `;
+                    list.appendChild(card);
+                }
+            });
+        }
+
+        // Hàm cập nhật thanh tiến độ %
+        function updateProgress(doneCount) {
+            const total = Object.keys(allTests).length;
+            const percent = Math.round((doneCount / total) * 100);
+
+            const fill = document.getElementById('progress-fill');
+            const label = document.getElementById('progress-label');
+
+            if (fill) fill.style.width = percent + '%';
+            if (label) label.innerText = `${doneCount}/${total} bài đã hoàn thành (${percent}%)`;
+        }
+
+        // --- HÀM VẼ BIỂU ĐỒ PRO (ĐÃ SỬA LỖI BỊ CỤT ĐỈNH) ---
+        function renderChart(data) {
+            const canvas = document.getElementById('scoreChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            const ctx = canvas.getContext('2d');
+
+            // Tạo hiệu ứng Gradient Pro cho vùng phủ dưới biểu đồ
+            let gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(25, 118, 210, 0.3)'); // Xanh dương trong suốt phía trên
+            gradient.addColorStop(1, 'rgba(25, 118, 210, 0)');   // Hoàn toàn trong suốt phía dưới
+
+            // Xóa biểu đồ cũ nếu đã tồn tại để tránh lỗi ghi đè
+            if (window.myChart instanceof Chart) {
+                window.myChart.destroy();
+            }
+
+            // Tạo biểu đồ mới
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.testId), // Nhãn trục X: Tên bài test
+                    datasets: [{
+                        label: 'Điểm số',
+                        data: data.map(d => d.score), // Dữ liệu trục Y: Điểm số
+                        borderColor: '#1976d2', // Màu đường kẻ
+                        borderWidth: 3,
+                        backgroundColor: gradient, // Màu vùng phủ (gradient)
+                        fill: true, // Phủ màu dưới đường kẻ
+                        tension: 0.4, // Độ cong mượt của đường kẻ
+                        pointRadius: 6, // Kích thước điểm dữ liệu
+                        pointBackgroundColor: '#fff', // Màu nền điểm dữ liệu (trắng)
+                        pointBorderColor: '#1976d2', // Màu viền điểm dữ liệu (xanh)
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#1976d2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false } // Ẩn chú thích
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Bắt đầu từ 0
+                            // --- SỬA LỖI: Xóa max: 10 đặt cứng ---
+                            // XÓA: max: 10,
+
+                            // --- GIẢI PHÁP PRO: Dùng grace để thêm "Pro Padding" phía trên đỉnh biểu đồ ---
+                            // Nó sẽ tự động thêm 10% chiều cao biểu đồ làm khoảng đệm
+                            grace: '10%',
+
+                            grid: { color: '#f1f5f9' }, // Màu lưới
+                            ticks: { stepSize: 2 } // Bước nhảy trục Y
+                        },
+                        x: {
+                            grid: { display: false } // Ẩn lưới trục X
+                        }
+                    }
+                }
+            });
+        }
+
+        // Gắn sự kiện lắng nghe việc nhập liệu để lọc danh sách
+        // Logic xử lý tìm kiếm, lọc và hiển thị kho từ vựng
+        document.addEventListener('input', (e) => {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const vocabBox = document.getElementById('vocab-suggestion');
+            const vocabTitle = document.getElementById('vocab-title');
+            const vocabLink = document.getElementById('vocab-link');
+
+            if (e.target.id === 'search-input' || e.target.id === 'category-filter') {
+                const searchVal = searchInput.value;
+                const catVal = categoryFilter.value;
+
+                // 1. Lọc danh sách bài thi
+                renderTests(globalHighScores, searchVal, catVal);
+
+                // 2. Hiển thị Card từ vựng theo chủ đề (Pro Feature)
+                if (vocabBox && catVal !== 'all') {
+                    vocabBox.style.display = 'flex';
+                    vocabTitle.innerText = `Kho từ vựng: ${catVal}`;
+                    // Link dẫn tới trang học từ vựng riêng
+                    vocabLink.href = `vocabulary.html?topic=${catVal}`;
+                } else if (vocabBox) {
+                    vocabBox.style.display = 'none';
+                }
+            }
+        });
+
+        // Xử lý nút Đăng xuất
+        const logoutBtn = document.getElementById('btn-logout');
+        if (logoutBtn) logoutBtn.onclick = () => signOut(auth);
+
+
+        // --- LOGIC UPLOAD AVATAR (DÙNG IMGBB API MIỄN PHÍ) ---
+        const avatarImg = document.getElementById('user-avatar-img');
+        const fileInput = document.getElementById('avatar-upload');
+
+        // Kích hoạt cửa sổ chọn file khi click vào ảnh
+        if (avatarImg && fileInput) {
+            avatarImg.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Khi người dùng chọn ảnh xong
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Lưu link ảnh cũ phòng khi lỗi, và đổi avatar thành ảnh loading
+                const originalSrc = avatarImg.src;
+                avatarImg.src = "https://i.gifer.com/ZKZg.gif";
+
+                try {
+                    const user = auth.currentUser;
+                    if (!user) throw new Error("Vui lòng đăng nhập trước!");
+
+                    // 1. Gói file ảnh lại để gửi đi
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    // THAY MÃ API KEY CỦA BẠN VÀO DÒNG DƯỚI ĐÂY:
+                    const imgbbApiKey = '3c7e80bbe2dad5ce952ab3577ad0ca24';
+
+                    // 2. Gửi ảnh lên ImgBB
+                    const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const newImageUrl = data.data.url;
+
+                        // 3. Cập nhật link ảnh mới vào tài khoản Firebase
+                        await updateProfile(user, { photoURL: newImageUrl });
+
+                        // 4. Hiển thị ảnh mới lên web
+                        avatarImg.src = newImageUrl;
+                        alert("Đã cập nhật Avatar siêu ngầu!");
+                    } else {
+                        throw new Error("Lỗi từ server ImgBB");
+                    }
+
+                } catch (error) {
+                    console.error("Lỗi upload:", error);
+                    avatarImg.src = originalSrc; // Trả lại ảnh cũ nếu thất bại
+                    alert("Upload thất bại, vui lòng thử lại!");
+                }
+            });
+        }
+
+        // --- LOGIC LẤY DANH SÁCH BÀI THI TỪ FIRESTORE ---
+        async function loadTestList() {
+            const container = document.getElementById('test-list-container');
+            if (!container) return;
+
+            container.innerHTML = '<p style="text-align:center; width:100%; color:#64748b;">Đang tải danh sách bài thi...</p>';
+
+            try {
+                // Kết nối tới kho 'listening_tests', lọc bài đang bật (isActive == true) và xếp theo order
+                const testsRef = collection(db, "reading_tests"); // <-- Trỏ đúng vào kho Reading
+                const q = query(testsRef, where("isActive", "==", true), orderBy("order", "asc"));
+
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align:center; width:100%; color:#64748b;">Chưa có bài thi nào được đăng.</p>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Xóa chữ "Đang tải..."
+
+                // Duyệt qua từng bài thi và vẽ giao diện
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const testId = doc.id; // Lấy mã ID ngẫu nhiên của bài thi
+
+                    const cardHTML = `
+                        <div class="test-card card-new">
+                            <div class="test-header">
+                                <span class="tag-type">${data.type}</span>
+                                <span class="tag-band">${data.band}</span>
+                            </div>
+                            <h3 class="test-title">${data.title}</h3>
+                            <div class="score-pill score-none">Chưa làm bài</div>
+                            <a href="room.html?id=${testId}" class="btn-test">BẮT ĐẦU</a>
+                        </div>
+                    `;
+                    container.innerHTML += cardHTML;
+                });
+
+            } catch (error) {
+                console.error("Lỗi tải danh sách:", error);
+                container.innerHTML = '<p style="text-align:center; color:red;">Lỗi kết nối. Vui lòng thử lại.</p>';
+            }
+        }
+
+        // Chạy hàm ngay khi mở web
+        loadTestList();
+
+    </script>
+    <script>
+        // --- LOGIC DARK MODE TOÀN CỤC ---
+        const themeBtn = document.getElementById('theme-toggle-btn');
+
+        // Kiểm tra xem nút có tồn tại không để tránh lỗi
+        if (themeBtn) {
+            // 1. Kiểm tra bộ nhớ xem trước đó người dùng có đang bật Dark Mode không
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+
+            // 2. Lắng nghe sự kiện click
+            themeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+
+                // 3. Lưu lại trạng thái vào bộ nhớ của trình duyệt
+                if (document.body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

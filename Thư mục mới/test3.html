@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Listening - Test 3</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); display: flex; justify-content: center; padding: 40px 0; margin: 0; }
+        .ielts-container { background-color: #ffffff; width: 800px; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .header { border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        h1 { color: #d32f2f; margin: 0; font-size: 26px; text-transform: uppercase; }
+        .band-target { background-color: #4CAF50; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        .instruction { color: #333; font-size: 15px; font-style: italic; margin-bottom: 20px; }
+        .word-limit { font-weight: bold; text-transform: uppercase; }
+        audio { width: 100%; outline: none; margin-bottom: 30px; }
+        
+        .question-box { background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 30px; line-height: 1.8; font-size: 16px; }
+        .question-title { font-weight: bold; text-transform: uppercase; margin-bottom: 15px; font-size: 18px; }
+        
+        /* Chỉnh lại ô input cho dạng điền 1 chữ cái */
+        input[type="text"] { 
+            padding: 5px 8px; border: 0; border-bottom: 2px dashed #666; 
+            background-color: transparent; width: 50px; font-size: 18px; 
+            font-family: inherit; color: #d32f2f; font-weight: bold; 
+            transition: 0.3s; text-align: center; text-transform: uppercase; 
+        }
+        input[type="text"]:focus { border-bottom: 2px solid #d32f2f; outline: none; }
+        .q-num { font-weight: bold; margin-right: 5px; font-size: 15px; background-color: #333; color: white; padding: 2px 6px; border-radius: 4px; }
+        
+        /* Box chứa các lựa chọn A, B, C... */
+        .options-box { background-color: #e0e0e0; padding: 15px; border-radius: 5px; margin-bottom: 15px; font-weight: bold; line-height: 2; }
+        .options-box span { margin-right: 20px; display: inline-block; }
+
+        .submit-btn, .transcript-btn, .home-btn { color: white; border: none; padding: 12px; font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: bold; transition: 0.3s; box-sizing: border-box; }
+        .submit-btn { background-color: #d32f2f; font-size: 18px; padding: 15px; }
+        .submit-btn:hover { background-color: #b71c1c; }
+        .transcript-btn { background-color: #2196F3; }
+        .transcript-btn:hover { background-color: #1976D2; }
+        .home-btn { background-color: #607D8B; text-decoration: none; display: block; text-align: center; }
+        .home-btn:hover { background-color: #455A64; }
+
+        .transcript-box { margin-top: 25px; padding: 20px; background-color: #f1f8e9; border: 1px solid #c5e1a5; border-radius: 8px; font-size: 15px; line-height: 1.6; color: #333; display: none; }
+        .highlight { background-color: #ffeb3b; font-weight: bold; padding: 2px 4px; border-radius: 3px; color: #d32f2f; }
+    </style>
+</head>
+<body>
+
+    <div class="ielts-container">
+        <div class="header">
+            <h1>Listening - Test 3</h1>
+            <div class="band-target">Target: 5.5 - 6.0</div>
+        </div>
+        
+        <audio controls>
+            <source src="test3.mp3" type="audio/mpeg">
+            Trình duyệt của bạn không hỗ trợ thẻ audio.
+        </audio>
+
+        <p><strong>Questions 21 & 22</strong></p>
+        <p class="instruction">Choose the correct letter, <span class="word-limit">A, B or C</span>.</p>
+
+        <div class="question-box">
+            <p><em>Example: Melanie couldn't get any books from library because</em><br>
+            A. the librarian was out.<br>
+            B. she didn't have time to look.<br>
+            <strong>C. the books had already been borrowed.</strong></p>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+
+            <p><span class="q-num">21</span> <strong>Melanie says she hasn't started assignment as</strong> <input type="text" maxlength="1"></p>
+            <p style="margin-left: 30px;">A. she was doing work for another course.<br>
+            B. it was a really big assignment.<br>
+            C. she hasn't spent time in the library.</p>
+
+            <p><span class="q-num">22</span> <strong>The lecturer says that reasonable excuses for extensions are</strong> <input type="text" maxlength="1"></p>
+            <p style="margin-left: 30px;">A. planning problems.<br>
+            B. problems with assignment deadlines.<br>
+            C. personal illness or accident.</p>
+        </div>
+
+        <p><strong>Questions 23–27</strong></p>
+        <p class="instruction">What recommendations does Dr Johnson make about the journal articles?<br>
+        Choose your answers from the box and write the letters <span class="word-limit">A–G</span> next to questions 23–27.</p>
+
+        <div class="question-box">
+            <div class="options-box">
+                <span>A. must read</span> <span>B. useful</span> <span>C. limited value</span><br>
+                <span>D. read 1st section</span> <span>E. read research methods</span> <span>F. read conclusion</span><br>
+                <span>G. don't read</span>
+            </div>
+            
+            <p><em>Example: Anderson and Hawker: &nbsp;&nbsp;&nbsp; <strong>Answer A</strong></em></p>
+            
+            <table style="width: 100%; margin-top: 10px;">
+                <tr>
+                    <td>Jackson: <span class="q-num">23</span> <input type="text" maxlength="1"></td>
+                    <td>Roberts: <span class="q-num">24</span> <input type="text" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td>Morris: <span class="q-num">25</span> <input type="text" maxlength="1"></td>
+                    <td>Cooper: <span class="q-num">26</span> <input type="text" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td>Forster: <span class="q-num">27</span> <input type="text" maxlength="1"></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <p><strong>Questions 28–30</strong></p>
+        <p class="instruction">Label the chart below. Choose your answers from the box below and write the letters <span class="word-limit">A–H</span> next to questions 28–30.<br>
+        <strong>Population studies: Reasons for changing accommodation</strong></p>
+
+        <div class="question-box">
+            <div class="options-box">
+                <strong>Possible reasons:</strong><br>
+                <span>A. uncooperative landlord</span> <span>B. environment</span> <span>C. space</span> <span>D. noisy neighbors</span><br>
+                <span>E. near city</span> <span>F. work location</span> <span>G. transport</span> <span>H. rent</span>
+            </div>
+            
+            <p>Bar 2: <span class="q-num">28</span> <input type="text" maxlength="1"></p>
+            <p>Bar 4: <span class="q-num">29</span> <input type="text" maxlength="1"></p>
+            <p>Bar 6: <span class="q-num">30</span> <input type="text" maxlength="1"></p>
+        </div>
+
+        <button class="submit-btn" onclick="checkAnswers()">Nộp Bài / Submit</button>
+        <button class="transcript-btn" onclick="toggleTranscript()">Xem Transcript & Đáp án</button>
+        <a href="index.html" class="home-btn">🔙 Quay lại Sảnh chính</a>
+
+        <div id="transcript-box" class="transcript-box">
+            <h3>Tapescript (Audio Transcript)</h3>
+            <p><strong>Melanie:</strong> Excuse me, Dr Johnson. May I speak to you for a minute?</p>
+            <p><strong>Dr Johnson:</strong> Sure. Come in.</p>
+            <p><strong>Melanie:</strong> I'm Melanie Griffin. I'm taking your course in Population Studies.</p>
+            <p><strong>Dr Johnson:</strong> Right. Well, Melanie, how can I help you?</p>
+            <p><strong>Melanie:</strong> I'm... having a bit of trouble with the second assignment, and it's due in twelve days.</p>
+            <p><strong>Dr Johnson:</strong> What sort of trouble are you having? Is the assignment question a problem?</p>
+            <p><strong>Melanie:</strong> Well, that's part of the problem. I'm also having - have been having - trouble getting hold of the books. I've been to the library several times, and all the books are out.</p>
+            <p><strong>Dr Johnson:</strong> Sounds like you should have started borrowing books a bit earlier.</p>
+            <p><strong>Melanie:</strong> Well, I had a really big assignment due in for another course, and <span class="highlight">I've been spending all my time on that [21]</span>, and I thought...</p>
+            <p><strong>Dr Johnson:</strong> ...you might get an extension of time to finish your assignment for me?</p>
+            <p><strong>Melanie:</strong> If that's possible, but I don't know...</p>
+            <p><strong>Dr Johnson:</strong> Well, yes, it is possible, but... extensions are normally given only for <span class="highlight">medical or compassionate reasons [22]</span>. Otherwise it's really a question of organising your study, and we don't like giving extensions to students who simply didn't plan their work properly. What did you get for your first assignment?</p>
+            <p><strong>Melanie:</strong> I got eighty-seven per cent.</p>
+            <p><strong>Dr Johnson:</strong> Mmm, yes, you did very well indeed. So obviously you can produce good work.</p>
+            <p><strong>Melanie:</strong> I don't think I'll need too much extra time, as long as I can get hold of some of the important references.</p>
+            <p><strong>Dr Johnson:</strong> Well, since you did so well in your first assignment, I'm prepared to give you an extra two weeks for this one. So that'll mean you'll need to submit it about a month from now.</p>
+            <p><strong>Melanie:</strong> Oh, thank you.</p>
+            <p><strong>Dr Johnson:</strong> Now, what about the reading materials? Have you checked out the journal articles in the list?</p>
+            <p><strong>Melanie:</strong> Um, no, not yet. There were about twenty of them, and I wasn't sure which ones would be most useful or important.</p>
+            <p><strong>Dr Johnson:</strong> Well, they're all useful, but I don't expect anyone to read them all, because a number of them deal with the same issues. Let me give you some suggestions. The article by Anderson and Hawker is really worth reading.</p>
+            <p><strong>Melanie:</strong> Right, I'll read that one.</p>
+            <p><strong>Dr Johnson:</strong> You should also read the article by Jackson, but just look at the part on the <span class="highlight">research methodology [23]</span>, how they did it.</p>
+            <p><strong>Melanie:</strong> OK... Jackson, got that...</p>
+            <p><strong>Dr Johnson:</strong> And if you have time, the one by Roberts <span class="highlight">says very relevant things [24]</span>, although it's not essential.</p>
+            <p><strong>Melanie:</strong> So, OK, if it's useful, I'll try and read that one...</p>
+            <p><strong>Dr Johnson:</strong> Now, the one by Morris... <span class="highlight">I wouldn't bother with that [25]</span> at this stage, if I were you.</p>
+            <p><strong>Melanie:</strong> OK, I won't bother with Morris. Oh, now, someone told me the article by Cooper is important.</p>
+            <p><strong>Dr Johnson:</strong> Well, yes, in a way, but just look at the last part where he discusses the <span class="highlight">research results [26]</span>.</p>
+            <p><strong>Melanie:</strong> And lastly, there's Forster - I can't think why I included that one. It's not bad and could be of some help, <span class="highlight">but not that much [27]</span>.</p>
+            <p><em>(Pause)</em></p>
+            <p><strong>Dr Johnson:</strong> Now, let's deal with the assignment question. What's the problem there?</p>
+            <p><strong>Melanie:</strong> It's the graph on page two.</p>
+            <p><strong>Dr Johnson:</strong> What seems to be the problem? It's just the bar graph showing reasons why people change where they live.</p>
+            <p><strong>Melanie:</strong> Well, I've got a photocopy but the reasons at the bottom are missing.</p>
+            <p><strong>Dr Johnson:</strong> OK. Look at the first bar on the graph. Now that indicates the number of people who move because they want more space.</p>
+            <p><strong>Melanie:</strong> Oh I see... bar one. OK. Now what about the next bar?</p>
+            <p><strong>Dr Johnson:</strong> Bar two is to do with the people <span class="highlight">living nearby disturbing them [28]</span>, so they chose to move away to somewhere quieter. Now let's look at bar number three. Another reason people change their place of living is because they want to be closer to the city.</p>
+            <p><strong>Melanie:</strong> OK. Proximity to the city is an issue...</p>
+            <p><strong>Dr Johnson:</strong> Now... bar number four refers to problems when the owner of the property <span class="highlight">won't help fix things [29]</span> that go wrong. In other words, the owner is not helpful and so the tenants move out.</p>
+            <p><strong>Melanie:</strong> OK... now what about bar five?</p>
+            <p><strong>Dr Johnson:</strong> Bar five is about those people who move because they need a bus or train to get them into the city or to go to work.</p>
+            <p><strong>Melanie:</strong> OK... and bar six?</p>
+            <p><strong>Dr Johnson:</strong> Bar number six is interesting. That reason was given quite a lot. People moving because they wanted to be in a more <span class="highlight">attractive neighbourhood [30]</span>.</p>
+            <p><strong>Melanie:</strong> Oh, yes. Thank you very much.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Đáp án chuẩn (chỉ 1 ký tự)
+        const answers = [
+            ["a"], // Câu 21
+            ["c"], // Câu 22
+            ["e"], // Câu 23
+            ["b"], // Câu 24
+            ["g"], // Câu 25
+            ["f"], // Câu 26
+            ["c"], // Câu 27
+            ["d"], // Câu 28
+            ["a"], // Câu 29
+            ["b"]  // Câu 30
+        ];
+
+        function checkAnswers() {
+            const submitBtn = document.querySelector('.submit-btn');
+            const inputs = document.querySelectorAll('input[type="text"]');
+            let score = 0;
+            
+            inputs.forEach((input, index) => {
+                let userAnswer = input.value.toLowerCase().trim();
+                let isCorrect = false;
+
+                if (userAnswer !== "" && answers[index] && answers[index].includes(userAnswer)) {
+                    isCorrect = true;
+                }
+
+                if (isCorrect) {
+                    input.style.color = "#4CAF50"; 
+                    input.style.borderBottomColor = "#4CAF50";
+                    score++;
+                } else {
+                    input.style.color = "#d32f2f"; 
+                    input.style.borderBottomColor = "#d32f2f";
+                    if (answers[index]) {
+                        input.value = (userAnswer === "") ? answers[index][0].toUpperCase() : userAnswer.toUpperCase() + " -> " + answers[index][0].toUpperCase();
+                    }
+                }
+            });
+            submitBtn.innerHTML = `Bạn đã đúng ${score}/10 câu! (F5 để làm lại)`;
+            submitBtn.style.backgroundColor = (score >= 5) ? "#4CAF50" : "#ff9800";
+        }
+
+        function toggleTranscript() {
+            const box = document.getElementById("transcript-box");
+            box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+        }
+    </script>
+</body>
+</html>

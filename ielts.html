@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bách Khoa Toàn Thư IELTS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --success: #4CAF50;
+            --bg: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .container { max-width: 1100px; margin: auto; }
+
+        /* Header */
+        .header-box {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        h1 { margin: 0; color: var(--primary); font-size: 20px; text-transform: uppercase; }
+
+        .user-pill {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .logout-btn {
+            background: #fee2e2; color: #ef4444; border: none;
+            padding: 4px 10px; border-radius: 8px; cursor: pointer;
+            font-size: 11px; font-weight: 700;
+        }
+
+        /* 4 Kỹ năng Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            border-color: var(--secondary);
+        }
+
+        .cat-icon { font-size: 32px; margin-bottom: 8px; }
+        .cat-title { font-size: 16px; font-weight: 800; margin: 0; }
+
+        /* Stats & Chart */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stats-card, .chart-card {
+            background: white; padding: 20px; border-radius: 20px;
+            border: 1px solid #e2e8f0; box-shadow: var(--card-shadow);
+        }
+
+        .progress-bar {
+            background: #f1f5f9; border-radius: 10px; height: 12px;
+            overflow: hidden; margin-top: 10px; border: 1px solid #e2e8f0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--success), #81c784);
+            height: 100%; width: 0%; transition: 1s ease;
+        }
+
+        /* Filters */
+        .filter-row {
+            margin-bottom: 25px;
+            display: flex;
+            gap: 12px;
+        }
+
+        #search-input {
+            flex: 2; padding: 12px 20px; border-radius: 12px;
+            border: 1px solid #e2e8f0; outline: none; font-size: 14px;
+        }
+
+        #category-filter {
+            flex: 1; padding: 12px; border-radius: 12px;
+            border: 1px solid #e2e8f0; background: white; font-weight: 600;
+        }
+
+        /* Test Cards */
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .test-card {
+            background: white; border-radius: 20px; padding: 20px;
+            border: 1px solid #e2e8f0; transition: 0.3s;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .test-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
+        .test-card.completed { border-left: 6px solid var(--success); }
+        .test-title { font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+
+        .high-score {
+            font-size: 12px; font-weight: 700; color: var(--secondary);
+            background: #e0f2fe; padding: 5px 10px; border-radius: 8px;
+            display: inline-block; margin-bottom: 15px;
+        }
+
+        .btn-go {
+            background: #1e293b; color: white; text-decoration: none;
+            padding: 12px; border-radius: 10px; text-align: center;
+            font-weight: 800; font-size: 14px; transition: 0.2s;
+        }
+
+        .btn-go:hover { background: var(--primary); }
+
+        #vocab-suggestion {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white; padding: 20px; border-radius: 15px;
+            margin-bottom: 25px; display: none; justify-content: space-between; align-items: center;
+        }
+
+        /* Dark Mode */
+        body.dark-theme { --bg: #0f172a; }
+        body.dark-theme .header-box, body.dark-theme .stats-card, 
+        body.dark-theme .chart-card, body.dark-theme .test-card, 
+        body.dark-theme .category-card, body.dark-theme #search-input, 
+        body.dark-theme #category-filter {
+            background: #1e293b; border-color: #334155; color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login-overlay" style="display: none; position: fixed; inset: 0; background: white; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+        <h2 style="font-size: 28px;">Dừng lại một chút! 🛑</h2>
+        <p>Vui lòng đăng nhập để tiếp tục.</p>
+        <a href="login.html" class="btn-go" style="padding: 15px 40px;">Đăng nhập ngay</a>
+    </div>
+
+    <div class="container" id="main-content">
+        <div class="header-box">
+            <h1>🎓 HỆ THỐNG HỌC TẬP PRO</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button onclick="document.body.classList.toggle('dark-theme')" style="background:none; border:none; cursor:pointer; font-size: 20px;">🌙</button>
+                <div class="user-pill">
+                    <img id="user-avatar-img" src="" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <span id="user-email" style="font-size: 13px; font-weight: 600;">Đang tải...</span>
+                    <button class="logout-btn" id="btn-logout">Thoát</button>
+                </div>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 15px; font-size: 18px;">IELTS 4 Kỹ Năng</h2>
+        <div class="category-grid">
+            <div class="category-card" onclick="setFilter('LISTENING')">
+                <div class="cat-icon">🎧</div>
+                <div class="cat-title">Listening</div>
+            </div>
+            <div class="category-card" onclick="setFilter('READING')">
+                <div class="cat-icon">📖</div>
+                <div class="cat-title">Reading</div>
+            </div>
+            <div class="category-card" onclick="setFilter('WRITING')">
+                <div class="cat-icon">✍️</div>
+                <div class="cat-title">Writing</div>
+            </div>
+            <div class="category-card" onclick="setFilter('SPEAKING')">
+                <div class="cat-icon">🗣️</div>
+                <div class="cat-title">Speaking</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="stats-card">
+                <h3 style="margin-top:0; font-size: 16px;">📊 Tổng quan tiến độ</h3>
+                <p id="progress-label" style="font-size: 13px; color: #64748b;">Đang tính...</p>
+                <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+            </div>
+            <div class="chart-card">
+                <h3 style="margin-top:0; font-size: 16px;">📈 Tiến bộ gần đây</h3>
+                <div style="height: 150px;"><canvas id="scoreChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <input type="text" id="search-input" placeholder="🔍 Tìm tên bài thi...">
+            <select id="category-filter">
+                <option value="all">Tất cả bài thi</option>
+                <option value="LISTENING">Listening</option>
+                <option value="READING">Reading</option>
+                <option value="WRITING">Writing</option>
+                <option value="SPEAKING">Speaking</option>
+            </select>
+        </div>
+
+        <div id="vocab-suggestion">
+            <div>
+                <h3 id="vocab-title" style="color: #fbbf24; margin:0; font-size: 18px;">Kho từ vựng</h3>
+                <p style="margin: 5px 0 0 0; font-size: 13px; opacity: 0.9;">Học từ vựng trọng tâm cho kỹ năng này!</p>
+            </div>
+            <a href="#" id="vocab-link" style="background:white; color:#1e293b; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size: 13px;">HỌC NGAY</a>
+        </div>
+
+        <h2 style="margin: 20px 0; font-size: 18px;">🎯 DANH SÁCH BÀI THI</h2>
+        <div class="test-grid" id="test-list"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf846RI3kuxaWv_BCo3g4atdYK0iG98ds",
+            authDomain: "luyen-nghe-ielts.firebaseapp.com",
+            projectId: "luyen-nghe-ielts",
+            storageBucket: "luyen-nghe-ielts.firebasestorage.app",
+            messagingSenderId: "965541526782",
+            appId: "1:965541526782:web:e54be5c7780feb197839af"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let globalHighScores = {};
+        let globalAllTests = {};
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('user-email').innerText = user.email;
+                document.getElementById('user-avatar-img').src = user.photoURL || `https://ui-avatars.com/api/?name=${user.email[0]}&background=d32f2f&color=fff`;
+                document.getElementById('login-overlay').style.display = 'none';
+                await initDashboard(user.uid);
+            } else {
+                document.getElementById('login-overlay').style.display = 'flex';
+            }
+        });
+
+        async function initDashboard(uid) {
+            const collections = ['listening_tests', 'reading_tests', 'writing_tests', 'speaking_tests'];
+            globalAllTests = {};
+            
+            // 1. Tải tất cả bài thi từ 4 kho
+            for (const col of collections) {
+                const snap = await getDocs(collection(db, col));
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if (data.isActive !== false) {
+                        globalAllTests[doc.id] = {
+                            id: doc.id,
+                            title: data.title || "Chưa đặt tên",
+                            // CHUẨN HÓA CATEGORY: Xóa khoảng trắng và viết hoa
+                            category: (data.type || col.split('_')[0]).toUpperCase().trim(),
+                            level: data.band || "Band 5.5+",
+                            order: Number(data.order) || 999
+                        };
+                    }
+                });
+            }
+
+            // 2. Tải kết quả điểm số
+            const q = query(collection(db, "results"), where("userId", "==", uid), orderBy("timestamp", "desc"));
+            const resSnap = await getDocs(q);
+            let resultsArr = [];
+            globalHighScores = {};
+            resSnap.forEach(doc => {
+                const d = doc.data();
+                resultsArr.push(d);
+                if (!globalHighScores[d.testId] || d.score > globalHighScores[d.testId]) {
+                    globalHighScores[d.testId] = d.score;
+                }
+            });
+
+            renderTests();
+            updateProgress();
+            if (resultsArr.length > 0) renderChart(resultsArr.slice(0, 7).reverse());
+        }
+
+        window.renderTests = function() {
+            const search = document.getElementById('search-input').value.toLowerCase().trim();
+            const filterVal = document.getElementById('category-filter').value.toUpperCase();
+            const list = document.getElementById('test-list');
+            list.innerHTML = '';
+
+            const sortedIds = Object.keys(globalAllTests).sort((a,b) => globalAllTests[a].order - globalAllTests[b].order);
+            
+            let count = 0;
+            sortedIds.forEach(id => {
+                const t = globalAllTests[id];
+                const score = globalHighScores[id];
+                
+                // Lọc thông minh: khớp tên VÀ khớp kỹ năng
+                if (t.title.toLowerCase().includes(search) && (filterVal === "ALL" || t.category === filterVal)) {
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = `test-card ${score !== undefined ? 'completed' : ''}`;
+                    card.innerHTML = `
+                        <div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                                <span style="font-size:10px; font-weight:800; color:var(--secondary); background:#e0f2fe; padding:2px 6px; border-radius:4px;">${t.category}</span>
+                                <span style="font-size:10px; color:#64748b; font-weight:600;">${t.level}</span>
+                            </div>
+                            <div class="test-title">${t.title}</div>
+                            <div class="high-score" style="${score !== undefined ? '' : 'background:#f1f5f9; color:#94a3b8;'}">
+                                ${score !== undefined ? `⭐ Best Score: ${score} điểm` : 'Chưa làm bài'}
+                            </div>
+                        </div>
+                        <a href="room.html?id=${id}" class="btn-go">LÀM BÀI NGAY</a>
+                    `;
+                    list.appendChild(card);
+                }
+            });
+            if(count === 0) list.innerHTML = `<div style="text-align:center; width:100%; color:#94a3b8; padding:30px;">Không tìm thấy bài thi nào cho mục ${filterVal}.</div>`;
+        }
+
+        window.setFilter = function(cat) {
+            const dropdown = document.getElementById('category-filter');
+            dropdown.value = cat;
+            
+            const vocabBox = document.getElementById('vocab-suggestion');
+            vocabBox.style.display = 'flex';
+            document.getElementById('vocab-title').innerText = `Kho từ vựng: ${cat}`;
+            document.getElementById('vocab-link').href = `vocabulary.html?topic=${cat}`;
+            
+            renderTests();
+            // Cuộn xuống danh sách
+            document.getElementById('test-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function updateProgress() {
+            const total = Object.keys(globalAllTests).length;
+            const done = Object.keys(globalHighScores).length;
+            const percent = total > 0 ? Math.round((done/total)*100) : 0;
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-label').innerText = `${done}/${total} bài đã hoàn thành (${percent}%)`;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            if(window.myChart) window.myChart.destroy();
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => "Bài " + d.testId.substring(0, 4)),
+                    datasets: [{
+                        label: 'Điểm số',
+                        data: data.map(d => d.score),
+                        borderColor: '#1976d2', tension: 0.4, fill: true,
+                        backgroundColor: 'rgba(25, 118, 210, 0.1)', pointRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        document.getElementById('search-input').oninput = renderTests;
+        document.getElementById('category-filter').onchange = renderTests;
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+    </script>
+</body>
+</html>
