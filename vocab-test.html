@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Test Từ Vựng - IELTS PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- BỘ BIẾN MÀU ĐỒNG BỘ VỚI TRANG CHỦ --- */
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --font-family: 'Inter', sans-serif;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --border-color: #334155;
+        }
+
+        [data-theme="light-purple"] {
+            --bg-main: #f3e8ff;
+            --bg-card: #ffffff;
+            --text-main: #4c1d95;
+            --border-color: #e9d5ff;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-main: #2e1065;
+            --bg-card: #4c1d95;
+            --text-main: #f3e8ff;
+            --border-color: #6b21a8;
+        }
+
+        [data-theme="light-pink"] {
+            --bg-main: #fce7f3;
+            --bg-card: #ffffff;
+            --text-main: #831843;
+            --border-color: #fbcfe8;
+        }
+
+        [data-theme="dark-pink"] {
+            --bg-main: #500724;
+            --bg-card: #831843;
+            --text-main: #fce7f3;
+            --border-color: #9d174d;
+        }
+
+        [data-theme="light-blue"] {
+            --bg-main: #e0f2fe;
+            --bg-card: #ffffff;
+            --text-main: #082f49;
+            --border-color: #bae6fd;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-main: #082f49;
+            --bg-card: #0369a1;
+            --text-main: #e0f2fe;
+            --border-color: #0284c7;
+        }
+
+        [data-theme="light-matcha"] {
+            --bg-main: #ecfdf5;
+            --bg-card: #ffffff;
+            --text-main: #064e3b;
+            --border-color: #a7f3d0;
+        }
+
+        [data-theme="dark-matcha"] {
+            --bg-main: #064e3b;
+            --bg-card: #047857;
+            --text-main: #ecfdf5;
+            --border-color: #059669;
+        }
+
+        [data-theme="light-coffee"] {
+            --bg-main: #f5f5f4;
+            --bg-card: #ffffff;
+            --text-main: #44403c;
+            --border-color: #e7e5e4;
+        }
+
+        [data-theme="dark-coffee"] {
+            --bg-main: #292524;
+            --bg-card: #44403c;
+            --text-main: #f5f5f4;
+            --border-color: #57534e;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 20px;
+            transition: 0.3s;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .card-custom {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-back:hover {
+            opacity: 0.8;
+            transform: translateX(-3px);
+        }
+
+        .progress-container {
+            width: 100%;
+            background: var(--border-color);
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        #word-display {
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--secondary);
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+
+        #word-type {
+            font-size: 16px;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        #progress-text {
+            font-size: 14px;
+            opacity: 0.7;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .opt-btn {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .opt-btn:disabled {
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .opt-btn.correct {
+            background: #dcfce7 !important;
+            border-color: var(--success) !important;
+            color: #166534 !important;
+        }
+
+        .opt-btn.wrong {
+            background: #fee2e2 !important;
+            border-color: var(--danger) !important;
+            color: #991b1b !important;
+        }
+
+        #next-btn {
+            display: none;
+            margin-top: 30px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+        }
+
+        #next-btn:hover {
+            opacity: 0.9;
+        }
+
+        #result-screen {
+            display: none;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 900;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(25, 118, 210, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        const savedTheme = localStorage.getItem('user_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <div class="container">
+        <div class="header-top">
+            <a href="ielts.html" class="btn-back">⬅ Quay lại</a>
+            <h2 id="topic-title" style="margin: 0; opacity: 0.8; color: var(--secondary);">📚 Topic: Loading...</h2>
+        </div>
+
+        <!-- SCREEN: LÀM BÀI -->
+        <div class="card-custom" id="quiz-screen">
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+
+            <div id="progress-text">Câu 1 / ?</div>
+            <div style="font-size: 16px; opacity: 0.8;">Chọn nghĩa Tiếng Việt chính xác nhất của từ:</div>
+
+            <div id="word-display">Loading...</div>
+            <div id="word-type">()</div>
+
+            <div class="options-grid" id="options-container"></div>
+
+            <button id="next-btn">CÂU TIẾP THEO ➡</button>
+        </div>
+
+        <!-- SCREEN: KẾT QUẢ -->
+        <div class="card-custom" id="result-screen">
+            <h2 style="font-size: 28px; margin-bottom: 30px;">Hoàn thành bài Test! 🎉</h2>
+            <div class="score-circle" id="final-score">0/0</div>
+            <p style="font-size: 20px; font-weight: 600; margin-bottom: 10px;" id="feedback-msg"></p>
+            <p style="font-size: 15px; opacity: 0.7; margin-bottom: 30px;">Hãy duy trì thói quen học từ vựng mỗi ngày để
+                bứt phá điểm IELTS nhé!</p>
+
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="location.reload()"
+                    style="background: var(--success); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer;">🔄
+                    LÀM LẠI</button>
+                <a href="ielts.html"
+                    style="background: var(--bg-main); color: var(--text-main); border: 2px solid var(--border-color); padding: 15px 30px; border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer; text-decoration: none;">VỀ
+                    TRANG CHỦ</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // SIÊU DỮ LIỆU: 16 CHỦ ĐỀ IELTS TRỌNG ĐIỂM
+        // ==========================================
+        const vocabDatabase = {
+            education: [
+                { word: "curriculum", type: "(n)", mean: "chương trình học" },
+                { word: "syllabus", type: "(n)", mean: "đề cương môn học" },
+                { word: "discipline", type: "(n)", mean: "ngành học / kỷ luật" },
+                { word: "pedagogy", type: "(n)", mean: "phương pháp giảng dạy" },
+                { word: "assessment", type: "(n)", mean: "đánh giá" },
+                { word: "qualification", type: "(n)", mean: "bằng cấp" },
+                { word: "academic performance", type: "(n)", mean: "thành tích học tập" },
+                { word: "compulsory", type: "(adj)", mean: "bắt buộc" },
+                { word: "optional", type: "(adj)", mean: "tự chọn" },
+                { word: "extracurricular", type: "(adj)", mean: "ngoại khóa" },
+                { word: "self-directed learning", type: "(n)", mean: "tự học" },
+                { word: "rote learning", type: "(n)", mean: "học vẹt" },
+                { word: "critical thinking", type: "(n)", mean: "tư duy phản biện" },
+                { word: "analytical skills", type: "(n)", mean: "kỹ năng phân tích" },
+                { word: "collaborative learning", type: "(n)", mean: "học nhóm" },
+                { word: "student-centered approach", type: "(n)", mean: "phương pháp lấy học sinh làm trung tâm" },
+                { word: "theoretical knowledge", type: "(n)", mean: "kiến thức lý thuyết" },
+                { word: "practical skills", type: "(n)", mean: "kỹ năng thực hành" },
+                { word: "higher education", type: "(n)", mean: "giáo dục đại học" },
+                { word: "tuition fees", type: "(n)", mean: "học phí" }
+            ],
+            environment: [
+                { word: "climate change", type: "(n)", mean: "biến đổi khí hậu" },
+                { word: "global warming", type: "(n)", mean: "nóng lên toàn cầu" },
+                { word: "air pollution", type: "(n)", mean: "ô nhiễm không khí" },
+                { word: "water contamination", type: "(n)", mean: "ô nhiễm nguồn nước" },
+                { word: "deforestation", type: "(n)", mean: "nạn phá rừng" },
+                { word: "biodiversity loss", type: "(n)", mean: "suy giảm đa dạng sinh học" },
+                { word: "habitat destruction", type: "(n)", mean: "phá hủy môi trường sống" },
+                { word: "overpopulation", type: "(n)", mean: "bùng nổ dân số" },
+                { word: "waste accumulation", type: "(n)", mean: "sự tích tụ rác thải" },
+                { word: "resource depletion", type: "(n)", mean: "cạn kiệt tài nguyên" },
+                { word: "renewable energy", type: "(n)", mean: "năng lượng tái tạo" },
+                { word: "sustainable development", type: "(n)", mean: "phát triển bền vững" },
+                { word: "carbon footprint", type: "(n)", mean: "lượng khí thải carbon" },
+                { word: "recycling", type: "(n)", mean: "tái chế" },
+                { word: "waste management", type: "(n)", mean: "quản lý rác thải" },
+                { word: "energy conservation", type: "(n)", mean: "tiết kiệm năng lượng" },
+                { word: "eco-friendly", type: "(adj)", mean: "thân thiện với môi trường" },
+                { word: "green technology", type: "(n)", mean: "công nghệ xanh" },
+                { word: "environmental protection", type: "(n)", mean: "bảo vệ môi trường" },
+                { word: "conservation", type: "(n)", mean: "bảo tồn" },
+                { word: "industrial emissions", type: "(n)", mean: "khí thải công nghiệp" },
+                { word: "fossil fuels", type: "(n)", mean: "nhiên liệu hóa thạch" },
+                { word: "urbanization", type: "(n)", mean: "đô thị hóa" },
+                { word: "agricultural runoff", type: "(n)", mean: "nước thải nông nghiệp" },
+                { word: "illegal logging", type: "(n)", mean: "khai thác gỗ trái phép" },
+                { word: "overconsumption", type: "(n)", mean: "tiêu thụ quá mức" },
+                { word: "plastic waste", type: "(n)", mean: "rác thải nhựa" },
+                { word: "greenhouse gases", type: "(n)", mean: "khí nhà kính" },
+                { word: "land degradation", type: "(n)", mean: "thoái hóa đất" },
+                { word: "toxic waste", type: "(n)", mean: "chất thải độc hại" }
+            ],
+            health: [
+                { word: "balanced diet", type: "(n)", mean: "chế độ ăn cân bằng" },
+                { word: "nutrient-rich", type: "(adj)", mean: "giàu dinh dưỡng" },
+                { word: "well-being", type: "(n)", mean: "sức khỏe tổng thể (thể chất & tinh thần)" },
+                { word: "physical fitness", type: "(n)", mean: "thể lực" },
+                { word: "regular exercise", type: "(n)", mean: "tập thể dục đều đặn" },
+                { word: "healthy habits", type: "(n)", mean: "thói quen lành mạnh" },
+                { word: "lifestyle choices", type: "(n)", mean: "lựa chọn lối sống" },
+                { word: "preventive healthcare", type: "(n)", mean: "chăm sóc sức khỏe phòng ngừa" },
+                { word: "immune system", type: "(n)", mean: "hệ miễn dịch" },
+                { word: "mental health", type: "(n)", mean: "sức khỏe tinh thần" },
+                { word: "calorie intake", type: "(n)", mean: "lượng calo nạp vào" },
+                { word: "processed food", type: "(n)", mean: "thực phẩm chế biến sẵn" },
+                { word: "junk food", type: "(n)", mean: "đồ ăn nhanh/không lành mạnh" },
+                { word: "sugar consumption", type: "(n)", mean: "lượng tiêu thụ đường" },
+                { word: "organic food", type: "(n)", mean: "thực phẩm hữu cơ" },
+                { word: "dietary fiber", type: "(n)", mean: "chất xơ" },
+                { word: "vitamin deficiency", type: "(n)", mean: "thiếu vitamin" },
+                { word: "malnutrition", type: "(n)", mean: "suy dinh dưỡng" },
+                { word: "hydration", type: "(n)", mean: "sự cung cấp đủ nước" },
+                { word: "portion control", type: "(n)", mean: "kiểm soát khẩu phần ăn" },
+                { word: "obesity", type: "(n)", mean: "béo phì" },
+                { word: "sedentary lifestyle", type: "(n)", mean: "lối sống ít vận động" },
+                { word: "chronic disease", type: "(n)", mean: "bệnh mãn tính" },
+                { word: "cardiovascular disease", type: "(n)", mean: "bệnh tim mạch" },
+                { word: "stress management", type: "(n)", mean: "quản lý căng thẳng" },
+                { word: "sleep deprivation", type: "(n)", mean: "thiếu ngủ" },
+                { word: "addiction", type: "(n)", mean: "nghiện (thuốc, rượu, điện thoại…)" },
+                { word: "public health", type: "(n)", mean: "y tế cộng đồng" },
+                { word: "health awareness", type: "(n)", mean: "nhận thức về sức khỏe" },
+                { word: "medical treatment", type: "(n)", mean: "điều trị y tế" }
+            ],
+            family: [
+                { word: "nuclear family", type: "(n)", mean: "gia đình hạt nhân" },
+                { word: "extended family", type: "(n)", mean: "gia đình nhiều thế hệ" },
+                { word: "single-parent family", type: "(n)", mean: "gia đình đơn thân" },
+                { word: "household", type: "(n)", mean: "hộ gia đình" },
+                { word: "breadwinner", type: "(n)", mean: "trụ cột gia đình" },
+                { word: "dependents", type: "(n)", mean: "người phụ thuộc" },
+                { word: "sibling", type: "(n)", mean: "anh/chị/em ruột" },
+                { word: "only child", type: "(n)", mean: "con một" },
+                { word: "generation gap", type: "(n)", mean: "khoảng cách thế hệ" },
+                { word: "family-oriented", type: "(adj)", mean: "coi trọng gia đình" },
+                { word: "close-knit", type: "(adj)", mean: "gắn bó khăng khít" },
+                { word: "parental guidance", type: "(n)", mean: "sự định hướng của cha mẹ" },
+                { word: "emotional support", type: "(n)", mean: "hỗ trợ tinh thần" },
+                { word: "mutual respect", type: "(n)", mean: "sự tôn trọng lẫn nhau" },
+                { word: "family bond", type: "(n)", mean: "mối liên kết gia đình" },
+                { word: "upbringing", type: "(n)", mean: "sự nuôi dạy" },
+                { word: "discipline", type: "(n)", mean: "sự kỷ luật" },
+                { word: "caregiver", type: "(n)", mean: "người chăm sóc" },
+                { word: "role model", type: "(n)", mean: "hình mẫu" },
+                { word: "household responsibilities", type: "(n)", mean: "trách nhiệm trong gia đình" },
+                { word: "divorce rate", type: "(n)", mean: "tỷ lệ ly hôn" },
+                { word: "work-life balance", type: "(n)", mean: "cân bằng công việc - cuộc sống" },
+                { word: "domestic conflict", type: "(n)", mean: "mâu thuẫn gia đình" },
+                { word: "child neglect", type: "(n)", mean: "bỏ bê con cái" },
+                { word: "financial burden", type: "(n)", mean: "gánh nặng tài chính" },
+                { word: "parenting style", type: "(n)", mean: "phong cách nuôi dạy con" },
+                { word: "generation differences", type: "(n)", mean: "khác biệt thế hệ" },
+                { word: "aging population", type: "(n)", mean: "dân số già hóa" },
+                { word: "family values", type: "(n)", mean: "giá trị gia đình" },
+                { word: "quality time", type: "(n)", mean: "thời gian chất lượng (bên gia đình)" }
+            ],
+            travel: [
+                { word: "domestic travel", type: "(n)", mean: "du lịch trong nước" },
+                { word: "international travel", type: "(n)", mean: "du lịch quốc tế" },
+                { word: "eco-tourism", type: "(n)", mean: "du lịch sinh thái" },
+                { word: "mass tourism", type: "(n)", mean: "du lịch đại trà" },
+                { word: "backpacking", type: "(n)", mean: "du lịch bụi" },
+                { word: "package tour", type: "(n)", mean: "tour trọn gói" },
+                { word: "solo travel", type: "(n)", mean: "du lịch một mình" },
+                { word: "business trip", type: "(n)", mean: "chuyến công tác" },
+                { word: "long-haul flight", type: "(n)", mean: "chuyến bay đường dài" },
+                { word: "short getaway", type: "(n)", mean: "chuyến đi ngắn ngày" },
+                { word: "itinerary", type: "(n)", mean: "lịch trình" },
+                { word: "accommodation", type: "(n)", mean: "chỗ ở" },
+                { word: "hospitality", type: "(n)", mean: "dịch vụ hiếu khách" },
+                { word: "tourist attraction", type: "(n)", mean: "điểm du lịch" },
+                { word: "scenic views", type: "(n)", mean: "cảnh đẹp" },
+                { word: "local cuisine", type: "(n)", mean: "ẩm thực địa phương" },
+                { word: "cultural experience", type: "(n)", mean: "trải nghiệm văn hóa" },
+                { word: "travel insurance", type: "(n)", mean: "bảo hiểm du lịch" },
+                { word: "jet lag", type: "(n)", mean: "lệch múi giờ" },
+                { word: "travel essentials", type: "(n)", mean: "vật dụng cần thiết khi đi du lịch" },
+                { word: "overcrowding", type: "(n)", mean: "quá tải khách du lịch" },
+                { word: "tourist hotspot", type: "(n)", mean: "điểm du lịch nổi tiếng" },
+                { word: "environmental impact", type: "(n)", mean: "tác động môi trường" },
+                { word: "sustainable tourism", type: "(n)", mean: "du lịch bền vững" },
+                { word: "cultural preservation", type: "(n)", mean: "bảo tồn văn hóa" },
+                { word: "travel restrictions", type: "(n)", mean: "hạn chế đi lại" },
+                { word: "carbon emissions", type: "(n)", mean: "khí thải carbon" },
+                { word: "tourism industry", type: "(n)", mean: "ngành du lịch" },
+                { word: "economic boost", type: "(n)", mean: "sự thúc đẩy kinh tế" },
+                { word: "peak season", type: "(n)", mean: "mùa cao điểm" }
+            ],
+            technology: [
+                { word: "cutting-edge technology", type: "(n)", mean: "công nghệ tiên tiến" },
+                { word: "technological advancement", type: "(n)", mean: "tiến bộ công nghệ" },
+                { word: "digital transformation", type: "(n)", mean: "chuyển đổi số" },
+                { word: "innovation", type: "(n)", mean: "sự đổi mới" },
+                { word: "automation", type: "(n)", mean: "tự động hóa" },
+                { word: "artificial intelligence (AI)", type: "(n)", mean: "trí tuệ nhân tạo" },
+                { word: "machine learning", type: "(n)", mean: "học máy" },
+                { word: "data analytics", type: "(n)", mean: "phân tích dữ liệu" },
+                { word: "cloud computing", type: "(n)", mean: "điện toán đám mây" },
+                { word: "cybersecurity", type: "(n)", mean: "an ninh mạng" },
+                { word: "smart device", type: "(n)", mean: "thiết bị thông minh" },
+                { word: "high-speed internet", type: "(n)", mean: "internet tốc độ cao" },
+                { word: "social media platforms", type: "(n)", mean: "nền tảng mạng xã hội" },
+                { word: "online privacy", type: "(n)", mean: "quyền riêng tư trực tuyến" },
+                { word: "data breach", type: "(n)", mean: "rò rỉ dữ liệu" },
+                { word: "digital footprint", type: "(n)", mean: "dấu vết số" },
+                { word: "screen time", type: "(n)", mean: "thời gian sử dụng màn hình" },
+                { word: "internet addiction", type: "(n)", mean: "nghiện internet" },
+                { word: "virtual meeting", type: "(n)", mean: "cuộc họp trực tuyến" },
+                { word: "remote work", type: "(n)", mean: "làm việc từ xa" },
+                { word: "job displacement", type: "(n)", mean: "mất việc do công nghệ" },
+                { word: "digital divide", type: "(n)", mean: "khoảng cách số" },
+                { word: "information overload", type: "(n)", mean: "quá tải thông tin" },
+                { word: "technological dependency", type: "(n)", mean: "sự phụ thuộc vào công nghệ" },
+                { word: "privacy concerns", type: "(n)", mean: "lo ngại về quyền riêng tư" },
+                { word: "ethical issues", type: "(n)", mean: "vấn đề đạo đức" },
+                { word: "automation risk", type: "(n)", mean: "rủi ro tự động hóa" },
+                { word: "productivity boost", type: "(n)", mean: "tăng năng suất" },
+                { word: "user-friendly", type: "(adj)", mean: "thân thiện với người dùng" },
+                { word: "time-consuming", type: "(adj)", mean: "tốn thời gian" }
+            ],
+            sports: [
+                { word: "competitive sports", type: "(n)", mean: "thể thao thi đấu" },
+                { word: "team sports", type: "(n)", mean: "thể thao đồng đội" },
+                { word: "individual sports", type: "(n)", mean: "thể thao cá nhân" },
+                { word: "extreme sports", type: "(n)", mean: "thể thao mạo hiểm" },
+                { word: "water sports", type: "(n)", mean: "thể thao dưới nước" },
+                { word: "indoor sports", type: "(n)", mean: "thể thao trong nhà" },
+                { word: "outdoor activities", type: "(n)", mean: "hoạt động ngoài trời" },
+                { word: "physical activity", type: "(n)", mean: "hoạt động thể chất" },
+                { word: "recreational sports", type: "(n)", mean: "thể thao giải trí" },
+                { word: "professional athlete", type: "(n)", mean: "vận động viên chuyên nghiệp" },
+                { word: "physical endurance", type: "(n)", mean: "sức bền thể chất" },
+                { word: "muscle strength", type: "(n)", mean: "sức mạnh cơ bắp" },
+                { word: "stamina", type: "(n)", mean: "sức chịu đựng" },
+                { word: "intensive training", type: "(n)", mean: "luyện tập cường độ cao" },
+                { word: "workout routine", type: "(n)", mean: "lịch tập luyện" },
+                { word: "fitness level", type: "(n)", mean: "mức độ thể lực" },
+                { word: "warm-up", type: "(n/v)", mean: "khởi động" },
+                { word: "cool down", type: "(n/v)", mean: "thả lỏng sau tập" },
+                { word: "injury prevention", type: "(n)", mean: "phòng tránh chấn thương" },
+                { word: "personal trainer", type: "(n)", mean: "huấn luyện viên cá nhân" },
+                { word: "boost immunity", type: "(v)", mean: "tăng cường miễn dịch" },
+                { word: "mental well-being", type: "(n)", mean: "sức khỏe tinh thần" },
+                { word: "stress relief", type: "(n)", mean: "giảm căng thẳng" },
+                { word: "sedentary lifestyle", type: "(n)", mean: "lối sống ít vận động" },
+                { word: "sportsmanship", type: "(n)", mean: "tinh thần thể thao" },
+                { word: "fair play", type: "(n)", mean: "chơi đẹp" },
+                { word: "performance-enhancing drugs", type: "(n)", mean: "chất kích thích tăng hiệu suất" },
+                { word: "match-fixing", type: "(n)", mean: "dàn xếp tỉ số" },
+                { word: "fan base", type: "(n)", mean: "lượng người hâm mộ" },
+                { word: "sports industry", type: "(n)", mean: "ngành công nghiệp thể thao" }
+            ],
+            music: [
+                { word: "classical music", type: "(n)", mean: "nhạc cổ điển" },
+                { word: "pop music", type: "(n)", mean: "nhạc pop" },
+                { word: "rock music", type: "(n)", mean: "nhạc rock" },
+                { word: "jazz", type: "(n)", mean: "nhạc jazz" },
+                { word: "hip-hop", type: "(n)", mean: "nhạc hip-hop" },
+                { word: "electronic music", type: "(n)", mean: "nhạc điện tử" },
+                { word: "folk music", type: "(n)", mean: "nhạc dân gian" },
+                { word: "traditional music", type: "(n)", mean: "nhạc truyền thống" },
+                { word: "instrumental music", type: "(n)", mean: "nhạc không lời" },
+                { word: "live music", type: "(n)", mean: "nhạc biểu diễn trực tiếp" },
+                { word: "melody", type: "(n)", mean: "giai điệu" },
+                { word: "rhythm", type: "(n)", mean: "nhịp điệu" },
+                { word: "lyrics", type: "(n)", mean: "lời bài hát" },
+                { word: "harmony", type: "(n)", mean: "hòa âm" },
+                { word: "vocal range", type: "(n)", mean: "quãng giọng" },
+                { word: "pitch", type: "(n)", mean: "cao độ" },
+                { word: "tone", type: "(n)", mean: "âm sắc" },
+                { word: "composition", type: "(n)", mean: "bản nhạc/sáng tác" },
+                { word: "live performance", type: "(n)", mean: "buổi biểu diễn trực tiếp" },
+                { word: "music festival", type: "(n)", mean: "lễ hội âm nhạc" },
+                { word: "music industry", type: "(n)", mean: "ngành công nghiệp âm nhạc" },
+                { word: "streaming platform", type: "(n)", mean: "nền tảng nghe nhạc trực tuyến" },
+                { word: "digital download", type: "(n)", mean: "tải nhạc kỹ thuật số" },
+                { word: "copyright infringement", type: "(n)", mean: "vi phạm bản quyền" },
+                { word: "musical taste", type: "(n)", mean: "gu âm nhạc" },
+                { word: "emotional expression", type: "(n)", mean: "sự biểu đạt cảm xúc" },
+                { word: "stress relief", type: "(n)", mean: "giảm căng thẳng" },
+                { word: "cultural identity", type: "(n)", mean: "bản sắc văn hóa" },
+                { word: "global audience", type: "(n)", mean: "khán giả toàn cầu" },
+                { word: "commercial success", type: "(n)", mean: "thành công thương mại" }
+            ],
+            personality: [
+                { word: "outgoing", type: "(adj)", mean: "hướng ngoại" },
+                { word: "sociable", type: "(adj)", mean: "hòa đồng" },
+                { word: "confident", type: "(adj)", mean: "tự tin" },
+                { word: "optimistic", type: "(adj)", mean: "lạc quan" },
+                { word: "reliable", type: "(adj)", mean: "đáng tin cậy" },
+                { word: "responsible", type: "(adj)", mean: "có trách nhiệm" },
+                { word: "hardworking", type: "(adj)", mean: "chăm chỉ" },
+                { word: "ambitious", type: "(adj)", mean: "tham vọng" },
+                { word: "independent", type: "(adj)", mean: "độc lập" },
+                { word: "open-minded", type: "(adj)", mean: "cởi mở" },
+                { word: "introverted", type: "(adj)", mean: "hướng nội" },
+                { word: "extroverted", type: "(adj)", mean: "hướng ngoại" },
+                { word: "reserved", type: "(adj)", mean: "kín đáo" },
+                { word: "sensitive", type: "(adj)", mean: "nhạy cảm" },
+                { word: "straightforward", type: "(adj)", mean: "thẳng thắn" },
+                { word: "perfectionist", type: "(n/adj)", mean: "người cầu toàn" },
+                { word: "spontaneous", type: "(adj)", mean: "bộc phát, tự nhiên" },
+                { word: "curious", type: "(adj)", mean: "tò mò" },
+                { word: "cautious", type: "(adj)", mean: "thận trọng" },
+                { word: "flexible", type: "(adj)", mean: "linh hoạt" },
+                { word: "selfish", type: "(adj)", mean: "ích kỷ" },
+                { word: "arrogant", type: "(adj)", mean: "kiêu ngạo" },
+                { word: "stubborn", type: "(adj)", mean: "bướng bỉnh" },
+                { word: "lazy", type: "(adj)", mean: "lười biếng" },
+                { word: "impatient", type: "(adj)", mean: "thiếu kiên nhẫn" },
+                { word: "irresponsible", type: "(adj)", mean: "vô trách nhiệm" },
+                { word: "moody", type: "(adj)", mean: "thất thường" },
+                { word: "jealous", type: "(adj)", mean: "ghen tị" },
+                { word: "pessimistic", type: "(adj)", mean: "bi quan" },
+                { word: "narrow-minded", type: "(adj)", mean: "bảo thủ" }
+            ],
+            weather: [
+                { word: "sunny", type: "(adj)", mean: "có nắng" },
+                { word: "cloudy", type: "(adj)", mean: "nhiều mây" },
+                { word: "rainy", type: "(adj)", mean: "có mưa" },
+                { word: "stormy", type: "(adj)", mean: "có bão" },
+                { word: "windy", type: "(adj)", mean: "nhiều gió" },
+                { word: "humid", type: "(adj)", mean: "ẩm ướt" },
+                { word: "dry", type: "(adj)", mean: "khô ráo" },
+                { word: "foggy", type: "(adj)", mean: "có sương mù" },
+                { word: "freezing", type: "(adj)", mean: "rất lạnh (dưới 0°C)" },
+                { word: "scorching", type: "(adj)", mean: "nóng gay gắt" },
+                { word: "climate", type: "(n)", mean: "khí hậu" },
+                { word: "temperature", type: "(n)", mean: "nhiệt độ" },
+                { word: "heatwave", type: "(n)", mean: "đợt nắng nóng" },
+                { word: "cold spell", type: "(n)", mean: "đợt lạnh" },
+                { word: "climate change", type: "(n)", mean: "biến đổi khí hậu" },
+                { word: "global warming", type: "(n)", mean: "nóng lên toàn cầu" },
+                { word: "tropical climate", type: "(n)", mean: "khí hậu nhiệt đới" },
+                { word: "temperate climate", type: "(n)", mean: "khí hậu ôn hòa" },
+                { word: "seasonal variation", type: "(n)", mean: "sự thay đổi theo mùa" },
+                { word: "extreme weather", type: "(n)", mean: "thời tiết cực đoan" },
+                { word: "flood", type: "(n)", mean: "lũ lụt" },
+                { word: "drought", type: "(n)", mean: "hạn hán" },
+                { word: "hurricane", type: "(n)", mean: "bão lớn" },
+                { word: "typhoon", type: "(n)", mean: "bão (ở châu Á)" },
+                { word: "thunderstorm", type: "(n)", mean: "giông bão" },
+                { word: "lightning", type: "(n)", mean: "tia chớp" },
+                { word: "weather forecast", type: "(n)", mean: "dự báo thời tiết" },
+                { word: "rising sea levels", type: "(n)", mean: "mực nước biển dâng" },
+                { word: "environmental impact", type: "(n)", mean: "tác động môi trường" },
+                { word: "natural disaster", type: "(n)", mean: "thiên tai" }
+            ],
+            career: [
+                { word: "occupation", type: "(n)", mean: "nghề nghiệp" },
+                { word: "profession", type: "(n)", mean: "nghề chuyên môn" },
+                { word: "career path", type: "(n)", mean: "lộ trình nghề nghiệp" },
+                { word: "job satisfaction", type: "(n)", mean: "sự hài lòng trong công việc" },
+                { word: "workplace", type: "(n)", mean: "nơi làm việc" },
+                { word: "employee", type: "(n)", mean: "nhân viên" },
+                { word: "employer", type: "(n)", mean: "nhà tuyển dụng" },
+                { word: "colleague", type: "(n)", mean: "đồng nghiệp" },
+                { word: "full-time job", type: "(n)", mean: " công việc toàn thời gian" },
+                { word: "part-time job", type: "(n)", mean: "công việc bán thời gian" },
+                { word: "professional skills", type: "(n)", mean: "kỹ năng chuyên môn" },
+                { word: "soft skills", type: "(n)", mean: "kỹ năng mềm" },
+                { word: "communication skills", type: "(n)", mean: "kỹ năng giao tiếp" },
+                { word: "leadership skills", type: "(n)", mean: "kỹ năng lãnh đạo" },
+                { word: "time management", type: "(n)", mean: "quản lý thời gian" },
+                { word: "problem-solving skills", type: "(n)", mean: "kỹ năng giải quyết vấn đề" },
+                { word: "career advancement", type: "(n)", mean: "thăng tiến nghề nghiệp" },
+                { word: "on-the-job training", type: "(n)", mean: "đào tạo tại nơi làm việc" },
+                { word: "work experience", type: "(n)", mean: "kinh nghiệm làm việc" },
+                { word: "internship", type: "(n)", mean: "thực tập" },
+                { word: "work-life balance", type: "(n)", mean: "cân bằng công việc - cuộc sống" },
+                { word: "job security", type: "(n)", mean: "sự ổn định công việc" },
+                { word: "unemployment", type: "(n)", mean: "thất nghiệp" },
+                { word: "job opportunities", type: "(n)", mean: "cơ hội việc làm" },
+                { word: "salary", type: "(n)", mean: "mức lương" },
+                { word: "promotion", type: "(n)", mean: "thăng chức" },
+                { word: "resignation", type: "(n)", mean: "sự từ chức/nghỉ việc" },
+                { word: "job burnout", type: "(n)", mean: "kiệt sức vì công việc" },
+                { word: "remote work", type: "(n)", mean: "làm việc từ xa" },
+                { word: "freelancer", type: "(n)", mean: "người làm việc tự do" }
+            ],
+            study_work: [
+                { word: "work-life balance", type: "(n)", mean: "cân bằng công việc – cuộc sống" },
+                { word: "study-work balance", type: "(n)", mean: "cân bằng học và làm" },
+                { word: "time management", type: "(n)", mean: "quản lý thời gian" },
+                { word: "heavy workload", type: "(n)", mean: "khối lượng công việc lớn" },
+                { word: "academic pressure", type: "(n)", mean: "áp lực học tập" },
+                { word: "part-time job", type: "(n)", mean: "công việc bán thời gian" },
+                { word: "full-time study", type: "(n)", mean: "học toàn thời gian" },
+                { word: "flexible schedule", type: "(n)", mean: "lịch trình linh hoạt" },
+                { word: "multitasking", type: "(n)", mean: "làm nhiều việc cùng lúc" },
+                { word: "prioritize tasks", type: "(v)", mean: "ưu tiên công việc" },
+                { word: "transferable skills", type: "(n)", mean: "kỹ năng có thể chuyển đổi" },
+                { word: "practical experience", type: "(n)", mean: "kinh nghiệm thực tế" },
+                { word: "theoretical knowledge", type: "(n)", mean: "kiến thức lý thuyết" },
+                { word: "skill development", type: "(n)", mean: "phát triển kỹ năng" },
+                { word: "professional growth", type: "(n)", mean: "phát triển nghề nghiệp" },
+                { word: "internship", type: "(n)", mean: "thực tập" },
+                { word: "on-the-job training", type: "(n)", mean: "đào tạo tại nơi làm việc" },
+                { word: "communication skills", type: "(n)", mean: "kỹ năng giao tiếp" },
+                { word: "problem-solving skills", type: "(n)", mean: "kỹ năng giải quyết vấn đề" },
+                { word: "adaptability", type: "(n)", mean: "khả năng thích nghi" },
+                { word: "burnout", type: "(n)", mean: "kiệt sức" },
+                { word: "fatigue", type: "(n)", mean: "mệt mỏi" },
+                { word: "stress management", type: "(n)", mean: "quản lý căng thẳng" },
+                { word: "financial independence", type: "(n)", mean: "độc lập tài chính" },
+                { word: "earn a living", type: "(v)", mean: "kiếm sống" },
+                { word: "job readiness", type: "(n)", mean: "sự sẵn sàng cho công việc" },
+                { word: "career prospects", type: "(n)", mean: "triển vọng nghề nghiệp" },
+                { word: "academic performance", type: "(n)", mean: "kết quả học tập" },
+                { word: "dropout rate", type: "(n)", mean: "tỷ lệ bỏ học" },
+                { word: "long-term benefits", type: "(n)", mean: "lợi ích lâu dài" }
+            ],
+            crime_punishment: [
+                { word: "theft", type: "(n)", mean: "trộm cắp" },
+                { word: "robbery", type: "(n)", mean: "cướp (có đe dọa/vũ lực)" },
+                { word: "burglary", type: "(n)", mean: "đột nhập trộm" },
+                { word: "fraud", type: "(n)", mean: "gian lận" },
+                { word: "cybercrime", type: "(n)", mean: "tội phạm mạng" },
+                { word: "violent crime", type: "(n)", mean: "tội phạm bạo lực" },
+                { word: "drug trafficking", type: "(n)", mean: "buôn bán ma túy" },
+                { word: "money laundering", type: "(n)", mean: "rửa tiền" },
+                { word: "shoplifting", type: "(n)", mean: "ăn cắp trong cửa hàng" },
+                { word: "vandalism", type: "(n)", mean: "phá hoại tài sản" },
+                { word: "law enforcement", type: "(n)", mean: "cơ quan thực thi pháp luật" },
+                { word: "police officer", type: "(n)", mean: "cảnh sát" },
+                { word: "court trial", type: "(n)", mean: "phiên tòa" },
+                { word: "judge", type: "(n)", mean: "thẩm phán" },
+                { word: "jury", type: "(n)", mean: "bồi thẩm đoàn" },
+                { word: "sentence", type: "(n/v)", mean: "bản án / tuyên án" },
+                { word: "prison sentence", type: "(n)", mean: "án tù" },
+                { word: "life imprisonment", type: "(n)", mean: "tù chung thân" },
+                { word: "capital punishment", type: "(n)", mean: "án tử hình" },
+                { word: "rehabilitation", type: "(n)", mean: "cải tạo (phạm nhân)" },
+                { word: "poverty", type: "(n)", mean: "nghèo đói" },
+                { word: "unemployment", type: "(n)", mean: "thất nghiệp" },
+                { word: "social inequality", type: "(n)", mean: "bất bình đẳng xã hội" },
+                { word: "peer pressure", type: "(n)", mean: "áp lực bạn bè" },
+                { word: "crime prevention", type: "(n)", mean: "phòng chống tội phạm" },
+                { word: "strict laws", type: "(n)", mean: "luật nghiêm khắc" },
+                { word: "deterrent", type: "(n)", mean: "biện pháp răn đe" },
+                { word: "reoffending", type: "(n)", mean: "tái phạm" },
+                { word: "community service", type: "(n)", mean: "lao động công ích" },
+                { word: "surveillance", type: "(n)", mean: "giám sát" }
+            ],
+            food_drinks: [
+                { word: "processed food", type: "(n)", mean: "thực phẩm chế biến sẵn" },
+                { word: "junk food", type: "(n)", mean: "đồ ăn nhanh/không lành mạnh" },
+                { word: "organic food", type: "(n)", mean: "thực phẩm hữu cơ" },
+                { word: "home-cooked meal", type: "(n)", mean: "bữa ăn nấu tại nhà" },
+                { word: "fast food", type: "(n)", mean: "thức ăn nhanh" },
+                { word: "vegetarian diet", type: "(n)", mean: "chế độ ăn chay" },
+                { word: "vegan diet", type: "(n)", mean: "chế độ ăn thuần chay" },
+                { word: "balanced diet", type: "(n)", mean: "chế độ ăn cân bằng" },
+                { word: "street food", type: "(n)", mean: "đồ ăn đường phố" },
+                { word: "traditional cuisine", type: "(n)", mean: "ẩm thực truyền thống" },
+                { word: "delicious", type: "(adj)", mean: "ngon" },
+                { word: "flavorful", type: "(adj)", mean: "đậm đà" },
+                { word: "savory", type: "(adj)", mean: "mặn (không ngọt)" },
+                { word: "spicy", type: "(adj)", mean: "cay" },
+                { word: "bitter", type: "(adj)", mean: "đắng" },
+                { word: "sweet", type: "(adj)", mean: "ngọt" },
+                { word: "sour", type: "(adj)", mean: "chua" },
+                { word: "cook from scratch", type: "(v)", mean: "nấu từ đầu (nguyên liệu tươi)" },
+                { word: "grilled", type: "(adj)", mean: "nướng" },
+                { word: "steamed", type: "(adj)", mean: "hấp" },
+                { word: "soft drinks", type: "(n)", mean: "nước ngọt" },
+                { word: "alcoholic beverages", type: "(n)", mean: "đồ uống có cồn" },
+                { word: "fresh juice", type: "(n)", mean: "nước ép tươi" },
+                { word: "caffeine intake", type: "(n)", mean: "lượng caffeine tiêu thụ" },
+                { word: "hydration", type: "(n)", mean: "sự cung cấp đủ nước" },
+                { word: "nutritional value", type: "(n)", mean: "giá trị dinh dưỡng" },
+                { word: "calorie intake", type: "(n)", mean: "lượng calo nạp vào" },
+                { word: "food safety", type: "(n)", mean: "an toàn thực phẩm" },
+                { word: "eating habits", type: "(n)", mean: "thói quen ăn uống" },
+                { word: "dietary preference", type: "(n)", mean: "sở thích ăn uống" }
+            ],
+            fruit: [
+                { word: "citrus fruits", type: "(n)", mean: "trái cây họ cam quýt" },
+                { word: "tropical fruits", type: "(n)", mean: "trái cây nhiệt đới" },
+                { word: "berries", type: "(n)", mean: "quả mọng" },
+                { word: "stone fruits", type: "(n)", mean: "trái cây có hạt cứng (đào, mận)" },
+                { word: "exotic fruits", type: "(n)", mean: "trái cây ngoại lai" },
+                { word: "seasonal fruits", type: "(n)", mean: "trái cây theo mùa" },
+                { word: "fresh produce", type: "(n)", mean: "nông sản tươi" },
+                { word: "organic fruits", type: "(n)", mean: "trái cây hữu cơ" },
+                { word: "ripe fruit", type: "(n)", mean: "trái chín" },
+                { word: "unripe fruit", type: "(n)", mean: "trái chưa chín" },
+                { word: "juicy", type: "(adj)", mean: "mọng nước" },
+                { word: "sweet", type: "(adj)", mean: "ngọt" },
+                { word: "sour", type: "(adj)", mean: "chua" },
+                { word: "tangy", type: "(adj)", mean: "chua nhẹ, kích thích vị giác" },
+                { word: "bitter", type: "(adj)", mean: "đắng" },
+                { word: "refreshing", type: "(adj)", mean: "thanh mát" },
+                { word: "aromatic", type: "(adj)", mean: "thơm" },
+                { word: "fibrous", type: "(adj)", mean: "nhiều xơ" },
+                { word: "seedless", type: "(adj)", mean: "không hạt" },
+                { word: "nutrient-rich", type: "(adj)", mean: "giàu dinh dưỡng" },
+                { word: "vitamin intake", type: "(n)", mean: "lượng vitamin hấp thụ" },
+                { word: "dietary fiber", type: "(n)", mean: "chất xơ" },
+                { word: "immune-boosting", type: "(adj)", mean: "tăng cường miễn dịch" },
+                { word: "antioxidants", type: "(n)", mean: "chất chống oxy hóa" },
+                { word: "natural sugar", type: "(n)", mean: "đường tự nhiên" },
+                { word: "calorie content", type: "(n)", mean: "hàm lượng calo" },
+                { word: "balanced diet", type: "(n)", mean: "chế độ ăn cân bằng" },
+                { word: "fruit consumption", type: "(n)", mean: "việc tiêu thụ trái cây" },
+                { word: "food preservation", type: "(n)", mean: "bảo quản thực phẩm" },
+                { word: "processed fruit products", type: "(n)", mean: "sản phẩm trái cây chế biến" }
+            ],
+            transportation: [
+                { word: "public transport", type: "(n)", mean: "phương tiện công cộng" },
+                { word: "private vehicle", type: "(n)", mean: "phương tiện cá nhân" },
+                { word: "mass transit", type: "(n)", mean: "hệ thống vận tải công cộng quy mô lớn" },
+                { word: "commuter train", type: "(n)", mean: "tàu dành cho người đi làm" },
+                { word: "subway/metro", type: "(n)", mean: "tàu điện ngầm" },
+                { word: "bus rapid transit (BRT)", type: "(n)", mean: "hệ thống xe buýt nhanh" },
+                { word: "ride-sharing", type: "(n)", mean: "đi chung xe (Grab, Uber)" },
+                { word: "electric vehicle (EV)", type: "(n)", mean: "xe điện" },
+                { word: "bicycle", type: "(n)", mean: "xe đạp" },
+                { word: "high-speed rail", type: "(n)", mean: "tàu cao tốc" },
+                { word: "traffic congestion", type: "(n)", mean: "tắc nghẽn giao thông" },
+                { word: "road infrastructure", type: "(n)", mean: "cơ sở hạ tầng đường bộ" },
+                { word: "rush hour", type: "(n)", mean: "giờ cao điểm" },
+                { word: "traffic flow", type: "(n)", mean: "lưu lượng giao thông" },
+                { word: "road safety", type: "(n)", mean: "an toàn giao thông" },
+                { word: "traffic jam", type: "(n)", mean: "kẹt xe" },
+                { word: "pedestrian crossing", type: "(n)", mean: "vạch qua đường" },
+                { word: "cycle lane", type: "(n)", mean: "làn đường cho xe đạp" },
+                { word: "parking space", type: "(n)", mean: "chỗ đỗ xe" },
+                { word: "urban planning", type: "(n)", mean: "quy hoạch đô thị" },
+                { word: "carbon emissions", type: "(n)", mean: "khí thải carbon" },
+                { word: "air pollution", type: "(n)", mean: "ô nhiễm không khí" },
+                { word: "sustainable transport", type: "(n)", mean: "giao thông bền vững" },
+                { word: "fuel-efficient", type: "(adj)", mean: "tiết kiệm nhiên liệu" },
+                { word: "environmentally friendly", type: "(adj)", mean: "thân thiện môi trường" },
+                { word: "traffic regulations", type: "(n)", mean: "luật giao thông" },
+                { word: "public awareness", type: "(n)", mean: "nhận thức cộng đồng" },
+                { word: "infrastructure development", type: "(n)", mean: "phát triển hạ tầng" },
+                { word: "reduce congestion", type: "(v)", mean: "giảm tắc nghẽn" },
+                { word: "alternative transport", type: "(n)", mean: "phương tiện thay thế" }
+            ]
+        };
+
+        // ==========================================
+        // LOGIC CHẠY BÀI TEST NGẪU NHIÊN (RÚT 10 CÂU)
+        // ==========================================
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentTopic = urlParams.get('topic');
+
+        // Cú pháp mặc định nếu link gõ sai
+        if (!currentTopic || !vocabDatabase[currentTopic]) {
+            currentTopic = 'education';
+        }
+
+        // Tự động làm đẹp tên tiêu đề (VD: "food_drinks" -> "Food_drinks")
+        let formattedTitle = currentTopic.charAt(0).toUpperCase() + currentTopic.slice(1);
+        formattedTitle = formattedTitle.replace('_', ' & '); // Làm đẹp nếu có dấu gạch dưới
+        document.getElementById('topic-title').innerText = `📚 Topic: ${formattedTitle}`;
+
+        const rawVocabData = vocabDatabase[currentTopic];
+        const allMeanings = rawVocabData.map(v => v.mean);
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Bốc ngẫu nhiên 10 câu cho bài test
+        const QUESTIONS_PER_TEST = 10;
+        const randomizedVocab = shuffle([...rawVocabData]).slice(0, Math.min(QUESTIONS_PER_TEST, rawVocabData.length));
+
+        const vocabData = randomizedVocab.map((item) => {
+            let wrongOptions = allMeanings.filter(m => m !== item.mean);
+            wrongOptions = shuffle(wrongOptions).slice(0, 3);
+            let options = shuffle([...wrongOptions, item.mean]);
+            return {
+                word: item.word,
+                type: item.type,
+                options: options,
+                correctIndex: options.indexOf(item.mean)
+            };
+        });
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const wordDisplay = document.getElementById('word-display');
+        const wordType = document.getElementById('word-type');
+        const optionsContainer = document.getElementById('options-container');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const nextBtn = document.getElementById('next-btn');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+
+        function loadQuestion() {
+            const currentQ = vocabData[currentQuestionIndex];
+            wordDisplay.innerText = currentQ.word.charAt(0).toUpperCase() + currentQ.word.slice(1);
+            wordType.innerText = currentQ.type;
+
+            progressText.innerText = `Câu ${currentQuestionIndex + 1} / ${vocabData.length}`;
+            progressBar.style.width = `${((currentQuestionIndex) / vocabData.length) * 100}%`;
+
+            optionsContainer.innerHTML = '';
+            nextBtn.style.display = 'none';
+
+            currentQ.options.forEach((optionText, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = optionText.charAt(0).toUpperCase() + optionText.slice(1);
+                btn.onclick = () => checkAnswer(btn, index, currentQ.correctIndex);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedBtn, selectedIndex, correctIndex) {
+            const allBtns = document.querySelectorAll('.opt-btn');
+            allBtns.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === correctIndex) {
+                selectedBtn.classList.add('correct');
+                score++;
+            } else {
+                selectedBtn.classList.add('wrong');
+                allBtns[correctIndex].classList.add('correct');
+            }
+
+            nextBtn.style.display = 'block';
+        }
+
+        nextBtn.onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < vocabData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        };
+
+        function showResult() {
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+
+            document.getElementById('final-score').innerText = `${score}/${vocabData.length}`;
+
+            let percentage = score / vocabData.length;
+            let msg = "";
+            if (percentage === 1) msg = "Tuyệt đỉnh! Điểm tối đa! 🏆";
+            else if (percentage >= 0.8) msg = "Rất xuất sắc! Vốn từ của bạn cực kỳ chắc chắn. ⭐";
+            else if (percentage >= 0.5) msg = "Khá tốt! Nhưng hãy ôn lại để đạt điểm cao hơn nhé. 👍";
+            else msg = "Cần cố gắng nhiều hơn! Đừng nản chí nhé. 💪";
+
+            document.getElementById('feedback-msg').innerText = msg;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+
+</html>

@@ -7,30 +7,72 @@
     <title>Dashboard - Bách Khoa Toàn Thư IELTS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Nạp Theme ngay lập tức để tránh chớp nháy màn hình -->
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+    </script>
+
     <style>
+        /* --- HỆ THỐNG 8 MÀU ĐỒNG BỘ --- */
         :root {
-            --primary: #d32f2f;
-            /* Màu đỏ Bách Khoa */
-            --secondary: #1e293b;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
+            --primary: #d32f2f; /* Màu đỏ Bách Khoa mặc định */
+            --secondary: #1976d2;
             --success: #22c55e;
-            --bg: #f8fafc;
             --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             --font-family: 'Inter', sans-serif;
+            --menu-bg: #1e293b;
+            --menu-hover: #334155;
+            --menu-text: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
+            --border-color: #334155; --primary: #f87171; --secondary: #60a5fa;
+        }
+
+        [data-theme="light-pink"] {
+            --bg-main: #fdf2f8; --bg-card: #ffffff; --text-main: #831843;
+            --border-color: #fbcfe8; --primary: #db2777; --secondary: #be185d;
+        }
+
+        [data-theme="light-matcha"] {
+            --bg-main: #f0fdf4; --bg-card: #ffffff; --text-main: #14532d;
+            --border-color: #bbf7d0; --primary: #16a34a; --secondary: #15803d;
+        }
+
+        [data-theme="light-purple"] {
+            --bg-main: #faf5ff; --bg-card: #ffffff; --text-main: #581c87;
+            --border-color: #e9d5ff; --primary: #a855f7; --secondary: #7e22ce;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-main: #1e1b4b; --bg-card: #312e81; --text-main: #e0e7ff;
+            --border-color: #4f46e5; --primary: #a78bfa; --secondary: #818cf8;
+        }
+
+        [data-theme="light-blue"] {
+            --bg-main: #eff6ff; --bg-card: #ffffff; --text-main: #1e3a8a;
+            --border-color: #bfdbfe; --primary: #3b82f6; --secondary: #1d4ed8;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-main: #082f49; --bg-card: #0c4a6e; --text-main: #e0f2fe;
+            --border-color: #0369a1; --primary: #38bdf8; --secondary: #7dd3fc;
         }
 
         body {
             font-family: var(--font-family);
-            background: var(--bg);
+            background: var(--bg-main);
             margin: 0;
             padding: 20px;
-            color: #1e293b;
-            transition: 0.3s;
-        }
-
-        body.dark-theme {
-            --bg: #0f172a;
-            --secondary: #f8fafc;
-            color: #f8fafc;
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
@@ -40,7 +82,7 @@
 
         /* Header */
         .header-box {
-            background: white;
+            background: var(--bg-card);
             padding: 20px 30px;
             border-radius: 20px;
             box-shadow: var(--card-shadow);
@@ -48,12 +90,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        body.dark-theme .header-box {
-            background: #1e293b;
-            border-color: #334155;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
         }
 
         h1 {
@@ -71,37 +109,24 @@
             gap: 15px;
         }
 
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: #64748b;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-theme .theme-toggle {
-            color: #fbbf24;
-        }
+        /* --- CSS NÚT BẢNG MÀU THAY CHO MẶT TRĂNG --- */
+        .theme-dropdown { position: relative; display: inline-block; }
+        .theme-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-main); transition: 0.2s; padding: 5px; border-radius: 50%; }
+        .theme-btn:hover { background: rgba(0, 0, 0, 0.05); transform: scale(1.1); }
+        .theme-menu { display: none; position: absolute; right: 0; top: 120%; background: var(--menu-bg); color: var(--menu-text); border-radius: 10px; width: 170px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); overflow: hidden; z-index: 1000; text-align: left;}
+        .theme-menu.show { display: block; }
+        .theme-option { padding: 12px 15px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .theme-option:hover { background: var(--menu-hover); }
 
         .user-pill {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 5px 12px;
-            background: #f1f5f9;
+            background: var(--bg-main);
             border-radius: 30px;
-            border: 1px solid #e2e8f0;
-        }
-
-        body.dark-theme .user-pill {
-            background: #334155;
-            border-color: #475569;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
         }
 
         .logout-btn {
@@ -125,27 +150,22 @@
 
         .stats-card,
         .chart-card {
-            background: white;
+            background: var(--bg-card);
             padding: 24px;
             border-radius: 20px;
             box-shadow: var(--card-shadow);
-            border: 1px solid #e2e8f0;
-        }
-
-        body.dark-theme .stats-card,
-        body.dark-theme .chart-card {
-            background: #1e293b;
-            border-color: #334155;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
         }
 
         /* Progress Bar */
         .progress-bar {
-            background: #f1f5f9;
+            background: var(--bg-main);
             border-radius: 10px;
             height: 12px;
             overflow: hidden;
             margin-top: 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
         }
 
         .progress-fill {
@@ -167,9 +187,10 @@
         #category-filter {
             padding: 12px 18px;
             border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             outline: none;
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-main);
         }
 
         #search-input {
@@ -212,19 +233,14 @@
         }
 
         .test-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 18px;
             padding: 20px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
             transition: 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
-
-        body.dark-theme .test-card {
-            background: #1e293b;
-            border-color: #334155;
         }
 
         .test-card:hover {
@@ -246,13 +262,14 @@
 
         .high-score {
             font-size: 12px;
-            color: #0284c7;
-            background: #e0f2fe;
+            color: var(--text-main);
+            background: var(--bg-main);
             padding: 5px 12px;
             border-radius: 8px;
             font-weight: 700;
             margin: 10px 0;
             display: inline-block;
+            border: 1px solid var(--border-color);
         }
 
         .btn-go {
@@ -273,7 +290,7 @@
         #login-overlay {
             position: fixed;
             inset: 0;
-            background: white;
+            background: var(--bg-card);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -297,12 +314,22 @@
         <div class="header-box">
             <h1>🎓 Hệ thống học tập PRO</h1>
             <div class="header-actions">
-                <button class="theme-toggle" id="theme-toggle-btn">
-                    <svg id="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                    </svg>
-                </button>
+                
+                <!-- Nút Đổi Theme 8 Màu -->
+                <div class="theme-dropdown">
+                    <button id="theme-btn" class="theme-btn">🎨</button>
+                    <div id="theme-menu" class="theme-menu">
+                        <div class="theme-option" data-value="light">☀️ Light</div>
+                        <div class="theme-option" data-value="dark">🌙 Dark</div>
+                        <div class="theme-option" data-value="light-pink">🌸 Light Pink</div>
+                        <div class="theme-option" data-value="light-matcha">🍵 Light Matcha</div>
+                        <div class="theme-option" data-value="light-purple">💜 Light Purple</div>
+                        <div class="theme-option" data-value="dark-purple">🌌 Dark Purple</div>
+                        <div class="theme-option" data-value="light-blue">🌊 Light Blue</div>
+                        <div class="theme-option" data-value="dark-blue">🌃 Dark Blue</div>
+                    </div>
+                </div>
+
                 <div class="user-pill">
                     <img id="user-avatar-img"
                         src="https://ui-avatars.com/api/?name=User&background=d32f2f&color=fff&rounded=true"
@@ -317,11 +344,11 @@
         <!-- Dashboard Stats -->
         <div class="dashboard-grid">
             <div class="stats-card">
-                <button onclick="window.history.back()"
-                    style="display: inline-flex; align-items: center; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 20px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
-                    onmouseover="this.style.background='#e2e8f0'; this.style.color='#d32f2f'; this.style.borderColor='#d32f2f'"
-                    onmouseout="this.style.background='#f1f5f9'; this.style.color='#475569'; this.style.borderColor='#cbd5e1'">
-                    ⬅ QUAY LẠI TRANG TRƯỚC
+                <button onclick="window.location.href='academic.html'"
+                    style="display: inline-flex; align-items: center; background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 20px; transition: all 0.2s;"
+                    onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'"
+                    onmouseout="this.style.borderColor='var(--border-color)'; this.style.color='var(--text-main)'">
+                    ➡️ SANG TRANG ACADEMIC
                 </button>
                 <h3 style="margin:0 0 10px 0;">📊 Tổng quan tiến độ</h3>
                 <p id="progress-label" style="font-size: 13px; color: #64748b;">Đang tính toán...</p>
@@ -362,6 +389,34 @@
         </div>
     </div>
 
+    <!-- SCRIPT GIAO DIỆN THEME -->
+    <script>
+        const themeBtn = document.getElementById('theme-btn');
+        const themeMenu = document.getElementById('theme-menu');
+        const themeOptions = document.querySelectorAll('.theme-option');
+
+        themeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!themeMenu.contains(e.target)) {
+                themeMenu.classList.remove('show');
+            }
+        });
+
+        themeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const selectedTheme = option.getAttribute('data-value');
+                document.documentElement.setAttribute('data-theme', selectedTheme);
+                localStorage.setItem('theme', selectedTheme);
+                themeMenu.classList.remove('show');
+            });
+        });
+    </script>
+
+    <!-- SCRIPT LOGIC FIREBASE & TÍNH NĂNG CHÍNH -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -401,7 +456,7 @@
 
         async function loadDashboardData(uid) {
             try {
-                // 1. Lấy kết quả bài làm để tính điểm cao nhất
+                // Lấy kết quả bài làm để tính điểm
                 const resultsSnap = await getDocs(query(collection(db, "results"), where("userId", "==", uid), orderBy("timestamp", "desc")));
                 let allResults = [];
                 globalHighScores = {};
@@ -415,8 +470,7 @@
                     }
                 });
 
-                // 2. Lấy danh sách bài thi từ Firestore (Gộp Reading và Listening nếu cần)
-                // Ở đây mình lấy Reading làm mẫu như bạn yêu cầu
+                // Lấy danh sách bài thi
                 const testsSnap = await getDocs(query(collection(db, "reading_tests"), where("isActive", "==", true), orderBy("order", "asc")));
                 allTestsCache = [];
                 testsSnap.forEach(doc => allTestsCache.push({ id: doc.id, ...doc.data() }));
@@ -451,7 +505,7 @@
                             <span style="font-size:10px; color:#64748b;">${test.band || '5.5+'}</span>
                         </div>
                         <h3 class="test-title" style="margin:10px 0; font-size:16px;">${test.title}</h3>
-                        ${isDone ? `<div class="high-score">⭐ Best: ${score}/10</div>` : '<div class="high-score" style="background:#f1f5f9; color:#94a3b8">Chưa làm</div>'}
+                        ${isDone ? `<div class="high-score">⭐ Best: ${score}/10</div>` : '<div class="high-score">Chưa làm</div>'}
                         <a href="room.html?id=${test.id}" class="btn-go">${isDone ? 'LÀM LẠI' : 'BẮT ĐẦU'}</a>
                     `;
                     container.appendChild(card);
@@ -492,7 +546,7 @@
             });
         }
 
-        // Event Listeners
+        // Lọc bài
         document.getElementById('search-input').oninput = renderTests;
         document.getElementById('category-filter').onchange = () => {
             const cat = document.getElementById('category-filter').value;
@@ -507,17 +561,10 @@
             renderTests();
         };
 
-        // Theme Toggle
-        document.getElementById('theme-toggle-btn').onclick = () => {
-            document.body.classList.toggle('dark-theme');
-            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
-        };
-        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
-
-        // Logout
+        // Đăng xuất
         document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-        // Avatar Upload (ImgBB)
+        // Upload Avatar
         document.getElementById('user-avatar-img').onclick = () => document.getElementById('avatar-upload').click();
         document.getElementById('avatar-upload').onchange = async (e) => {
             const file = e.target.files[0];

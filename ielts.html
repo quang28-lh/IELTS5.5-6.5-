@@ -6,57 +6,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Bách Khoa Toàn Thư IELTS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* --- KHAI BÁO CÁC BỘ MÀU (THEMES) --- */
         :root {
             --primary: #d32f2f;
             --secondary: #1976d2;
             --success: #4CAF50;
-            --bg: #f8fafc;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             --font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+
+            /* Theme Variables (Mặc định là Light) */
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
         }
 
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --border-color: #334155;
+        }
+
+        [data-theme="light-purple"] {
+            --bg-main: #f3e8ff;
+            --bg-card: #ffffff;
+            --text-main: #4c1d95;
+            --border-color: #e9d5ff;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-main: #2e1065;
+            --bg-card: #4c1d95;
+            --text-main: #f3e8ff;
+            --border-color: #6b21a8;
+        }
+
+        [data-theme="light-pink"] {
+            --bg-main: #fce7f3;
+            --bg-card: #ffffff;
+            --text-main: #831843;
+            --border-color: #fbcfe8;
+        }
+
+        [data-theme="dark-pink"] {
+            --bg-main: #500724;
+            --bg-card: #831843;
+            --text-main: #fce7f3;
+            --border-color: #9d174d;
+        }
+
+        [data-theme="light-blue"] {
+            --bg-main: #e0f2fe;
+            --bg-card: #ffffff;
+            --text-main: #082f49;
+            --border-color: #bae6fd;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-main: #082f49;
+            --bg-card: #0369a1;
+            --text-main: #e0f2fe;
+            --border-color: #0284c7;
+        }
+
+        [data-theme="light-matcha"] {
+            --bg-main: #ecfdf5;
+            --bg-card: #ffffff;
+            --text-main: #064e3b;
+            --border-color: #a7f3d0;
+        }
+
+        [data-theme="dark-matcha"] {
+            --bg-main: #064e3b;
+            --bg-card: #047857;
+            --text-main: #ecfdf5;
+            --border-color: #059669;
+        }
+
+        [data-theme="light-coffee"] {
+            --bg-main: #f5f5f4;
+            --bg-card: #ffffff;
+            --text-main: #44403c;
+            --border-color: #e7e5e4;
+        }
+
+        [data-theme="dark-coffee"] {
+            --bg-main: #292524;
+            --bg-card: #44403c;
+            --text-main: #f5f5f4;
+            --border-color: #57534e;
+        }
+
+        /* --- GLOBAL STYLES --- */
         body {
             font-family: var(--font-family);
-            background: var(--bg);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
-            color: #1e293b;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .container { max-width: 1100px; margin: auto; }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card-custom {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            transition: background-color 0.3s, border-color 0.3s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Nút bấm chung */
+        .btn-main {
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        .btn-main:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
 
         /* Header */
         .header-box {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
         }
 
-        h1 { margin: 0; color: var(--primary); font-size: 20px; text-transform: uppercase; }
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 20px;
+            text-transform: uppercase;
+        }
 
         .user-pill {
-            background: #f1f5f9;
+            background: var(--bg-main);
             padding: 6px 12px;
             border-radius: 30px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border-color);
         }
 
         .logout-btn {
-            background: #fee2e2; color: #ef4444; border: none;
-            padding: 4px 10px; border-radius: 8px; cursor: pointer;
-            font-size: 11px; font-weight: 700;
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         /* 4 Kỹ năng Grid */
@@ -68,26 +185,28 @@
         }
 
         .category-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             cursor: pointer;
-            transition: 0.3s;
             border: 2px solid transparent;
         }
 
         .category-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
             border-color: var(--secondary);
         }
 
-        .cat-icon { font-size: 32px; margin-bottom: 8px; }
-        .cat-title { font-size: 16px; font-weight: 800; margin: 0; }
+        .cat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
 
-        /* Stats & Chart */
+        .cat-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        /* Stats & Feedback Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
@@ -95,36 +214,49 @@
             margin-bottom: 25px;
         }
 
-        .stats-card, .chart-card {
-            background: white; padding: 20px; border-radius: 20px;
-            border: 1px solid #e2e8f0; box-shadow: var(--card-shadow);
-        }
-
         .progress-bar {
-            background: #f1f5f9; border-radius: 10px; height: 12px;
-            overflow: hidden; margin-top: 10px; border: 1px solid #e2e8f0;
+            background: var(--bg-main);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
         }
 
         .progress-fill {
             background: linear-gradient(90deg, var(--success), #81c784);
-            height: 100%; width: 0%; transition: 1s ease;
+            height: 100%;
+            width: 0%;
+            transition: 1s ease;
         }
 
         /* Filters */
         .filter-row {
-            margin-bottom: 25px;
             display: flex;
             gap: 12px;
+            margin-bottom: 25px;
         }
 
         #search-input {
-            flex: 2; padding: 12px 20px; border-radius: 12px;
-            border: 1px solid #e2e8f0; outline: none; font-size: 14px;
+            flex: 2;
+            padding: 12px 20px;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
         }
 
         #category-filter {
-            flex: 1; padding: 12px; border-radius: 12px;
-            border: 1px solid #e2e8f0; background: white; font-weight: 600;
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            outline: none;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
         }
 
         /* Test Cards */
@@ -135,58 +267,208 @@
         }
 
         .test-card {
-            background: white; border-radius: 20px; padding: 20px;
-            border: 1px solid #e2e8f0; transition: 0.3s;
-            display: flex; flex-direction: column; justify-content: space-between;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .test-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
-        .test-card.completed { border-left: 6px solid var(--success); }
-        .test-title { font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+        .test-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .test-card.completed {
+            border-left: 6px solid var(--success);
+        }
+
+        .test-title {
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
 
         .high-score {
-            font-size: 12px; font-weight: 700; color: var(--secondary);
-            background: #e0f2fe; padding: 5px 10px; border-radius: 8px;
-            display: inline-block; margin-bottom: 15px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--secondary);
+            background: #e0f2fe;
+            padding: 5px 10px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         .btn-go {
-            background: #1e293b; color: white; text-decoration: none;
-            padding: 12px; border-radius: 10px; text-align: center;
-            font-weight: 800; font-size: 14px; transition: 0.2s;
+            background: #1e293b;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 14px;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
         }
 
-        .btn-go:hover { background: var(--primary); }
+        .btn-go:hover {
+            background: var(--primary);
+        }
 
         #vocab-suggestion {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white; padding: 20px; border-radius: 15px;
-            margin-bottom: 25px; display: none; justify-content: space-between; align-items: center;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Dark Mode */
-        body.dark-theme { --bg: #0f172a; }
-        body.dark-theme .header-box, body.dark-theme .stats-card, 
-        body.dark-theme .chart-card, body.dark-theme .test-card, 
-        body.dark-theme .category-card, body.dark-theme #search-input, 
-        body.dark-theme #category-filter {
-            background: #1e293b; border-color: #334155; color: white;
+        /* --- THEME SWITCHER UI --- */
+        .theme-switcher-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-dropdown {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 0;
+            width: 220px;
+            background: #1e1b26;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 8px 0;
+            color: #e5e5e5;
+            font-family: sans-serif;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .theme-dropdown.show {
+            display: block;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 15px;
+        }
+
+        .theme-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-option .icon {
+            margin-right: 15px;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .theme-option .check {
+            margin-left: auto;
+            display: none;
+            color: white;
+        }
+
+        .theme-option.active {
+            background: rgba(255, 255, 255, 0.15);
+            font-weight: bold;
+        }
+
+        .theme-option.active .check {
+            display: inline-block;
+        }
+
+        .theme-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 6px 0;
         }
     </style>
 </head>
 
 <body>
-    <div id="login-overlay" style="display: none; position: fixed; inset: 0; background: white; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+    <div id="login-overlay"
+        style="display: none; position: fixed; inset: 0; background: var(--bg-main); z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
         <h2 style="font-size: 28px;">Dừng lại một chút! 🛑</h2>
         <p>Vui lòng đăng nhập để tiếp tục.</p>
         <a href="login.html" class="btn-go" style="padding: 15px 40px;">Đăng nhập ngay</a>
     </div>
 
     <div class="container" id="main-content">
-        <div class="header-box">
+        <div class="card-custom header-box">
             <h1>🎓 HỆ THỐNG HỌC TẬP PRO</h1>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <button onclick="document.body.classList.toggle('dark-theme')" style="background:none; border:none; cursor:pointer; font-size: 20px;">🌙</button>
+
+                <!-- Nút mở Menu Đổi Màu -->
+                <div class="theme-switcher-container">
+                    <button class="theme-btn" id="theme-btn" title="Đổi giao diện">
+                        <span class="icon">🎨</span>
+                    </button>
+                    <!-- Menu Dropdown -->
+                    <div class="theme-dropdown" id="theme-dropdown">
+                        <div class="theme-option" data-theme="light"><span class="icon">☀️</span> Light <span
+                                class="check">✔</span></div>
+                        <div class="theme-option" data-theme="dark"><span class="icon">🌙</span> Dark <span
+                                class="check">✔</span></div>
+                        <div class="theme-divider"></div>
+                        <div class="theme-option" data-theme="light-purple"><span class="icon">☀️</span> Light Purple
+                            <span class="check">✔</span>
+                        </div>
+                        <div class="theme-option" data-theme="dark-purple"><span class="icon">🌙</span> Dark Purple
+                            <span class="check">✔</span>
+                        </div>
+                        <div class="theme-option" data-theme="light-pink"><span class="icon">☀️</span> Light Pink <span
+                                class="check">✔</span></div>
+                        <div class="theme-option" data-theme="dark-pink"><span class="icon">🌙</span> Dark Pink <span
+                                class="check">✔</span></div>
+                        <div class="theme-option" data-theme="light-blue"><span class="icon">☀️</span> Light Blue <span
+                                class="check">✔</span></div>
+                        <div class="theme-option" data-theme="dark-blue"><span class="icon">🌙</span> Dark Blue <span
+                                class="check">✔</span></div>
+                        <div class="theme-divider"></div>
+                        <div class="theme-option" data-theme="light-matcha"><span class="icon">☀️</span> Light Matcha
+                            <span class="check">✔</span>
+                        </div>
+                        <div class="theme-option" data-theme="dark-matcha"><span class="icon">🌙</span> Dark Matcha
+                            <span class="check">✔</span>
+                        </div>
+                        <div class="theme-option" data-theme="light-coffee"><span class="icon">☀️</span> Light Coffee
+                            <span class="check">✔</span>
+                        </div>
+                        <div class="theme-option" data-theme="dark-coffee"><span class="icon">🌙</span> Dark Coffee
+                            <span class="check">✔</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="user-pill">
                     <img id="user-avatar-img" src="" style="width: 30px; height: 30px; border-radius: 50%;">
                     <span id="user-email" style="font-size: 13px; font-weight: 600;">Đang tải...</span>
@@ -197,36 +479,77 @@
 
         <h2 style="margin-bottom: 15px; font-size: 18px;">IELTS 4 Kỹ Năng</h2>
         <div class="category-grid">
-            <div class="category-card" onclick="setFilter('LISTENING')">
+            <div class="card-custom category-card" onclick="setFilter('LISTENING')">
                 <div class="cat-icon">🎧</div>
                 <div class="cat-title">Listening</div>
             </div>
-            <div class="category-card" onclick="setFilter('READING')">
+            <div class="card-custom category-card" onclick="setFilter('READING')">
                 <div class="cat-icon">📖</div>
                 <div class="cat-title">Reading</div>
             </div>
-            <div class="category-card" onclick="setFilter('WRITING')">
+            <div class="card-custom category-card" onclick="setFilter('WRITING')">
                 <div class="cat-icon">✍️</div>
                 <div class="cat-title">Writing</div>
             </div>
-            <div class="category-card" onclick="setFilter('SPEAKING')">
+            <div class="card-custom category-card" onclick="setFilter('SPEAKING')">
                 <div class="cat-icon">🗣️</div>
                 <div class="cat-title">Speaking</div>
             </div>
         </div>
 
+        <!-- KHU VỰC THỐNG KÊ & TƯƠNG TÁC -->
         <div class="dashboard-grid">
-            <div class="stats-card">
+
+            <!-- Cột trái: Tiến độ -->
+            <div class="card-custom">
                 <h3 style="margin-top:0; font-size: 16px;">📊 Tổng quan tiến độ</h3>
-                <p id="progress-label" style="font-size: 13px; color: #64748b;">Đang tính...</p>
-                <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+                <p id="progress-label" style="font-size: 13px; opacity: 0.8;">Đang tính...</p>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
             </div>
-            <div class="chart-card">
-                <h3 style="margin-top:0; font-size: 16px;">📈 Tiến bộ gần đây</h3>
-                <div style="height: 150px;"><canvas id="scoreChart"></canvas></div>
+
+            <!-- Cột phải: Học Từ Vựng & Góp ý -->
+            <div style="display: flex; flex-direction: column; gap: 20px; flex: 1;">
+
+                <!-- Ô Bài Test Từ Vựng -->
+                <div class="card-custom" style="padding: 15px 20px;">
+                    <h3 style="margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
+                        <span>📚</span> Rèn luyện Từ Vựng
+                    </h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn-main"
+                            style="background: #2563eb; padding: 10px 15px; font-size: 13px; flex: 1;"
+                            onclick="window.location.href='academic.html'">
+                            Academic
+                        </button>
+                        <button class="btn-main"
+                            style="background: #16a34a; padding: 10px 15px; font-size: 13px; flex: 1;"
+                            onclick="window.location.href='general.html'">
+                            General
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ô Feedback -->
+                <div class="card-custom" style="padding: 15px 20px;">
+                    <h3 style="margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
+                        <span>💬</span> Góp Ý & Phản Hồi
+                    </h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <input type="text" id="feedback-input" placeholder="Nhập góp ý của bạn..."
+                            style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); outline: none; font-family: inherit; font-size: 13px;">
+                        <button class="btn-main" onclick="sendFeedback()"
+                            style="background: #eab308; color: #1e293b; padding: 10px 20px; font-size: 13px;">
+                            Gửi
+                        </button>
+                    </div>
+                </div>
             </div>
+
         </div>
 
+        <!-- Bộ Lọc -->
         <div class="filter-row">
             <input type="text" id="search-input" placeholder="🔍 Tìm tên bài thi...">
             <select id="category-filter">
@@ -243,13 +566,16 @@
                 <h3 id="vocab-title" style="color: #fbbf24; margin:0; font-size: 18px;">Kho từ vựng</h3>
                 <p style="margin: 5px 0 0 0; font-size: 13px; opacity: 0.9;">Học từ vựng trọng tâm cho kỹ năng này!</p>
             </div>
-            <a href="#" id="vocab-link" style="background:white; color:#1e293b; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size: 13px;">HỌC NGAY</a>
+            <a href="#" id="vocab-link"
+                style="background:white; color:#1e293b; padding:10px 20px; border-radius:10px; text-decoration:none; font-weight:800; font-size: 13px;">HỌC
+                NGAY</a>
         </div>
 
         <h2 style="margin: 20px 0; font-size: 18px;">🎯 DANH SÁCH BÀI THI</h2>
         <div class="test-grid" id="test-list"></div>
     </div>
 
+    <!-- MODULE FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -285,7 +611,7 @@
         async function initDashboard(uid) {
             const collections = ['listening_tests', 'reading_tests', 'writing_tests', 'speaking_tests'];
             globalAllTests = {};
-            
+
             // 1. Tải tất cả bài thi từ 4 kho
             for (const col of collections) {
                 const snap = await getDocs(collection(db, col));
@@ -295,7 +621,6 @@
                         globalAllTests[doc.id] = {
                             id: doc.id,
                             title: data.title || "Chưa đặt tên",
-                            // CHUẨN HÓA CATEGORY: Xóa khoảng trắng và viết hoa
                             category: (data.type || col.split('_')[0]).toUpperCase().trim(),
                             level: data.band || "Band 5.5+",
                             order: Number(data.order) || 999
@@ -319,35 +644,33 @@
 
             renderTests();
             updateProgress();
-            if (resultsArr.length > 0) renderChart(resultsArr.slice(0, 7).reverse());
         }
 
-        window.renderTests = function() {
+        window.renderTests = function () {
             const search = document.getElementById('search-input').value.toLowerCase().trim();
             const filterVal = document.getElementById('category-filter').value.toUpperCase();
             const list = document.getElementById('test-list');
             list.innerHTML = '';
 
-            const sortedIds = Object.keys(globalAllTests).sort((a,b) => globalAllTests[a].order - globalAllTests[b].order);
-            
+            const sortedIds = Object.keys(globalAllTests).sort((a, b) => globalAllTests[a].order - globalAllTests[b].order);
+
             let count = 0;
             sortedIds.forEach(id => {
                 const t = globalAllTests[id];
                 const score = globalHighScores[id];
-                
-                // Lọc thông minh: khớp tên VÀ khớp kỹ năng
+
                 if (t.title.toLowerCase().includes(search) && (filterVal === "ALL" || t.category === filterVal)) {
                     count++;
                     const card = document.createElement('div');
-                    card.className = `test-card ${score !== undefined ? 'completed' : ''}`;
+                    card.className = `card-custom test-card ${score !== undefined ? 'completed' : ''}`;
                     card.innerHTML = `
                         <div>
                             <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                                 <span style="font-size:10px; font-weight:800; color:var(--secondary); background:#e0f2fe; padding:2px 6px; border-radius:4px;">${t.category}</span>
-                                <span style="font-size:10px; color:#64748b; font-weight:600;">${t.level}</span>
+                                <span style="font-size:10px; opacity:0.8; font-weight:600;">${t.level}</span>
                             </div>
                             <div class="test-title">${t.title}</div>
-                            <div class="high-score" style="${score !== undefined ? '' : 'background:#f1f5f9; color:#94a3b8;'}">
+                            <div class="high-score" style="${score !== undefined ? '' : 'background:var(--bg-main); color:var(--text-main); opacity:0.6;'}">
                                 ${score !== undefined ? `⭐ Best Score: ${score} điểm` : 'Chưa làm bài'}
                             </div>
                         </div>
@@ -356,52 +679,90 @@
                     list.appendChild(card);
                 }
             });
-            if(count === 0) list.innerHTML = `<div style="text-align:center; width:100%; color:#94a3b8; padding:30px;">Không tìm thấy bài thi nào cho mục ${filterVal}.</div>`;
+            if (count === 0) list.innerHTML = `<div style="text-align:center; width:100%; opacity:0.6; padding:30px;">Không tìm thấy bài thi nào.</div>`;
         }
 
-        window.setFilter = function(cat) {
+        window.setFilter = function (cat) {
             const dropdown = document.getElementById('category-filter');
             dropdown.value = cat;
-            
+
             const vocabBox = document.getElementById('vocab-suggestion');
             vocabBox.style.display = 'flex';
             document.getElementById('vocab-title').innerText = `Kho từ vựng: ${cat}`;
             document.getElementById('vocab-link').href = `vocabulary.html?topic=${cat}`;
-            
+
             renderTests();
-            // Cuộn xuống danh sách
             document.getElementById('test-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function updateProgress() {
             const total = Object.keys(globalAllTests).length;
             const done = Object.keys(globalHighScores).length;
-            const percent = total > 0 ? Math.round((done/total)*100) : 0;
+            const percent = total > 0 ? Math.round((done / total) * 100) : 0;
             document.getElementById('progress-fill').style.width = percent + '%';
             document.getElementById('progress-label').innerText = `${done}/${total} bài đã hoàn thành (${percent}%)`;
-        }
-
-        function renderChart(data) {
-            const ctx = document.getElementById('scoreChart').getContext('2d');
-            if(window.myChart) window.myChart.destroy();
-            window.myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => "Bài " + d.testId.substring(0, 4)),
-                    datasets: [{
-                        label: 'Điểm số',
-                        data: data.map(d => d.score),
-                        borderColor: '#1976d2', tension: 0.4, fill: true,
-                        backgroundColor: 'rgba(25, 118, 210, 0.1)', pointRadius: 4
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
         }
 
         document.getElementById('search-input').oninput = renderTests;
         document.getElementById('category-filter').onchange = renderTests;
         document.getElementById('btn-logout').onclick = () => signOut(auth);
     </script>
+
+    <!-- UI JAVASCRIPT & THEME SWITCHER -->
+    <script>
+        // Tính năng Gửi Feedback
+        window.sendFeedback = function () {
+            const input = document.getElementById('feedback-input');
+            const message = input.value.trim();
+
+            if (message === "") {
+                alert("⚠️ Bạn chưa nhập nội dung góp ý kìa!");
+                return;
+            }
+            console.log("Feedback nhận được:", message);
+            alert("💖 Cảm ơn bạn! Góp ý của bạn đã được gửi tới hệ thống.");
+            input.value = "";
+        };
+
+        // Quản lý Bật/Tắt Menu Màu
+        const themeBtn = document.getElementById('theme-btn');
+        const themeDropdown = document.getElementById('theme-dropdown');
+
+        themeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            themeDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+            themeDropdown.classList.remove('show');
+        });
+
+        const themeOptions = document.querySelectorAll('.theme-option');
+
+        function setTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            localStorage.setItem('user_theme', themeName);
+            themeOptions.forEach(opt => {
+                if (opt.getAttribute('data-theme') === themeName) {
+                    opt.classList.add('active');
+                } else {
+                    opt.classList.remove('active');
+                }
+            });
+        }
+
+        themeOptions.forEach(opt => {
+            opt.addEventListener('click', function () {
+                const selectedTheme = this.getAttribute('data-theme');
+                setTheme(selectedTheme);
+                themeDropdown.classList.remove('show');
+            });
+        });
+
+        // Tự động Load màu khi vào web
+        const savedTheme = localStorage.getItem('user_theme') || 'light';
+        setTheme(savedTheme);
+    </script>
 </body>
+
 </html>

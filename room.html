@@ -6,76 +6,162 @@
     <title>Phòng Thi IELTS PRO - Hệ Thống Thông Minh</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1e293b; --accent: #2563eb; --danger: #dc2626; --success: #16a34a; }
-        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; color: var(--primary); }
-        
-        .room-container { max-width: 1400px; margin: 0 auto; padding: 30px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        
-        .test-title { font-size: 32px; font-weight: 800; margin: 0 0 10px 0; }
-        .test-info { background: #e2e8f0; padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: 700; display: inline-block; margin-bottom: 30px; }
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --success: #22c55e;
+            --ai-color: #8b5cf6;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+        }
 
-        /* Card chung cho các thành phần */
-        .card-custom { 
-            background: white; border-radius: 15px; padding: 25px; 
-            border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; color: var(--text-main); }
+        .room-container { max-width: 1100px; margin: 0 auto; padding: 35px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; position: relative; }
+        
+        .test-title { color: var(--text-main); margin-bottom: 8px; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+        .test-info { margin-bottom: 30px; color: var(--text-sub); font-weight: 700; background: #f1f5f9; padding: 8px 18px; border-radius: 30px; display: inline-block; font-size: 14px; }
+        
+        .audio-player { width: 100%; margin: 25px 0; background: #f8fafc; padding: 20px; border-radius: 15px; border: 2px solid #e2e8f0; box-sizing: border-box; }
+        
+        .test-content { margin-top: 30px; line-height: 1.8; }
+        svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+        .highlighted-text { background-color: #fef08a; border-bottom: 2px solid #eab308; cursor: pointer; border-radius: 2px; }
+
+        .action-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 50px; padding-top: 30px; border-top: 2px dashed #e2e8f0; }
+        
+        .btn-main { padding: 16px 50px; border: none; border-radius: 14px; cursor: pointer; font-weight: 800; font-size: 16px; transition: all 0.3s; width: 100%; max-width: 400px; color: white; }
+        .btn-submit { background: var(--success); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); }
+        .btn-ai { background: var(--ai-color); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); display: none; }
+        .btn-main:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        
+        .btn-transcript { padding: 14px 30px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; display: none; margin-top: 20px; }
+
+        #ai-feedback-area { display: none; width: 100%; text-align: left; margin-top: 40px; padding: 30px; background: #fdf4ff; border: 2px solid #d8b4fe; border-radius: 20px; box-sizing: border-box; }
+        #ai-loading { text-align: center; color: var(--ai-color); font-weight: 700; margin-bottom: 15px; }
+
+        .timer-widget { position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; padding: 18px; border-radius: 15px; z-index: 1000; text-align: center; min-width: 140px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #334155; }
+        .timer-display { font-size: 32px; font-weight: 800; color: #fbbf24; font-family: 'Courier New', monospace; margin: 5px 0; }
+        .timer-input { width: 55px; padding: 8px; border-radius: 8px; border: none; text-align: center; font-weight: 800; }
+
+        #results-area { font-size: 24px; font-weight: 800; margin-top: 20px; color: var(--primary); }
+        #transcript-container { display: none; margin-top: 35px; padding: 25px; border: 1px solid #e2e8f0; border-radius: 15px; background: #fff; line-height: 1.8; }
+        #highlight-btn-pop { position: absolute; background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; display: none; z-index: 9999; font-weight: 800; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        /* --- GIAO DIỆN NÂNG CẤP (THEO MẪU ẢNH) --- */
+        .card-custom {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 800;
             margin-bottom: 20px;
+            color: var(--primary);
         }
 
-        /* --- LAYOUT CHIA ĐÔI MÀN HÌNH --- */
-        .reading-layout { display: flex; gap: 30px; align-items: flex-start; }
-        .reading-passage { 
-            flex: 1.3; position: sticky; top: 20px; 
-            max-height: 85vh; overflow-y: auto; 
-            padding-right: 15px; border-right: 1px solid #f1f5f9;
+        .essay-container {
+            position: relative;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 25px;
+            transition: all 0.3s;
         }
-        .reading-questions { flex: 1; }
 
-        /* --- BẢNG GIẢI THÍCH --- */
-        .explain-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .explain-table th { background: #2563eb; color: white; padding: 12px; font-weight: 700; }
-        .explain-table td { border: 1px solid #e2e8f0; padding: 15px; vertical-align: top; line-height: 1.6; }
-        .ans-highlight { color: var(--danger); font-weight: 800; font-size: 16px; }
-        .keyword-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px; border-radius: 8px; margin: 10px 0; }
+        .essay-container:focus-within {
+            border-color: var(--accent);
+            background: white;
+        }
 
-        /* Timer Widget */
-        .timer-widget { position: fixed; top: 20px; right: 20px; background: #1e293b; color: white; padding: 15px; border-radius: 12px; z-index: 100; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .timer-display { font-size: 26px; font-weight: 800; color: #fbbf24; font-family: monospace; }
-        
-        .btn-main { padding: 15px 30px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; color: white; }
-        .btn-submit { background: var(--success); width: 100%; max-width: 400px; }
-        .btn-toggle { background: var(--primary); width: 100%; max-width: 400px; margin-top: 15px; }
+        .badge-words {
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
-        .highlighted-text { background: #fef08a; border-bottom: 2px solid #eab308; }
+        /* Khung Model Answer giống image_365922.jpg */
+        .model-answer-box {
+            border-left: 6px solid #2563eb;
+            background: #f0f7ff;
+            padding: 25px;
+            border-radius: 0 20px 20px 0;
+            line-height: 1.8;
+        }
+
+        /* Lưới từ vựng giống image_531885.jpg */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .vocab-item {
+            background: #fff1f2;
+            padding: 18px;
+            border-radius: 15px;
+            border-left: 5px solid #f43f5e;
+            transition: transform 0.2s;
+        }
+
+        .vocab-item:hover { transform: translateY(-5px); }
     </style>
 </head>
 <body>
-    <div class="timer-widget">
-        <div style="font-size: 10px; opacity: 0.7; letter-spacing: 1px;">TIME REMAINING</div>
+
+    <div class="timer-widget" id="timer-box">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Time Remaining</div>
         <div class="timer-display" id="time-show">00:00</div>
-        <div style="margin-top: 10px;">
-            <input type="number" id="timer-minutes" value="60" style="width: 45px; padding: 4px; border-radius: 4px; border: none; text-align: center; font-weight: 700;">
-            <button onclick="startTimer()" style="background: #2563eb; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 700;">START</button>
+        <div id="timer-setup-box" style="margin-top: 12px; display: flex; justify-content: center; gap: 8px;">
+            <input type="number" id="timer-minutes" class="timer-input" value="60">
+            <button onclick="startTimer()" style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 800;">BẮT ĐẦU</button>
         </div>
     </div>
 
     <div class="room-container">
-        <button onclick="window.history.back()" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 18px; border-radius: 10px; cursor: pointer; font-weight: 700; margin-bottom: 20px;">⬅ BACK</button>
+        <button onclick="window.history.back()" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; margin-bottom: 25px;">⬅ QUAY LẠI</button>
         
-        <h1 id="display-title" class="test-title">Loading...</h1>
+        <h1 id="display-title" class="test-title">Đang tải đề thi...</h1>
         <div id="display-info" class="test-info">...</div>
-        
-        <!-- Vùng hiển thị nội dung Side-by-Side -->
-        <div id="display-content"></div>
 
-        <div style="text-align: center; margin-top: 50px; border-top: 2px dashed #e2e8f0; padding-top: 30px;">
-            <button class="btn-main btn-submit" onclick="checkAnswers()">SUBMIT TEST & CHECK SCORE</button>
-            <div id="results-area" style="margin-top: 20px; font-size: 26px; font-weight: 800;"></div>
-            <button id="btn-toggle" class="btn-main btn-toggle" style="display: none;" onclick="toggleTranscript()">📖 VIEW DETAILED EXPLANATION</button>
+        <div id="audio-area" class="audio-player" style="display: none;">
+            <div style="font-weight: 800; color: #d32f2f; margin-bottom: 10px;">🎧 AUDIO PLAYER:</div>
+            <audio id="main-audio" controls style="width: 100%;"></audio>
         </div>
 
-        <!-- Vùng hiển thị giải thích (Bảng) -->
-        <div id="transcript-container" style="display: none; margin-top: 40px;"></div>
+        <div id="display-content" class="test-content"></div>
+
+        <div class="action-container">
+            <button id="btn-submit-main" class="btn-main btn-submit" onclick="checkAnswers()">NỘP BÀI & CHẤM ĐIỂM</button>
+            <button id="btn-ai-grade" class="btn-main btn-ai" onclick="gradeWithAI()">✨ GIÁM KHẢO AI CHẤM CHI TIẾT</button>
+            <div id="results-area"></div>
+            <div id="ai-feedback-area">
+                <div id="ai-loading" style="display: none;">
+                    <img src="https://i.gifer.com/ZKZg.gif" width="30" style="vertical-align: middle; margin-right: 10px;">
+                    <span>Giám khảo AI đang phân tích bài viết...</span>
+                </div>
+                <div id="ai-response-content"></div>
+            </div>
+            <button id="btn-toggle" class="btn-transcript" onclick="toggleTranscript()">📖 XEM GIẢI THÍCH & BÀI MẪU</button>
+        </div>
+        <div id="transcript-container"></div>
     </div>
+
+    <button id="highlight-btn-pop">✏️ Highlight</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -92,58 +178,182 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const testId = new URLSearchParams(window.location.search).get('id');
         let currentAnswers = [];
+        const testId = new URLSearchParams(window.location.search).get('id');
 
-        async function loadRoom() {
-            if (!testId) return;
-            const cols = ['listening_tests', 'reading_tests', 'writing_tests'];
-            for (let col of cols) {
-                const snap = await getDoc(doc(db, col, testId));
-                if (snap.exists()) {
-                    const data = snap.data();
-                    currentAnswers = data.answers || [];
-                    document.getElementById('display-title').innerText = data.title;
-                    document.getElementById('display-info').innerText = `${data.type || 'TEST'} | ${data.band || 'Band 6.0+'}`;
-                    
-                    // Render HTML từ Firebase - Cần dùng .innerHTML
-                    document.getElementById('display-content').innerHTML = data.content;
-                    document.getElementById('transcript-container').innerHTML = data.explain || "No explanation data.";
-                    break;
-                }
+        // --- 1. TỰ ĐỘNG CẬP NHẬT SỐ CHỮ ---
+        window.handleInput = function() {
+            const area = document.querySelector('textarea');
+            const counter = document.getElementById('word-count-display');
+            if (area && counter) {
+                const words = area.value.trim().split(/\s+/).filter(x => x.length > 0).length;
+                counter.innerText = words;
             }
-        }
-
-        window.startTimer = function() {
-            let time = document.getElementById('timer-minutes').value * 60;
-            const interval = setInterval(() => {
-                time--;
-                let m = Math.floor(time/60), s = time%60;
-                document.getElementById('time-show').innerText = `${m}:${s<10?'0'+s:s}`;
-                if(time <= 0) { clearInterval(interval); alert("Time is up!"); }
-            }, 1000);
         };
 
+        // --- 2. HÀM CHẤM ĐIỂM TRẮC NGHIỆM ---
         window.checkAnswers = function() {
-            let score = 0;
-            currentAnswers.forEach((ans, i) => {
-                const input = document.querySelector(`input[data-q="${i+1}"]`);
-                if (input) {
-                    const val = input.value.trim().toLowerCase();
-                    const corrects = ans.toString().toLowerCase().split('/').map(s => s.trim());
-                    if (corrects.includes(val)) { score++; input.style.background = "#dcfce7"; }
-                    else { input.style.background = "#fee2e2"; }
-                }
-            });
-            document.getElementById('results-area').innerHTML = `Your Score: <span style="color:var(--danger)">${score}/${currentAnswers.length}</span>`;
-            document.getElementById('btn-toggle').style.display = 'inline-block';
+            if (window.timerInterval) clearInterval(window.timerInterval);
+            if (currentAnswers.length === 0) {
+                alert("Đã ghi nhận bài làm! Hãy dùng AI chấm hoặc xem bài mẫu.");
+            } else {
+                let score = 0;
+                currentAnswers.forEach((ans, index) => {
+                    const input = document.querySelector(`input[data-q="${index+1}"]`);
+                    if (input) {
+                        const userVal = input.value.trim().toLowerCase();
+                        const corrects = ans.toString().toLowerCase().split('/').map(s => s.trim());
+                        if (corrects.includes(userVal)) {
+                            score++;
+                            input.style.background = "#dcfce7";
+                            input.style.borderColor = "#22c55e";
+                        } else {
+                            input.style.background = "#fee2e2";
+                            input.style.borderColor = "#ef4444";
+                        }
+                    }
+                });
+                document.getElementById('results-area').innerHTML = `Kết quả: <span style="color:#d32f2f; font-weight:800;">${score}/${currentAnswers.length}</span> câu đúng!`;
+            }
+            document.getElementById('btn-toggle').style.display = 'block';
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        };
+
+        // --- 3. HÀM CHẤM ĐIỂM AI ĐÃ ĐƯỢC SỬA LỖI ---
+        window.gradeWithAI = async function() {
+            const essay = document.querySelector('textarea')?.value.trim();
+            const title = document.getElementById('display-title').innerText;
+            if (!essay || essay.length < 50) { 
+                alert("Bài viết quá ngắn! Viết ít nhất 50 chữ để AI có thể chấm nhé."); 
+                return; 
+            }
+
+            const feedbackArea = document.getElementById('ai-feedback-area');
+            const loading = document.getElementById('ai-loading');
+            const content = document.getElementById('ai-response-content');
+            
+            // Đã cập nhật đúng mã API Key của bạn
+            const apiKey = "AIzaSyDXMG1KKDImHpJifR76JvS9rPT44CiJYuE"; 
+
+            feedbackArea.style.display = 'block';
+            loading.style.display = 'block';
+            content.innerHTML = '';
+            window.scrollTo({ top: feedbackArea.offsetTop - 100, behavior: 'smooth' });
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        contents: [{ 
+                            parts: [{ 
+                                text: `Bạn là giám khảo IELTS chuyên nghiệp. Hãy chấm điểm Overall và nhận xét lỗi sai cho bài Writing này bằng tiếng Việt. Đề bài: ${title}. Bài làm: ${essay}` 
+                            }] 
+                        }] 
+                    })
+                });
+
+                const data = await res.json();
+
+                // KIỂM TRA LỖI HTTP TỪ SERVER (Giúp debug dễ hơn)
+                if (!res.ok) {
+                    throw new Error(data.error?.message || `Lỗi kết nối HTTP: ${res.status}`);
+                }
+
+                if (data.candidates && data.candidates[0]) {
+                    loading.style.display = 'none';
+                    const text = data.candidates[0].content.parts[0].text;
+                    content.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                } else {
+                    throw new Error("Không nhận được phản hồi hợp lệ từ hệ thống AI.");
+                }
+
+            } catch (error) { 
+                console.error("Lỗi AI:", error);
+                loading.style.display = 'none';
+                content.innerHTML = `<div style="color:#b91c1c; padding:15px; border:2px solid #fca5a5; border-radius:10px; background:#fef2f2;">
+                    <b>Đã xảy ra lỗi kết nối AI:</b><br>
+                    <small>${error.message}</small><br><br>
+                    <i>Mẹo: Nếu lỗi báo API_KEY_INVALID, hãy kiểm tra lại khóa API. Nếu lỗi 403/404, hãy đảm bảo dự án Google Cloud của bạn đã bật "Generative Language API".</i>
+                </div>`;
+            }
+        };
+
+        // --- 4. HỆ THỐNG ĐỒNG HỒ & GIAO DIỆN ---
+        window.startTimer = function() {
+            let time = parseInt(document.getElementById('timer-minutes').value) * 60;
+            if (isNaN(time) || time <= 0) return;
+            document.getElementById('timer-setup-box').style.display = 'none';
+            window.timerInterval = setInterval(() => {
+                time--;
+                let m = Math.floor(time/60), s = time%60;
+                document.getElementById('time-show').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+                if (time <= 0) { 
+                    clearInterval(window.timerInterval); 
+                    window.checkAnswers(); 
+                }
+            }, 1000);
         };
 
         window.toggleTranscript = function() {
             const box = document.getElementById('transcript-container');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            const btn = document.getElementById('btn-toggle');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+            btn.innerText = (box.style.display === 'block') ? '🙈 ẨN GIẢI THÍCH' : '📖 XEM GIẢI THÍCH & BÀI MẪU';
         };
+
+        // --- 5. TẢI DỮ LIỆU ĐỀ THI ---
+        async function loadRoom() {
+            if (!testId) return;
+            const collections = ['listening_tests', 'reading_tests', 'writing_tests', 'speaking_tests'];
+            for (let col of collections) {
+                try {
+                    const snap = await getDoc(doc(db, col, testId));
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        currentAnswers = data.answers || [];
+                        document.getElementById('display-title').innerText = data.title || "IELTS Test";
+                        const type = (data.type || col.split('_')[0]).toUpperCase();
+                        document.getElementById('display-info').innerText = `${type} | ${data.band || 'Band 5.5-6.5'}`;
+                        document.getElementById('display-content').innerHTML = data.content;
+                        document.getElementById('transcript-container').innerHTML = data.explain || data.transcript || "Không có giải thích.";
+                        
+                        if (data.audioUrl) {
+                            document.getElementById('audio-area').style.display = 'block';
+                            document.getElementById('main-audio').src = data.audioUrl;
+                        }
+                        if (type === 'WRITING') {
+                            document.getElementById('btn-ai-grade').style.display = 'block';
+                        }
+                        
+                        initHighlight();
+                        break;
+                    }
+                } catch (e) { console.error("Lỗi tải đề:", e); }
+            }
+        }
+
+        function initHighlight() {
+            const content = document.getElementById('display-content');
+            const btn = document.getElementById('highlight-btn-pop');
+            content.addEventListener('mouseup', (e) => {
+                const sel = window.getSelection();
+                if (sel.toString().length > 0) {
+                    btn.style.display = 'block';
+                    btn.style.top = `${e.pageY - 45}px`;
+                    btn.style.left = `${e.pageX}px`;
+                    btn.onclick = () => {
+                        const range = sel.getRangeAt(0);
+                        const span = document.createElement('span');
+                        span.className = 'highlighted-text';
+                        range.surroundContents(span);
+                        sel.removeAllRanges();
+                        btn.style.display = 'none';
+                    };
+                } else { btn.style.display = 'none'; }
+            });
+        }
 
         loadRoom();
     </script>
