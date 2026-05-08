@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Môn Học - THPT PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tích hợp Firebase SDK (Phiên bản tương thích) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subject-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 40px 0 20px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-info {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 15px;
+            align-self: flex-start;
+        }
+
+        .badge-theory {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-theme {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .badge-mock {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+         /* --- CÁC THEME MÀU SẮC --- */
+        [data-theme="light-pink"] {
+            --bg-main: #fdf2f8;
+            --bg-card: #ffffff;
+            --text-main: #831843;
+            --border-color: #fbcfe8;
+            --primary: #db2777;
+            --secondary: #ec4899;
+        }
+
+        [data-theme="light-matcha"] {
+            --bg-main: #f0fdf4;
+            --bg-card: #ffffff;
+            --text-main: #14532d;
+            --border-color: #bbf7d0;
+            --primary: #16a34a;
+            --secondary: #22c55e;
+        }
+
+        [data-theme="light-purple"] {
+            --bg-main: #faf5ff;
+            --bg-card: #ffffff;
+            --text-main: #581c87;
+            --border-color: #e9d5ff;
+            --primary: #9333ea;
+            --secondary: #a855f7;
+        }
+
+        [data-theme="dark-purple"] {
+            --bg-main: #2e1065;
+            --bg-card: #3b0764;
+            --text-main: #f3e8ff;
+            --border-color: #581c87;
+            --primary: #d8b4fe;
+            --secondary: #c084fc;
+        }
+
+        [data-theme="light-blue"] {
+            --bg-main: #f0f9ff;
+            --bg-card: #ffffff;
+            --text-main: #0c4a6e;
+            --border-color: #bae6fd;
+            --primary: #0284c7;
+            --secondary: #38bdf8;
+        }
+
+        [data-theme="dark-blue"] {
+            --bg-main: #082f49;
+            --bg-card: #0f172a;
+            --text-main: #e0f2fe;
+            --border-color: #0369a1;
+            --primary: #7dd3fc;
+            --secondary: #38bdf8;
+        }
+
+        /* --- GIAO DIỆN CHÍNH --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-main);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .dashboard-container {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .header-box {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            font-weight: bold;
+            color: var(--secondary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .subject-card {
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: var(--card-shadow);
+            text-decoration: none;
+            color: var(--text-main);
+            display: block;
+        }
+
+        .subject-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+        }
+
+        .subject-card .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .subject-card h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* --- CSS CHO NÚT VÀ MENU THEME --- */
+        .theme-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .theme-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background-color: #1e293b;
+            color: #f8fafc;
+            min-width: 160px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            padding: 8px 0;
+            z-index: 9999;
+        }
+
+        .theme-menu.active {
+            display: block; 
+        }
+
+        .theme-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-option:hover {
+            background-color: #334155;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Dán ngay dưới <body> (dòng 137) -->
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+        <div class="theme-dropdown">
+            <button id="theme-btn" class="theme-btn">🎨</button>
+            <div id="theme-menu" class="theme-menu">
+                <div class="theme-option" data-value="light">☀️ Light</div>
+                <div class="theme-option" data-value="dark">🌙 Dark</div>
+                <div class="theme-option" data-value="light-pink">🌸 Light Pink</div>
+                <div class="theme-option" data-value="light-matcha">🍵 Light Matcha</div>
+                <div class="theme-option" data-value="light-purple">💜 Light Purple</div>
+                <div class="theme-option" data-value="dark-purple">🌌 Dark Purple</div>
+                <div class="theme-option" data-value="light-blue">🌊 Light Blue</div>
+                <div class="theme-option" data-value="dark-blue">🌃 Dark Blue</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <header class="header-nav">
+            <a href="thpt.html" class="btn-back">⬅ CHỌN MÔN KHÁC</a>
+            <h1 class="subject-title" id="display-sub-name">MÔN HỌC</h1>
+            <div style="width: 100px;"></div>
+        </header>
+
+        <!-- 1. MỤC LÝ THUYẾT -->
+        <div id="theory-section">
+            <div class="section-header">
+                <div style="font-size: 24px;">📚</div>
+                <h2>LÝ THUYẾT TRỌNG TÂM</h2>
+            </div>
+            <div class="grid" id="theory-container"></div>
+        </div>
+
+        <!-- 2. MỤC CHUYÊN ĐỀ -->
+        <div id="theme-section">
+            <div class="section-header">
+                <div style="font-size: 24px;">📘</div>
+                <h2>ÔN TẬP THEO CHUYÊN ĐỀ</h2>
+            </div>
+            <div class="grid" id="theme-container"></div>
+        </div>
+
+        <!-- 3. MỤC LUYỆN ĐỀ -->
+        <div id="mock-section">
+            <div class="section-header">
+                <div style="font-size: 24px;">📝</div>
+                <h2>LUYỆN ĐỀ THI THỬ THPTQG</h2>
+            </div>
+            <div class="grid" id="mock-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // === BƯỚC 1: CẤU HÌNH FIREBASE (DÁN THÔNG TIN CỦA BẠN VÀO ĐÂY) ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3WqZW_w5oHLzs3BtY0Y3ZQ3KFiLJAMc4",
+            authDomain: "on-thi-thptqg.firebaseapp.com",
+            projectId: "on-thi-thptqg",
+            storageBucket: "on-thi-thptqg.firebasestorage.app",
+            messagingSenderId: "624401868727",
+            appId: "1:624401868727:web:946dca0dc5f37b90daaa32"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // === BƯỚC 2: LẤY THÔNG TIN MÔN HỌC TỪ URL ===
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSub = urlParams.get('sub') || 'math';
+
+        const subNames = {
+            'math': 'Môn Toán',
+            'physics': 'Môn Vật Lý',
+            'chemistry': 'Môn Hóa Học',
+            'english': 'Môn Tiếng Anh'
+        };
+        document.getElementById('display-sub-name').innerText = subNames[currentSub] || currentSub;
+
+        // === BƯỚC 3: HÀM ĐỔ DỮ LIỆU TỪ FIREBASE (GIỐNG KIỂU IELTS) ===
+        function loadCategory(collectionName, containerId, badgeClass, badgeText, pageUrl) {
+            db.collection(collectionName).orderBy('order', 'asc').get().then((querySnapshot) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p style="font-size:14px; opacity:0.5;">Đang cập nhật dữ liệu...</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    container.innerHTML += `
+                        <a href="${pageUrl}?sub=${currentSub}&id=${doc.id}" class="item-card">
+                            <div class="card-title">${data.title}</div>
+                            <div class="card-info">${data.description || 'Nội dung ôn luyện trọng tâm'}</div>
+                            <span class="badge ${badgeClass}">${badgeText}</span>
+                        </a>
+                    `;
+                });
+            }).catch(err => console.error("Lỗi tải " + collectionName, err));
+        }
+
+        // === BƯỚC 4: KÍCH HOẠT LẤY DỮ LIỆU CHO 3 MỤC ===
+        // Hệ thống sẽ tự tìm Collection: math_theory, math_topics, math_tests...
+        loadCategory(currentSub + '_theory', 'theory-container', 'badge-theory', 'Lý Thuyết', 'theory-viewer.html');
+        loadCategory(currentSub + '_topics', 'theme-container', 'badge-theme', 'Chuyên Đề', 'thpt-test.html');
+        loadCategory(currentSub + '_tests', 'mock-container', 'badge-mock', 'Đề Thi Thử', 'thpt-test.html');
+    </script>
+    <!-- Dán ngay dưới thẻ </script> ở dòng 230 -->
+<script src="theme.js"></script>
+</body>
+
+</html>

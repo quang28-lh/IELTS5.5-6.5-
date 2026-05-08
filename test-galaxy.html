@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Interactive Galaxy</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    height:100vh;
+    background:
+    radial-gradient(circle at bottom, #1b2735 0%, #090a0f 70%);
+    font-family:Arial, sans-serif;
+}
+
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.title{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    font-size:70px;
+    letter-spacing:10px;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #00bfff,
+        0 0 40px #00bfff,
+        0 0 80px #00bfff;
+    animation: glow 3s infinite alternate;
+    z-index:10;
+    pointer-events:none;
+}
+
+@keyframes glow{
+    from{
+        text-shadow:
+        0 0 10px #fff,
+        0 0 20px #00bfff;
+    }
+
+    to{
+        text-shadow:
+        0 0 20px #fff,
+        0 0 50px #00bfff,
+        0 0 100px #00bfff;
+    }
+}
+
+.info{
+    position:absolute;
+    bottom:20px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:18px;
+    opacity:0.7;
+    z-index:10;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 class="title">GALAXY</h1>
+
+<div class="info">
+✨ Di chuyển chuột để tương tác với vũ trụ ✨
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const stars = [];
+const mouse = {
+    x: null,
+    y: null
+};
+
+window.addEventListener("mousemove", (e)=>{
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
+
+window.addEventListener("resize", ()=>{
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+class Star{
+
+    constructor(x,y,size,speed){
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.speed = speed;
+        this.baseX = x;
+        this.baseY = y;
+    }
+
+    draw(){
+
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+
+        const gradient = ctx.createRadialGradient(
+            this.x,this.y,0,
+            this.x,this.y,this.size*4
+        );
+
+        gradient.addColorStop(0,"white");
+        gradient.addColorStop(0.5,"#8be9fd");
+        gradient.addColorStop(1,"transparent");
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+    }
+
+    update(){
+
+        this.y += this.speed;
+
+        if(this.y > canvas.height){
+            this.y = 0;
+            this.x = Math.random() * canvas.width;
+        }
+
+        // Mouse interaction
+        if(mouse.x && mouse.y){
+
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+
+            let distance = Math.sqrt(dx*dx + dy*dy);
+
+            if(distance < 120){
+
+                this.x -= dx / 20;
+                this.y -= dy / 20;
+
+                this.size = Math.min(this.size + 0.08, 6);
+
+            }else{
+
+                if(this.x !== this.baseX){
+                    let dx = this.x - this.baseX;
+                    this.x -= dx / 20;
+                }
+
+                if(this.y !== this.baseY){
+                    let dy = this.y - this.baseY;
+                    this.y -= dy / 20;
+                }
+
+                this.size = Math.max(this.size - 0.02, 1);
+            }
+        }
+
+        this.draw();
+    }
+}
+
+for(let i=0;i<700;i++){
+
+    let size = Math.random()*2 + 1;
+
+    stars.push(
+        new Star(
+            Math.random()*canvas.width,
+            Math.random()*canvas.height,
+            size,
+            Math.random()*0.3
+        )
+    );
+}
+
+function shootingStar(){
+
+    let x = Math.random() * canvas.width;
+    let y = 0;
+
+    let len = Math.random()*80 + 100;
+
+    let speed = Math.random()*10 + 6;
+
+    let opacity = 1;
+
+    function animateShooting(){
+
+        ctx.beginPath();
+
+        ctx.moveTo(x,y);
+
+        ctx.lineTo(x-len,y+len);
+
+        ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
+
+        ctx.lineWidth = 2;
+
+        ctx.stroke();
+
+        x += speed;
+        y += speed;
+
+        opacity -= 0.01;
+
+        if(opacity > 0){
+            requestAnimationFrame(animateShooting);
+        }
+    }
+
+    animateShooting();
+}
+
+setInterval(shootingStar,2000);
+
+function animate(){
+
+    ctx.fillStyle = "rgba(9,10,15,0.25)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    stars.forEach(star=>{
+        star.update();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>

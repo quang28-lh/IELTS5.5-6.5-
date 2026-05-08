@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Thi THPTQG - Aura Diamond</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet"> 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --p: #00f2ff; --a: #bc13fe; --bg: #010208; --neon: 0 0 25px rgba(0, 242, 255, 0.6); }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f1f5f9; margin: 0; padding: 20px; min-height: 100vh; overflow-x: hidden; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 10%, #1e1b4b 0%, #010208 100%); z-index: -2; }
+        .aura { position: fixed; width: 80vw; height: 80vw; background: var(--p); filter: blur(250px); opacity: 0.08; border-radius: 50%; z-index: -1; animation: orbit 40s infinite linear; }
+        @keyframes orbit { from { transform: rotate(0deg) translate(-10%, -10%); } to { transform: rotate(360deg) translate(-10%, -10%); } }
+        .container { max-width: 1000px; margin: 0 auto; position: relative; }
+        .btn-back { display: inline-flex; align-items: center; padding: 14px 28px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 100px; color: #cbd5e1; text-decoration: none; font-weight: 700; font-size: 14px; margin-bottom: 30px; transition: 0.4s; backdrop-filter: blur(15px); }
+        .btn-back:hover { background: rgba(255, 61, 61, 0.2); border-color: #ff3d3d; color: #ff3d3d; box-shadow: 0 0 30px rgba(255, 61, 61, 0.4); transform: translateX(-8px); }
+        .diamond-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(50px); border: 1px solid rgba(255,255,255,0.08); border-radius: 50px; padding: 60px; box-shadow: 0 60px 150px rgba(0,0,0,1); margin-bottom: 50px; border-top: 1px solid rgba(0, 242, 255, 0.2); }
+        .timer-vip { position: fixed; top: 30px; right: 40px; z-index: 1000; background: rgba(0,0,0,0.85); color: var(--p); padding: 18px 45px; border-radius: 100px; font-weight: 900; font-size: 36px; box-shadow: var(--neon); border: 2px solid var(--p); display: none; text-shadow: var(--neon); backdrop-filter: blur(20px); letter-spacing: 3px; }
+        .dynamic-instruction { background: rgba(0, 242, 255, 0.1); border-left: 5px solid var(--p); padding: 15px 25px; margin-bottom: 25px; border-radius: 0 15px 15px 0; color: var(--p); font-size: 14px; font-weight: 800; text-transform: uppercase; line-height: 1.5; }
+        .q-item { background: rgba(255,255,255,0.01); padding: 50px; border-radius: 45px; margin-bottom: 50px; border: 1px solid rgba(255,255,255,0.04); transition: 0.6s; position: relative; }
+        .q-item:hover { border-color: var(--p); transform: translateY(-10px); }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 40px; }
+        .opt-btn { padding: 26px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; color: #94a3b8; cursor: pointer; text-align: left; font-weight: 600; transition: 0.4s; font-size: 19px; outline: none; }
+        .opt-btn:hover { border-color: var(--p); color: #fff; background: rgba(0, 242, 255, 0.08); }
+        .opt-btn.active { border-color: var(--p); background: rgba(0, 242, 255, 0.15); color: #fff; box-shadow: var(--neon); }
+        .opt-btn.correct { background: rgba(0, 255, 149, 0.25) !important; border-color: #00ff95 !important; color: #00ff95 !important; }
+        .opt-btn.wrong { background: rgba(255, 61, 61, 0.25) !important; border-color: #ff3d3d !important; color: #ff3d3d !important; }
+        .analysis-vip { display: none; margin-top: 45px; padding: 40px; background: rgba(255,255,255,0.02); border-radius: 35px; border-left: 12px solid var(--p); font-size: 17px; line-height: 2; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-action { width: 100%; padding: 30px; background: linear-gradient(135deg, var(--p), var(--a)); color: #000; border: none; border-radius: 35px; font-weight: 900; font-size: 28px; cursor: pointer; box-shadow: 0 30px 80px rgba(0,0,0,0.7); transition: 0.5s; margin-top: 60px; text-transform: uppercase; letter-spacing: 4px; }
+        .time-box { background: rgba(0,0,0,0.7); border: 4px solid var(--p); border-radius: 30px; color: #fff; width: 150px; padding: 20px; text-align: center; font-size: 42px; font-weight: 900; margin: 25px; outline: none; box-shadow: var(--neon); }
+    </style>
+</head>
+<body>
+    <div class="aura"></div><div class="timer-vip" id="clock-vip">00:00</div>
+    <div class="container">
+        <button onclick="window.location.href='subject-detail.html?sub=' + (new URLSearchParams(window.location.search).get('sub') || 'english');" class="btn-back" style="cursor: pointer; font-family: inherit;">⬅ THOÁT PHÒNG LUYỆN</button>
+        <div id="header-root" class="diamond-card">
+            <div style="text-align: center; padding: 100px;">🔱 Đang kết nối máy chủ dữ liệu THPTQG...</div>
+        </div>
+        <div id="quiz-root" style="display: none;">
+            <div id="list-target"></div>
+            <button class="btn-action" onclick="finishExam()">NỘP BÀI & XEM GIẢI CHI TIẾT 🚀</button>
+        </div>
+    </div>
+    <script>
+        const config = { apiKey: "AIzaSy...", authDomain: "on-thi-thptqg.firebaseapp.com", projectId: "on-thi-thptqg", storageBucket: "on-thi-thptqg.appspot.com", messagingSenderId: "...", appId: "..." };
+        if (!firebase.apps.length) { firebase.initializeApp(config); }
+        const db = firebase.firestore();
+        const params = new URLSearchParams(window.location.search);
+        
+        const sub = params.get('sub') || 'english'; 
+        const id = params.get('id') || '001';
+        
+        // Tự động gán link cho nút thoát về đúng trang môn học
+        document.getElementById('btn-back').href = `subject-detail.html?sub=${sub}`;
+
+        let qData = [];
+        async function load() {
+            try {
+                const doc = await db.collection(`${sub}_topics`).doc(id).get();
+                if (doc.exists) {
+                    const d = doc.data();
+                    document.getElementById('header-root').innerHTML = `${d.content}<div id="setup-panel" style="text-align:center; margin-top:100px; border-top:1px solid rgba(255,255,255,0.1); padding-top:80px;"><h2 style="color:var(--p); font-weight:800; text-shadow: var(--neon); letter-spacing:5px; font-size:32px;">⏱️ CÀI ĐẶT THỜI GIAN</h2><input type="number" id="m-val" class="time-box" value="45"> <b style="font-size:32px;">PHÚT</b><br><button class="btn-action" style="width:auto; padding: 30px 180px;" onclick="start()">BẮT ĐẦU</button></div>`;
+                    let raw = d.answers;
+                    if (typeof raw === 'string') {
+                        raw = raw.trim().replace(/(\r\n|\n|\r)/gm, " ").replace(/“|”/g, "'").replace(/‘|’/g, "'"); 
+                        const lastBracket = raw.lastIndexOf(']');
+                        if (lastBracket !== -1) raw = raw.substring(0, lastBracket + 1);
+                        qData = JSON.parse(raw);
+                    } else { qData = raw; }
+                }
+            } catch (e) { console.error(e); }
+        }
+        function start() {
+            const m = document.getElementById('m-val').value;
+            document.getElementById('setup-panel').style.display = 'none';
+            document.getElementById('quiz-root').style.display = 'block';
+            document.getElementById('clock-vip').style.display = 'block';
+            let s = m * 60;
+            window.examClock = setInterval(() => {
+                s--; let mm = Math.floor(s/60), ss = s%60;
+                document.getElementById('clock-vip').innerText = `${mm<10?'0'+mm:mm}:${ss<10?'0'+ss:ss}`;
+                if(s <= 0) { clearInterval(window.examClock); finishExam(); }
+            }, 1000);
+            document.getElementById('list-target').innerHTML = qData.map((q, i) => `
+                <div class="q-item" id="q-${i}">
+                    <div class="dynamic-instruction">${q.instruction || ''}</div>
+                    <div style="font-weight:900; color:var(--p); font-size:16px; letter-spacing:10px; margin-bottom:30px; text-transform:uppercase; border-bottom: 2px solid rgba(0,242,255,0.3); width: fit-content; padding-bottom:15px;">QUESTION ${i+1}</div>
+                    <div style="font-size:26px; line-height:1.9;">${q.question}</div>
+                    <div class="opt-grid">
+                        ${q.options.map((o, j) => `<button class="opt-btn" onclick="select(this, ${i}, ${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}
+                    </div>
+                    <div class="analysis-vip" id="an-${i}">
+                        <div style="color:var(--p); font-weight:900; font-size:24px; margin-bottom:25px; text-transform:uppercase;">🔱 GIẢI THÍCH CHI TIẾT</div>
+                        ${q.explain}
+                    </div>
+                </div>`).join('');
+            window.scrollTo({ top: document.getElementById('quiz-root').offsetTop - 100, behavior: 'smooth' });
+        }
+        function select(b, qi, oi) {
+            const block = document.getElementById(`q-${qi}`);
+            block.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active'); b.setAttribute('data-choice', oi);
+        }
+        function finishExam() {
+            clearInterval(window.examClock); let sc = 0;
+            document.getElementById('clock-vip').style.display = 'none';
+            qData.forEach((q, i) => {
+                const block = document.getElementById(`q-${i}`);
+                const btns = block.querySelectorAll('.opt-btn');
+                const active = block.querySelector('.opt-btn.active');
+                const choice = active ? parseInt(active.getAttribute('data-choice')) : -1;
+                btns[q.correctIndex].classList.add('correct');
+                if (choice === q.correctIndex) sc++; else if (choice !== -1) btns[choice].classList.add('wrong');
+                block.querySelector('.analysis-vip').style.display = 'block';
+            });
+            confetti({ particleCount: 800, spread: 250, origin: { y: 0.6 } });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        window.onload = load;
+    </script>
+</body>
+</html>

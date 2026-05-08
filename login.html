@@ -28,83 +28,38 @@
         <form id="auth-form">
             <div class="input-group">
                 <label for="email">Email của bạn</label>
+                <!-- Dùng type="email" để HTML tự chặn định dạng sai -->
                 <input type="email" id="email" placeholder="ví dụ: student@gmail.com" required>
             </div>
+            
+            <!-- Nhóm SĐT (Mặc định ẩn, chỉ hiện khi đăng ký) -->
+            <div class="input-group" id="phone-group" style="display: none;">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" placeholder="Ví dụ: 0912345678" pattern="^(03|05|07|08|09)[0-9]{8}$" title="Vui lòng nhập đúng 10 số">
+            </div>
+
             <div class="input-group">
                 <label for="password">Mật khẩu (ít nhất 6 ký tự)</label>
                 <input type="password" id="password" placeholder="Nhập mật khẩu" required minlength="6">
             </div>
+
             <button type="submit" class="primary-btn" id="submit-btn">Vào phòng thi</button>
         </form>
+
         <div class="toggle-link" id="toggle-text">
-            Chưa có tài khoản? <span onclick="window.toggleMode()">Đăng ký ngay</span>
+            Chưa có tài khoản? <span>Đăng ký ngay</span>
         </div>
+        
         <a href="index.html" class="back-home">🔙 Quay lại Sảnh chính</a>
     </div>
 
+    <!-- MỘT THẺ SCRIPT DUY NHẤT VÀ SẠCH SẼ -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        // Import thêm Firestore để lưu SĐT
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // Sử dụng chính xác apiKey bạn vừa gửi
-        let isLoginMode = true;
-
-        window.toggleMode = function() {
-            isLoginMode = !isLoginMode;
-            const title = document.getElementById('form-title');
-            const btn = document.getElementById('submit-btn');
-            const toggleText = document.getElementById('toggle-text');
-            if (isLoginMode) {
-                title.innerText = "ĐĂNG NHẬP";
-                btn.innerText = "Vào phòng thi";
-                btn.style.backgroundColor = "#2196F3";
-                toggleText.innerHTML = 'Chưa có tài khoản? <span onclick="window.toggleMode()">Đăng ký ngay</span>';
-            } else {
-                title.innerText = "TẠO TÀI KHOẢN MỚI";
-                btn.innerText = "Đăng ký thành viên";
-                btn.style.backgroundColor = "#4CAF50"; 
-                toggleText.innerHTML = 'Đã có tài khoản? <span onclick="window.toggleMode()">Đăng nhập</span>';
-            }
-        };
-
-        document.getElementById('auth-form').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = "Đang xử lý..."; 
-            btn.style.opacity = "0.7";
-
-            if (isLoginMode) {
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(() => { 
-                        alert("Đăng nhập thành công!"); 
-                        window.location.href = "index.html"; 
-                    })
-                    .catch((error) => { 
-                        alert("Lỗi đăng nhập: " + error.message); 
-                        btn.innerText = "Vào phòng thi"; 
-                        btn.style.opacity = "1"; 
-                    });
-            } else {
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => { 
-                        alert("Tạo tài khoản thành công!"); 
-                        window.location.href = "index.html"; 
-                    })
-                    .catch((error) => { 
-                        alert("Lỗi đăng ký: " + error.message); 
-                        btn.innerText = "Đăng ký thành viên"; 
-                        btn.style.opacity = "1"; 
-                    });
-            }
-        });
-    </script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-        // Config Firebase của dự án (mình lấy lại từ file cũ của bạn)
         const firebaseConfig = {
             apiKey: "AIzaSyAf846RI3kuxaWv_BCo3g4atdYK0iG98ds",
             authDomain: "luyen-nghe-ielts.firebaseapp.com",
@@ -116,62 +71,119 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // Lấy các thẻ HTML dựa theo id và class của bạn
+        let isLoginMode = true;
+
+        // Bắt các element HTML
         const authForm = document.getElementById('auth-form');
         const formTitle = document.getElementById('form-title');
-        
-        // LƯU Ý KỸ: Bạn phải đảm bảo trong HTML, ô nhập email có id="email" và ô password có id="password" nhé!
         const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password'); 
-        
-        const toggleLink = document.querySelector('.toggle-link'); 
-        const submitBtn = document.querySelector('.primary-btn');
+        const passwordInput = document.getElementById('password');
+        const phoneGroup = document.getElementById('phone-group');
+        const phoneInput = document.getElementById('phone');
+        const toggleText = document.getElementById('toggle-text');
+        const submitBtn = document.getElementById('submit-btn');
 
-        let isLogin = true; // Mặc định mở lên là form Đăng nhập
-
-        // Xử lý khi người dùng bấm dòng chữ chuyển đổi Đăng ký / Đăng nhập
-        if (toggleLink) {
-            toggleLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                isLogin = !isLogin; // Đảo trạng thái
+        // Xử lý chuyển đổi Đăng nhập / Đăng ký
+        toggleText.addEventListener('click', (e) => {
+            if(e.target.tagName.toLowerCase() !== 'span') return; // Chỉ nhận click vào thẻ span
+            
+            isLoginMode = !isLoginMode;
+            
+            if (isLoginMode) {
+                formTitle.innerText = "ĐĂNG NHẬP";
+                submitBtn.innerText = "Vào phòng thi";
+                submitBtn.style.backgroundColor = "#2196F3";
+                toggleText.innerHTML = 'Chưa có tài khoản? <span>Đăng ký ngay</span>';
                 
-                formTitle.innerText = isLogin ? "ĐĂNG NHẬP" : "ĐĂNG KÝ";
-                if (submitBtn) submitBtn.innerText = isLogin ? "Vào hệ thống" : "Tạo tài khoản";
-                toggleLink.innerHTML = isLogin ? "Chưa có tài khoản? <span>Đăng ký ngay</span>" : "Đã có tài khoản? <span>Đăng nhập</span>";
-            });
-        }
-
-        // Xử lý khi người dùng bấm nút Submit
-        if (authForm) {
-            authForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Chặn hành vi tải lại trang mặc định của form
+                // Ẩn SĐT và gỡ bắt buộc
+                phoneGroup.style.display = "none";
+                phoneInput.removeAttribute('required');
+            } else {
+                formTitle.innerText = "TẠO TÀI KHOẢN MỚI";
+                submitBtn.innerText = "Đăng ký thành viên";
+                submitBtn.style.backgroundColor = "#4CAF50"; 
+                toggleText.innerHTML = 'Đã có tài khoản? <span>Đăng nhập</span>';
                 
-                const email = emailInput.value.trim();
-                const password = passwordInput.value;
+                // Hiện SĐT và ép buộc phải nhập
+                phoneGroup.style.display = "block";
+                phoneInput.setAttribute('required', 'true');
+            }
+        });
 
-                if (!email || !password) {
-                    alert("Vui lòng nhập đủ email và mật khẩu!");
-                    return;
-                }
+        // Xử lý Form Submit
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const phone = phoneInput.value.trim();
 
-                try {
-                    if (isLogin) {
-                        // Gửi lệnh Đăng nhập lên Firebase
-                        await signInWithEmailAndPassword(auth, email, password);
-                        alert("Đăng nhập thành công!");
+            submitBtn.innerText = "Đang xử lý..."; 
+            submitBtn.style.opacity = "0.7";
+
+            try {
+                if (isLoginMode) {
+                    // --- CHẾ ĐỘ ĐĂNG NHẬP ---
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // KIỂM TRA EMAIL XÁC THỰC
+                    if (!user.emailVerified) {
+                        alert("Tài khoản chưa được xác thực! Vui lòng kiểm tra Hộp thư email (hoặc mục Spam) để kích hoạt tài khoản.");
+                        await signOut(auth); // Đuổi ra ngoài ngay lập tức
                     } else {
-                        // Gửi lệnh Tạo tài khoản lên Firebase
-                        await createUserWithEmailAndPassword(auth, email, password);
-                        alert("Tạo tài khoản thành công!");
+                        alert("Đăng nhập thành công!");
+                        window.location.href = "index.html";
                     }
-                    // Đăng nhập thành công thì tự động đá sang trang chủ
-                    window.location.href = "index.html";
-                } catch (error) {
+
+                } else {
+                    // --- CHẾ ĐỘ ĐĂNG KÝ ---
+                    // 1. Tạo tài khoản Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    // 2. Gửi Email xác nhận
+                    await sendEmailVerification(user);
+
+                    // 3. Lưu SĐT và thông tin vào Database (Firestore)
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: email,
+                        phone: phone,
+                        role: "student",
+                        createdAt: serverTimestamp()
+                    });
+
+                    // 4. Đăng xuất luôn để ép người dùng đi check mail
+                    await signOut(auth);
+
+                    alert("Tạo tài khoản thành công! Mã xác thực đã được gửi. Vui lòng kiểm tra Email của bạn để xác thực trước khi đăng nhập.");
+                    
+                    // Tự động quay về giao diện Đăng nhập
+                    isLoginMode = true;
+                    formTitle.innerText = "ĐĂNG NHẬP";
+                    submitBtn.innerText = "Vào phòng thi";
+                    submitBtn.style.backgroundColor = "#2196F3";
+                    toggleText.innerHTML = 'Chưa có tài khoản? <span>Đăng ký ngay</span>';
+                    phoneGroup.style.display = "none";
+                    phoneInput.removeAttribute('required');
+                    authForm.reset();
+                }
+            } catch (error) {
+                // Xử lý báo lỗi bằng Tiếng Việt
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("Email này đã được đăng ký từ trước!");
+                } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                    alert("Tài khoản hoặc mật khẩu không chính xác!");
+                } else {
                     alert("Có lỗi xảy ra: " + error.message);
                 }
-            });
-        }
+            } finally {
+                // Nhả nút bấm ra trạng thái bình thường
+                submitBtn.innerText = isLoginMode ? "Vào phòng thi" : "Đăng ký thành viên";
+                submitBtn.style.opacity = "1";
+            }
+        });
     </script>
 </body>
 </html>

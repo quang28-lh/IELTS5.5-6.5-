@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,37 +16,218 @@
             --text-sub: #64748b;
         }
 
-        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; color: var(--text-main); }
-        .room-container { max-width: 1100px; margin: 0 auto; padding: 35px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; position: relative; }
-        
-        .test-title { color: var(--text-main); margin-bottom: 8px; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
-        .test-info { margin-bottom: 30px; color: var(--text-sub); font-weight: 700; background: #f1f5f9; padding: 8px 18px; border-radius: 30px; display: inline-block; font-size: 14px; }
-        
-        .audio-player { width: 100%; margin: 25px 0; background: #f8fafc; padding: 20px; border-radius: 15px; border: 2px solid #e2e8f0; box-sizing: border-box; }
-        
-        .test-content { margin-top: 30px; line-height: 1.8; }
-        svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-        .highlighted-text { background-color: #fef08a; border-bottom: 2px solid #eab308; cursor: pointer; border-radius: 2px; }
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+        }
 
-        .action-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 50px; padding-top: 30px; border-top: 2px dashed #e2e8f0; }
-        
-        .btn-main { padding: 16px 50px; border: none; border-radius: 14px; cursor: pointer; font-weight: 800; font-size: 16px; transition: all 0.3s; width: 100%; max-width: 400px; color: white; }
-        .btn-submit { background: var(--success); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3); }
-        .btn-ai { background: var(--ai-color); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); display: none; }
-        .btn-main:hover { transform: translateY(-3px); filter: brightness(1.1); }
-        
-        .btn-transcript { padding: 14px 30px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; display: none; margin-top: 20px; }
+        .room-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 35px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
 
-        #ai-feedback-area { display: none; width: 100%; text-align: left; margin-top: 40px; padding: 30px; background: #fdf4ff; border: 2px solid #d8b4fe; border-radius: 20px; box-sizing: border-box; }
-        #ai-loading { text-align: center; color: var(--ai-color); font-weight: 700; margin-bottom: 15px; }
+        #transcript-container {
+            white-space: pre-wrap;
+            /* Giúp ngắt dòng y hệt văn bản gốc */
+            line-height: 1.8;
+            /* Giúp các dòng chữ thoáng, dễ đọc hơn */
+            font-size: 16px;
+            /* Cỡ chữ chuẩn cho bài đọc IELTS */
+        }
 
-        .timer-widget { position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; padding: 18px; border-radius: 15px; z-index: 1000; text-align: center; min-width: 140px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #334155; }
-        .timer-display { font-size: 32px; font-weight: 800; color: #fbbf24; font-family: 'Courier New', monospace; margin: 5px 0; }
-        .timer-input { width: 55px; padding: 8px; border-radius: 8px; border: none; text-align: center; font-weight: 800; }
+        .test-title {
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
 
-        #results-area { font-size: 24px; font-weight: 800; margin-top: 20px; color: var(--primary); }
-        #transcript-container { display: none; margin-top: 35px; padding: 25px; border: 1px solid #e2e8f0; border-radius: 15px; background: #fff; line-height: 1.8; }
-        #highlight-btn-pop { position: absolute; background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; display: none; z-index: 9999; font-weight: 800; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .test-info {
+            margin-bottom: 30px;
+            color: var(--text-sub);
+            font-weight: 700;
+            background: #f1f5f9;
+            padding: 8px 18px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin: 25px 0;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+            box-sizing: border-box;
+        }
+
+        .test-content {
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .highlighted-text {
+            background-color: #fef08a;
+            border-bottom: 2px solid #eab308;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px dashed #e2e8f0;
+        }
+
+        .btn-main {
+            padding: 16px 50px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 16px;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 400px;
+            color: white;
+        }
+
+        .btn-submit {
+            background: var(--success);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-ai {
+            background: var(--ai-color);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            display: none;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        .btn-transcript {
+            padding: 14px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            display: none;
+            margin-top: 20px;
+        }
+
+        #ai-feedback-area {
+            display: none;
+            width: 100%;
+            text-align: left;
+            margin-top: 40px;
+            padding: 30px;
+            background: #fdf4ff;
+            border: 2px solid #d8b4fe;
+            border-radius: 20px;
+            box-sizing: border-box;
+        }
+
+        #ai-loading {
+            text-align: center;
+            color: var(--ai-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .timer-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 18px;
+            border-radius: 15px;
+            z-index: 1000;
+            text-align: center;
+            min-width: 140px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border: 2px solid #334155;
+        }
+
+        .timer-display {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fbbf24;
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+        }
+
+        .timer-input {
+            width: 55px;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        #results-area {
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 20px;
+            color: var(--primary);
+        }
+
+        #transcript-container {
+            display: none;
+            margin-top: 35px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            background: #fff;
+            line-height: 1.8;
+            white-space: pre-wrap !important;
+            /* Thêm !important để ép trình duyệt nhận lệnh */
+            word-wrap: break-word;
+        }
+
+        #highlight-btn-pop {
+            position: absolute;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            z-index: 9999;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
         /* --- GIAO DIỆN NÂNG CẤP (THEO MẪU ẢNH) --- */
         .card-custom {
             background: white;
@@ -53,7 +235,7 @@
             padding: 30px;
             margin-bottom: 30px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
 
         .section-header {
@@ -90,7 +272,7 @@
             border-radius: 25px;
             font-size: 13px;
             font-weight: 900;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         /* Khung Model Answer giống image_365922.jpg */
@@ -118,9 +300,12 @@
             transition: transform 0.2s;
         }
 
-        .vocab-item:hover { transform: translateY(-5px); }
+        .vocab-item:hover {
+            transform: translateY(-5px);
+        }
     </style>
 </head>
+
 <body>
 
     <div class="timer-widget" id="timer-box">
@@ -128,13 +313,17 @@
         <div class="timer-display" id="time-show">00:00</div>
         <div id="timer-setup-box" style="margin-top: 12px; display: flex; justify-content: center; gap: 8px;">
             <input type="number" id="timer-minutes" class="timer-input" value="60">
-            <button onclick="startTimer()" style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 800;">BẮT ĐẦU</button>
+            <button onclick="startTimer('p1', 300)"
+                style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 800;">BẮT
+                ĐẦU</button>
         </div>
     </div>
 
     <div class="room-container">
-        <button onclick="window.history.back()" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; margin-bottom: 25px;">⬅ QUAY LẠI</button>
-        
+        <button onclick="window.history.back()"
+            style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; margin-bottom: 25px;">⬅
+            QUAY LẠI</button>
+
         <h1 id="display-title" class="test-title">Đang tải đề thi...</h1>
         <div id="display-info" class="test-info">...</div>
 
@@ -146,17 +335,21 @@
         <div id="display-content" class="test-content"></div>
 
         <div class="action-container">
-            <button id="btn-submit-main" class="btn-main btn-submit" onclick="checkAnswers()">NỘP BÀI & CHẤM ĐIỂM</button>
-            <button id="btn-ai-grade" class="btn-main btn-ai" onclick="gradeWithAI()">✨ GIÁM KHẢO AI CHẤM CHI TIẾT</button>
+            <button id="btn-submit-main" class="btn-main btn-submit" onclick="checkAnswers()">NỘP BÀI & CHẤM
+                ĐIỂM</button>
+            <button id="btn-ai-grade" class="btn-main btn-ai" onclick="gradeWithAI()">✨ GIÁM KHẢO AI CHẤM CHI
+                TIẾT</button>
             <div id="results-area"></div>
             <div id="ai-feedback-area">
                 <div id="ai-loading" style="display: none;">
-                    <img src="https://i.gifer.com/ZKZg.gif" width="30" style="vertical-align: middle; margin-right: 10px;">
+                    <img src="https://i.gifer.com/ZKZg.gif" width="30"
+                        style="vertical-align: middle; margin-right: 10px;">
                     <span>Giám khảo AI đang phân tích bài viết...</span>
                 </div>
                 <div id="ai-response-content"></div>
             </div>
-            <button id="btn-toggle" class="btn-transcript" onclick="toggleTranscript()">📖 XEM GIẢI THÍCH & BÀI MẪU</button>
+            <button id="btn-toggle" class="btn-transcript" onclick="toggleTranscript()">📖 XEM GIẢI THÍCH & BÀI
+                MẪU</button>
         </div>
         <div id="transcript-container"></div>
     </div>
@@ -181,8 +374,84 @@
         let currentAnswers = [];
         const testId = new URLSearchParams(window.location.search).get('id');
 
+        // --- HỆ THỐNG ĐẾM GIỜ SPEAKING ---
+        window.startPartTimer = function (part, seconds) {
+            const btn = document.getElementById('btn-' + part);
+            const display = document.getElementById('timer-' + part);
+            if (!btn || !display) return;
+
+            btn.disabled = true;
+            btn.innerText = "🔴 ĐANG GHI ÂM...";
+            btn.style.background = "#ef4444";
+
+            let timeLeft = 0;
+            const interval = setInterval(() => {
+                timeLeft++;
+                let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+                display.innerText = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+                if (timeLeft >= seconds) {
+                    clearInterval(interval);
+                    btn.innerText = "HOÀN THÀNH";
+                    btn.style.background = "#22c55e";
+                }
+            }, 1000);
+        };
+
+        window.startPart2Flow = function () {
+            const btn = document.getElementById('btn-p2');
+            const display = document.getElementById('timer-p2');
+            const status = document.getElementById('status-p2');
+            if (!btn || !display || !status) return;
+
+            btn.disabled = true;
+            let prepTime = 60;
+            status.innerText = "⏳ ĐANG CHUẨN BỊ...";
+            btn.innerText = "HÃY GHI CHÚ RA GIẤY";
+
+            const prepInterval = setInterval(() => {
+                prepTime--;
+                let m = Math.floor(prepTime / 60), s = prepTime % 60;
+                display.innerText = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+
+                if (prepTime <= 0) {
+                    clearInterval(prepInterval);
+                    status.innerText = "🔴 ĐANG NÓI (2 PHÚT)...";
+                    status.style.color = "#ef4444";
+                    btn.innerText = "HÃY TRÌNH BÀY BÀI NÓI";
+                    btn.style.background = "#ef4444";
+
+                    let speakTime = 120;
+                    const speakInterval = setInterval(() => {
+                        speakTime--;
+                        let m = Math.floor(speakTime / 60), s = speakTime % 60;
+                        display.innerText = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+                        if (speakTime <= 0) {
+                            clearInterval(speakInterval);
+                            status.innerText = "HOÀN THÀNH";
+                            btn.innerText = "KẾT THÚC PART 2";
+                            btn.style.background = "#22c55e";
+                        }
+                    }, 1000);
+                }
+            }, 1000);
+        };
+
+        // --- LOGIC GIÁM KHẢO ĐỌC ĐỀ ---
+        window.speak = function (text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Rất tiếc, trình duyệt của bạn không hỗ trợ chức năng đọc văn bản.");
+            }
+        };
+
         // --- 1. TỰ ĐỘNG CẬP NHẬT SỐ CHỮ ---
-        window.handleInput = function() {
+        window.handleInput = function () {
             const area = document.querySelector('textarea');
             const counter = document.getElementById('word-count-display');
             if (area && counter) {
@@ -192,14 +461,14 @@
         };
 
         // --- 2. HÀM CHẤM ĐIỂM TRẮC NGHIỆM ---
-        window.checkAnswers = function() {
+        window.checkAnswers = function () {
             if (window.timerInterval) clearInterval(window.timerInterval);
             if (currentAnswers.length === 0) {
                 alert("Đã ghi nhận bài làm! Hãy dùng AI chấm hoặc xem bài mẫu.");
             } else {
                 let score = 0;
                 currentAnswers.forEach((ans, index) => {
-                    const input = document.querySelector(`input[data-q="${index+1}"]`);
+                    const input = document.querySelector(`input[data-q="${index + 1}"]`);
                     if (input) {
                         const userVal = input.value.trim().toLowerCase();
                         const corrects = ans.toString().toLowerCase().split('/').map(s => s.trim());
@@ -219,44 +488,42 @@
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
 
-        // --- 3. HÀM CHẤM ĐIỂM AI ĐÃ ĐƯỢC SỬA LỖI ---
-        window.gradeWithAI = async function() {
+        // --- 3. HÀM CHẤM ĐIỂM AI WRITING ---
+        window.gradeWithAI = async function () {
             const essay = document.querySelector('textarea')?.value.trim();
             const title = document.getElementById('display-title').innerText;
-            if (!essay || essay.length < 50) { 
-                alert("Bài viết quá ngắn! Viết ít nhất 50 chữ để AI có thể chấm nhé."); 
-                return; 
+            if (!essay || essay.length < 50) {
+                alert("Bài viết quá ngắn! Viết ít nhất 50 chữ để AI có thể chấm nhé.");
+                return;
             }
 
             const feedbackArea = document.getElementById('ai-feedback-area');
             const loading = document.getElementById('ai-loading');
             const content = document.getElementById('ai-response-content');
-            
-            // Đã cập nhật đúng mã API Key của bạn
-            const apiKey = "AIzaSyDXMG1KKDImHpJifR76JvS9rPT44CiJYuE"; 
+
+            const apiKey = "AIzaSyDXMG1KKDImHpJifR76JvS9rPT44CiJYuE";
 
             feedbackArea.style.display = 'block';
             loading.style.display = 'block';
             content.innerHTML = '';
             window.scrollTo({ top: feedbackArea.offsetTop - 100, behavior: 'smooth' });
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             try {
                 const res = await fetch(url, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        contents: [{ 
-                            parts: [{ 
-                                text: `Bạn là giám khảo IELTS chuyên nghiệp. Hãy chấm điểm Overall và nhận xét lỗi sai cho bài Writing này bằng tiếng Việt. Đề bài: ${title}. Bài làm: ${essay}` 
-                            }] 
-                        }] 
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `Bạn là giám khảo IELTS chuyên nghiệp. Hãy chấm điểm Overall và nhận xét lỗi sai cho bài Writing này bằng tiếng Việt. Đề bài: ${title}. Bài làm: ${essay}`
+                            }]
+                        }]
                     })
                 });
 
                 const data = await res.json();
 
-                // KIỂM TRA LỖI HTTP TỪ SERVER (Giúp debug dễ hơn)
                 if (!res.ok) {
                     throw new Error(data.error?.message || `Lỗi kết nối HTTP: ${res.status}`);
                 }
@@ -269,7 +536,7 @@
                     throw new Error("Không nhận được phản hồi hợp lệ từ hệ thống AI.");
                 }
 
-            } catch (error) { 
+            } catch (error) {
                 console.error("Lỗi AI:", error);
                 loading.style.display = 'none';
                 content.innerHTML = `<div style="color:#b91c1c; padding:15px; border:2px solid #fca5a5; border-radius:10px; background:#fef2f2;">
@@ -280,23 +547,68 @@
             }
         };
 
+        // --- HÀM CHẤM ĐIỂM AI SPEAKING (ĐÃ ĐƯỢC TÁCH RIÊNG) ---
+        window.gradeSpeakingWithAI = async function () {
+            const btn = document.getElementById('btn-ai-speaking');
+            const title = document.getElementById('display-title').innerText;
+            const apiKey = "AIzaSyDXMG1KKDImHpJifR76JvS9rPT44CiJYuE";
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "⏳ AI ĐANG PHÂN TÍCH...";
+            }
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: `Bạn là giám khảo IELTS chuyên nghiệp. Hãy đưa ra bài mẫu Band 8.0+ và lời khuyên về từ vựng, ngữ pháp cho đề Speaking: ${title}. Trình bày bằng tiếng Việt, định dạng HTML.` }]
+                        }]
+                    })
+                });
+
+                const data = await res.json();
+                const feedback = data.candidates[0].content.parts[0].text;
+
+                const feedbackArea = document.getElementById('ai-feedback-area') || document.getElementById('results-area');
+                feedbackArea.style.display = 'block';
+                feedbackArea.innerHTML = feedback.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+                if (btn) {
+                    btn.innerText = "🚀 CHẤM ĐIỂM NÓI VỚI AI";
+                    btn.disabled = false;
+                }
+
+            } catch (e) {
+                alert("Lỗi kết nối AI, vui lòng thử lại.");
+                if (btn) {
+                    btn.innerText = "🚀 CHẤM ĐIỂM NÓI VỚI AI";
+                    btn.disabled = false;
+                }
+            }
+        };
+
         // --- 4. HỆ THỐNG ĐỒNG HỒ & GIAO DIỆN ---
-        window.startTimer = function() {
+        window.startTimer = function () {
             let time = parseInt(document.getElementById('timer-minutes').value) * 60;
             if (isNaN(time) || time <= 0) return;
             document.getElementById('timer-setup-box').style.display = 'none';
             window.timerInterval = setInterval(() => {
                 time--;
-                let m = Math.floor(time/60), s = time%60;
-                document.getElementById('time-show').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-                if (time <= 0) { 
-                    clearInterval(window.timerInterval); 
-                    window.checkAnswers(); 
+                let m = Math.floor(time / 60), s = time % 60;
+                document.getElementById('time-show').innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+                if (time <= 0) {
+                    clearInterval(window.timerInterval);
+                    window.checkAnswers();
                 }
             }, 1000);
         };
 
-        window.toggleTranscript = function() {
+        window.toggleTranscript = function () {
             const box = document.getElementById('transcript-container');
             const btn = document.getElementById('btn-toggle');
             box.style.display = (box.style.display === 'block') ? 'none' : 'block';
@@ -317,8 +629,10 @@
                         const type = (data.type || col.split('_')[0]).toUpperCase();
                         document.getElementById('display-info').innerText = `${type} | ${data.band || 'Band 5.5-6.5'}`;
                         document.getElementById('display-content').innerHTML = data.content;
-                        document.getElementById('transcript-container').innerHTML = data.explain || data.transcript || "Không có giải thích.";
-                        
+                        const transcriptBox = document.getElementById('transcript-container');
+                        const rawContent = data.explain || data.transcript || "Không có giải thích.";
+                        transcriptBox.innerHTML = `<div style="white-space: pre-wrap !important; line-height: 1.8;">${rawContent}</div>`;
+
                         if (data.audioUrl) {
                             document.getElementById('audio-area').style.display = 'block';
                             document.getElementById('main-audio').src = data.audioUrl;
@@ -326,7 +640,7 @@
                         if (type === 'WRITING') {
                             document.getElementById('btn-ai-grade').style.display = 'block';
                         }
-                        
+
                         initHighlight();
                         break;
                     }
@@ -358,4 +672,5 @@
         loadRoom();
     </script>
 </body>
+
 </html>

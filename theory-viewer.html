@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nội Dung Lý Thuyết - THPT PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- 1. Cấu hình MathJax để hiểu dấu $ (Phải đặt trước khi load script MathJax) -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <!-- Thư viện hiển thị công thức Toán LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --secondary: #1976d2;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 30px;
+            gap: 8px;
+        }
+
+        h1#theory-title {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #fee2e2;
+            padding-bottom: 15px;
+        }
+
+        /* Ô định nghĩa mượt mà hơn */
+        .def-box {
+            background: #f0f9ff;
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .def-title {
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Sửa lỗi hiển thị ô công thức nổi bật */
+        .formula {
+            text-align: center;
+            font-size: 1.4em;
+            margin: 25px 0;
+            color: #b91c1c;
+            font-weight: 700;
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px dashed #fecaca;
+        }
+
+        .step-card {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .step-num {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        #loading { text-align: center; padding: 100px; font-weight: 600; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="javascript:history.back()" class="btn-back">⬅ QUAY LẠI DANH SÁCH</a>
+        
+        <div id="loading">Đang tải nội dung bài học...</div>
+        
+        <div id="content-area" style="display: none;">
+            <h1 id="theory-title">Tiêu đề bài học</h1>
+            <div id="theory-content">
+                <!-- Nội dung HTML từ Firebase sẽ đổ vào đây -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3WqZW_w5oHLzs3BtY0Y3ZQ3KFiLJAMc4",
+            authDomain: "on-thi-thptqg.firebaseapp.com",
+            projectId: "on-thi-thptqg",
+            storageBucket: "on-thi-thptqg.firebasestorage.app",
+            messagingSenderId: "624401868727",
+            appId: "1:624401868727:web:946dca0dc5f37b90daaa32"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const sub = urlParams.get('sub');
+        const id = urlParams.get('id');
+
+        if (sub && id) {
+            const collectionName = sub + '_theory';
+            db.collection(collectionName).doc(id).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('theory-title').innerText = data.title;
+                    document.getElementById('theory-content').innerHTML = data.content;
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content-area').style.display = 'block';
+
+                    // Quan trọng: Gọi MathJax quét lại nội dung sau khi dữ liệu đã hiện ra
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        MathJax.typesetPromise();
+                    }
+                } else {
+                    document.getElementById('loading').innerText = "⚠️ Không tìm thấy bài học này.";
+                }
+            }).catch(err => {
+                console.error(err);
+                document.getElementById('loading').innerText = "❌ Lỗi tải dữ liệu.";
+            });
+        }
+    </script>
+</body>
+</html>

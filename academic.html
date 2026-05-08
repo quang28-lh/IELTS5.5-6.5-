@@ -4,529 +4,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Bách Khoa Toàn Thư IELTS</title>
+    <title>Từ Vựng Academic - Bách Khoa Toàn Thư IELTS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Khởi tạo Theme sớm -->
     <script>
         const currentTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', currentTheme);
     </script>
 
     <style>
-        /* --- HỆ THỐNG 8 MÀU ĐỒNG BỘ --- */
+        /* --- HỆ THỐNG THEME (GIỮ NGUYÊN THEO TRANG CHỦ) --- */
         :root {
-            --bg-main: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --border-color: #e2e8f0;
-            --primary: #d32f2f;
-            --secondary: #1976d2;
-            --success: #22c55e;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            --font-family: 'Inter', sans-serif;
-            --menu-bg: #1e293b;
-            --menu-hover: #334155;
-            --menu-text: #ffffff;
+            --bg-main: #f8fafc; --bg-card: #ffffff; --text-main: #1e293b; --border-color: #e2e8f0;
+            --primary: #d32f2f; --secondary: #1976d2; --success: #22c55e;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); --font-family: 'Inter', sans-serif;
         }
 
         [data-theme="dark"] {
-            --bg-main: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
-            --border-color: #334155; --primary: #f87171; --secondary: #60a5fa;
+            --bg-main: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc; --border-color: #334155;
+            --primary: #f87171; --secondary: #60a5fa;
+            body {
+                background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1964');
+                background-size: cover; background-position: center; background-attachment: fixed;
+                min-height: 100vh; margin: 0; padding: 20px;
+            }
+            .dashboard-container {
+                background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px);
+                border-radius: 24px; padding: 30px; max-width: 1200px; margin: 0 auto;
+                border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: var(--card-shadow);
+            }
         }
-
-        [data-theme="light-pink"] {
-            --bg-main: #fdf2f8; --bg-card: #ffffff; --text-main: #831843;
-            --border-color: #fbcfe8; --primary: #db2777; --secondary: #be185d;
-        }
-
-        [data-theme="light-matcha"] {
-            --bg-main: #f0fdf4; --bg-card: #ffffff; --text-main: #14532d;
-            --border-color: #bbf7d0; --primary: #16a34a; --secondary: #15803d;
-        }
-
-        [data-theme="light-purple"] {
-            --bg-main: #faf5ff; --bg-card: #ffffff; --text-main: #581c87;
-            --border-color: #e9d5ff; --primary: #a855f7; --secondary: #7e22ce;
-        }
-
-        [data-theme="dark-purple"] {
-            --bg-main: #1e1b4b; --bg-card: #312e81; --text-main: #e0e7ff;
-            --border-color: #4f46e5; --primary: #a78bfa; --secondary: #818cf8;
-        }
-
-        [data-theme="light-blue"] {
-            --bg-main: #eff6ff; --bg-card: #ffffff; --text-main: #1e3a8a;
-            --border-color: #bfdbfe; --primary: #3b82f6; --secondary: #1d4ed8;
-        }
-
-        [data-theme="dark-blue"] {
-            --bg-main: #082f49; --bg-card: #0c4a6e; --text-main: #e0f2fe;
-            --border-color: #0369a1; --primary: #38bdf8; --secondary: #7dd3fc;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: var(--bg-main);
-            margin: 0;
-            padding: 20px;
-            color: var(--text-main);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
+        
+        body { font-family: var(--font-family); background: var(--bg-main); margin: 0; padding: 20px; color: var(--text-main); transition: 0.3s; }
         .container { max-width: 1100px; margin: auto; }
+        .dashboard-container { background: var(--bg-card); border-radius: 24px; padding: 30px; max-width: 1200px; margin: 0 auto; box-shadow: var(--card-shadow); }
 
-        /* --- Header --- */
-        .header-box {
-            background: var(--bg-card); padding: 20px 30px; border-radius: 20px;
-            box-shadow: var(--card-shadow); margin-bottom: 25px; display: flex;
-            justify-content: space-between; align-items: center; border: 1px solid var(--border-color);
-        }
-
-        h1 { margin: 0; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: -0.5px; }
-
-        .header-actions { display: flex; align-items: center; gap: 15px; }
-
-        /* --- Theme Dropdown --- */
-        .theme-dropdown { position: relative; display: inline-block; }
-        .theme-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-main); padding: 5px; border-radius: 50%; transition: 0.2s;}
-        .theme-btn:hover { background: rgba(0, 0, 0, 0.05); transform: scale(1.1); }
-        .theme-menu { display: none; position: absolute; right: 0; top: 120%; background: var(--menu-bg); color: var(--menu-text); border-radius: 10px; width: 170px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); overflow: hidden; z-index: 1000; }
-        .theme-menu.show { display: block; }
-        .theme-option { padding: 12px 15px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .theme-option:hover { background: var(--menu-hover); }
-
-        /* --- User Profile --- */
-        .user-pill {
-            display: flex; align-items: center; gap: 10px; padding: 5px 12px;
-            background: var(--bg-main); border-radius: 30px; border: 1px solid var(--border-color); transition: 0.3s;
-        }
-        .user-pill:hover { border-color: var(--secondary); }
-        .logout-btn {
-            background: #fee2e2; color: #ef4444; border: none; padding: 6px 12px;
-            border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: 700;
-        }
-
-        /* --- Lộ trình học tập --- */
-        .category-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px; margin-bottom: 30px;
-        }
-        .category-card {
-            background: var(--bg-card); border-radius: 15px; padding: 25px 20px;
-            text-align: center; box-shadow: var(--card-shadow); border: 2px solid transparent;
-            cursor: pointer; transition: 0.3s; text-decoration: none; display: block; color: var(--text-main);
-        }
-        .category-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .cat-icon { font-size: 40px; margin-bottom: 15px; }
-        .cat-title { font-size: 18px; font-weight: 800; margin: 0 0 10px 0; }
-        .cat-desc { font-size: 14px; opacity: 0.7; margin: 0; }
-
-        /* --- BỐ CỤC MỚI (LỊCH SỬ, XẾP HẠNG, CHAT) --- */
-        .community-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 40px;
-        }
+        /* Header */
+        .header-box { background: var(--bg-card); padding: 20px 30px; border-radius: 20px; box-shadow: var(--card-shadow); margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); }
+        h1 { margin: 0; color: var(--primary); font-size: 20px; text-transform: uppercase; }
         
-        @media (max-width: 768px) {
-            .community-grid { grid-template-columns: 1fr; }
-        }
+        .btn-back { display: inline-flex; font-weight: bold; color: var(--secondary); text-decoration: none; margin-bottom: 20px; transition: 0.2s; }
+        .btn-back:hover { opacity: 0.8; transform: translateX(-5px); }
 
-        .panel-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .panel-header {
-            font-size: 18px; font-weight: 800; margin-bottom: 15px;
-            color: var(--text-main); display: flex; align-items: center; gap: 8px;
-            padding-bottom: 10px; border-bottom: 1px solid var(--border-color);
-        }
-
-        .scrollable-content {
-            flex: 1; overflow-y: auto; padding-right: 5px;
-        }
-
-        /* Items Lịch sử & Xếp hạng */
-        .list-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid var(--border-color);
-        }
-        .list-item:last-child { border-bottom: none; }
-        .item-title { font-weight: 600; font-size: 14px; }
-        .item-sub { font-size: 12px; opacity: 0.7; margin-top: 4px; }
-        .item-score { background: var(--bg-main); padding: 5px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--secondary); border: 1px solid var(--border-color); }
-
-        /* Khung Chat */
-        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; padding-right: 5px; }
-        .chat-msg-wrapper { display: flex; flex-direction: column; max-width: 85%; }
-        .chat-msg-wrapper.mine { align-self: flex-end; align-items: flex-end; }
-        .chat-msg-wrapper.others { align-self: flex-start; align-items: flex-start; }
+        /* GRID 16 CHỦ ĐỀ */
+        .grid-16 { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
         
-        .chat-sender { font-size: 11px; opacity: 0.6; margin-bottom: 4px; font-weight: 600; }
-        .chat-bubble {
-            padding: 10px 15px; border-radius: 15px; font-size: 14px; line-height: 1.4;
+        .topic-card { 
+            background: var(--bg-card); 
+            border: 2px solid transparent; 
+            padding: 25px 20px; 
+            border-radius: 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            box-shadow: var(--card-shadow); 
+            text-decoration: none;
+            display: block;
+            color: var(--text-main);
         }
-        .mine .chat-bubble { background: var(--secondary); color: #fff; border-bottom-right-radius: 4px; }
-        .others .chat-bubble { background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color); border-bottom-left-radius: 4px; }
-
-        .chat-input-area { display: flex; gap: 10px; }
-        .chat-input {
-            flex: 1; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 12px;
-            background: var(--bg-main); color: var(--text-main); outline: none; font-family: var(--font-family);
-        }
-        .chat-input:focus { border-color: var(--secondary); }
-        .btn-send {
-            background: var(--primary); color: white; border: none; padding: 0 20px;
-            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .btn-send:hover { filter: brightness(1.1); }
-
-        /* Login Overlay */
-        #login-overlay {
-            position: fixed; inset: 0; background: var(--bg-card); z-index: 1000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        }
-        .btn-login-go { background: #1e293b; color: white; text-decoration: none; padding: 15px 40px; border-radius: 10px; font-weight: 700; transition: 0.2s; }
-        .btn-login-go:hover { background: var(--primary); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .topic-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 20px -5px rgba(0,0,0,0.1); }
+        .topic-card h3 { margin: 15px 0 0 0; font-size: 18px; }
     </style>
 </head>
 
 <body>
-    <!-- Overlay Đăng Nhập -->
-    <div id="login-overlay" style="display: none;">
-        <h2 style="font-size: 32px; letter-spacing: -1px; margin-bottom: 8px; color: var(--text-main);">Dừng lại một chút! 🛑</h2>
-        <p style="color: #64748b; margin-bottom: 24px; font-size: 16px;">Bạn cần đăng nhập để truy cập Bách Khoa Toàn Thư.</p>
-        <a href="login.html" class="btn-login-go">Đăng nhập ngay</a>
+    <div class="dashboard-container">
+        <div class="container">
+            <!-- Nút quay về trang IELTS như bạn muốn -->
+            <a href="ielts.html" class="btn-back">⬅️ Quay lại trang IELTS</a>
+
+            <div class="header-box">
+                <h1>📚 TỪ VỰNG ACADEMIC PRO</h1>
+            </div>
+
+            <!-- MENU 16 CHỦ ĐỀ -->
+            <h2 style="margin-bottom: 10px; font-size: 24px;">Lựa chọn chủ đề luyện tập</h2>
+            <p style="opacity: 0.7; margin-top: 0;">Bấm vào một chủ đề để bắt đầu làm bài Test trắc nghiệm 10 câu.</p>
+            
+            <div class="grid-16">
+                <!-- Chú ý: URL truyền tham số "?topic=" phải khớp CHÍNH XÁC với KEY trong mảng vocabDatabase của bạn -->
+                <a href="vocab-test.html?topic=education" class="topic-card"><div style="font-size: 40px;">🎓</div><h3>Education</h3></a>
+                <a href="vocab-test.html?topic=technology" class="topic-card"><div style="font-size: 40px;">💻</div><h3>Technology</h3></a>
+                <a href="vocab-test.html?topic=health" class="topic-card"><div style="font-size: 40px;">🏥</div><h3>Health</h3></a>
+                <a href="vocab-test.html?topic=environment" class="topic-card"><div style="font-size: 40px;">🌍</div><h3>Environment</h3></a>
+                <a href="vocab-test.html?topic=family" class="topic-card"><div style="font-size: 40px;">👨‍👩‍👧‍👦</div><h3>Family</h3></a>
+                <a href="vocab-test.html?topic=travel" class="topic-card"><div style="font-size: 40px;">✈️</div><h3>Travel</h3></a>
+                <a href="vocab-test.html?topic=sports" class="topic-card"><div style="font-size: 40px;">⚽</div><h3>Sports</h3></a>
+                <a href="vocab-test.html?topic=music" class="topic-card"><div style="font-size: 40px;">🎵</div><h3>Music</h3></a>
+                <a href="vocab-test.html?topic=personality" class="topic-card"><div style="font-size: 40px;">🧠</div><h3>Personality</h3></a>
+                <a href="vocab-test.html?topic=weather" class="topic-card"><div style="font-size: 40px;">☀️</div><h3>Weather</h3></a>
+                <a href="vocab-test.html?topic=career" class="topic-card"><div style="font-size: 40px;">💼</div><h3>Career</h3></a>
+                <a href="vocab-test.html?topic=study_work" class="topic-card"><div style="font-size: 40px;">⚖️</div><h3>Study & Work</h3></a>
+                <a href="vocab-test.html?topic=crime_punishment" class="topic-card"><div style="font-size: 40px;">🚓</div><h3>Crime & Law</h3></a>
+                <a href="vocab-test.html?topic=food_drinks" class="topic-card"><div style="font-size: 40px;">🍔</div><h3>Food & Drinks</h3></a>
+                <a href="vocab-test.html?topic=fruit" class="topic-card"><div style="font-size: 40px;">🍎</div><h3>Fruit</h3></a>
+                <a href="vocab-test.html?topic=transportation" class="topic-card"><div style="font-size: 40px;">🚌</div><h3>Transportation</h3></a>
+            </div>
+
+        </div>
     </div>
-
-    <div class="container" id="main-content">
-        <!-- HEADER -->
-        <div class="header-box">
-            <h1>🎓 Hệ thống học tập PRO</h1>
-            <div class="header-actions">
-                <div class="theme-dropdown">
-                    <button id="theme-btn" class="theme-btn">🎨</button>
-                    <div id="theme-menu" class="theme-menu">
-                        <div class="theme-option" data-value="light">☀️ Light</div>
-                        <div class="theme-option" data-value="dark">🌙 Dark</div>
-                        <div class="theme-option" data-value="light-pink">🌸 Light Pink</div>
-                        <div class="theme-option" data-value="light-matcha">🍵 Light Matcha</div>
-                        <div class="theme-option" data-value="light-purple">💜 Light Purple</div>
-                        <div class="theme-option" data-value="dark-purple">🌌 Dark Purple</div>
-                        <div class="theme-option" data-value="light-blue">🌊 Light Blue</div>
-                        <div class="theme-option" data-value="dark-blue">🌃 Dark Blue</div>
-                    </div>
-                </div>
-
-                <div class="user-pill">
-                    <img id="user-avatar-img" src="https://ui-avatars.com/api/?name=U&background=d32f2f&color=fff" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%; cursor: pointer;">
-                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-                    <span id="user-email" style="font-weight: 600; font-size: 13px;">Đang tải...</span>
-                    <button class="logout-btn" id="btn-logout">Đăng xuất</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- LỘ TRÌNH HỌC TẬP -->
-        <h2 style="margin-bottom: 15px; font-size: 20px;">Lộ trình học tập của bạn</h2>
-        <div class="category-grid">
-            
-            <!-- ĐÂY CHÍNH LÀ THẺ ĐÃ SỬA CHUẨN 100% THÀNH ielts.html -->
-            <a href="ielts.html" class="category-card">
-                <div class="cat-icon">🎯</div>
-                <h3 class="cat-title">IELTS 4 Kỹ Năng</h3>
-                <p class="cat-desc">Reading, Listening, Writing, Speaking</p>
-            </a>
-            
-            <a href="thpt.html" class="category-card">
-                <div class="cat-icon">🎓</div>
-                <h3 class="cat-title">Ôn thi THPT Quốc Gia</h3>
-                <p class="cat-desc">Toán, Văn, Anh & Tổ hợp môn</p>
-            </a>
-            <a href="grade10.html" class="category-card">
-                <div class="cat-icon">🚀</div>
-                <h3 class="cat-title">Luyện thi 9 lên 10</h3>
-                <p class="cat-desc">Nắm chắc kiến thức, vững bước vào Cấp 3</p>
-            </a>
-        </div>
-
-        <!-- KHU VỰC CỘNG ĐỒNG & LỊCH SỬ -->
-        <div class="community-grid">
-            
-            <!-- CỘT TRÁI: Lịch sử & Bảng xếp hạng -->
-            <div style="display: flex; flex-direction: column; gap: 24px;">
-                
-                <!-- Lịch sử cá nhân -->
-                <div class="panel-card" style="height: 280px;">
-                    <div class="panel-header">🕒 Lịch sử làm bài của bạn</div>
-                    <div class="scrollable-content" id="history-list">
-                        <div style="text-align: center; color: #64748b; margin-top: 20px; font-size: 14px;">Đang tải dữ liệu...</div>
-                    </div>
-                </div>
-
-                <!-- Bảng xếp hạng -->
-                <div class="panel-card" style="height: 320px;">
-                    <div class="panel-header">🏆 Bảng Xếp Hạng Chăm Chỉ (Top 10)</div>
-                    <div class="scrollable-content" id="leaderboard-list">
-                        <div style="text-align: center; color: #64748b; margin-top: 20px; font-size: 14px;">Đang quét dữ liệu server...</div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- CỘT PHẢI: Khung Chat Tổng -->
-            <div class="panel-card" style="height: 624px;">
-                <div class="panel-header">💬 Kênh Thế Giới (Global Chat)</div>
-                
-                <div class="chat-box" id="chat-messages-container">
-                    <!-- Tin nhắn sẽ được chèn vào đây -->
-                </div>
-
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" class="chat-input" placeholder="Nhập tin nhắn thảo luận...">
-                    <button id="btn-send-chat" class="btn-send">Gửi</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- SCRIPT GIAO DIỆN THEME -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeBtn = document.getElementById('theme-btn');
-            const themeMenu = document.getElementById('theme-menu');
-            const themeOptions = document.querySelectorAll('.theme-option');
-
-            if (themeBtn && themeMenu) {
-                themeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    themeMenu.classList.toggle('show');
-                });
-                document.addEventListener('click', (e) => {
-                    if (!themeMenu.contains(e.target)) themeMenu.classList.remove('show');
-                });
-                themeOptions.forEach(option => {
-                    option.addEventListener('click', () => {
-                        const selectedTheme = option.getAttribute('data-value');
-                        document.documentElement.setAttribute('data-theme', selectedTheme);
-                        localStorage.setItem('theme', selectedTheme);
-                        themeMenu.classList.remove('show');
-                    });
-                });
-            }
-        });
-    </script>
-
-    <!-- SCRIPT LOGIC FIREBASE -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, orderBy, limit, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAf846RI3kuxaWv_BCo3g4atdYK0iG98ds",
-            authDomain: "luyen-nghe-ielts.firebaseapp.com",
-            projectId: "luyen-nghe-ielts",
-            storageBucket: "luyen-nghe-ielts.firebasestorage.app",
-            messagingSenderId: "965541526782",
-            appId: "1:965541526782:web:e54be5c7780feb197839af"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-
-        // Xử lý Authentication
-        onAuthStateChanged(auth, async (user) => {
-            const overlay = document.getElementById('login-overlay');
-            const emailDisplay = document.getElementById('user-email');
-            const avatarImg = document.getElementById('user-avatar-img');
-
-            if (user) {
-                currentUser = user;
-                if (overlay) overlay.style.display = 'none';
-                if (emailDisplay) emailDisplay.innerText = user.email;
-                if (avatarImg) avatarImg.src = user.photoURL || `https://ui-avatars.com/api/?name=${user.email[0]}&background=d32f2f&color=fff`;
-
-                // Tải 3 Module mới
-                loadUserHistory(user.uid);
-                loadLeaderboard();
-                initGlobalChat();
-            } else {
-                if (overlay) overlay.style.display = 'flex';
-            }
-        });
-
-        // 1. TẢI LỊCH SỬ CÁ NHÂN
-        async function loadUserHistory(uid) {
-            const historyList = document.getElementById('history-list');
-            try {
-                const q = query(collection(db, "results"), where("userId", "==", uid), orderBy("timestamp", "desc"), limit(20));
-                const snap = await getDocs(q);
-                
-                if (snap.empty) {
-                    historyList.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 14px; margin-top:20px;">Bạn chưa làm bài nào. Hãy bắt đầu ngay!</div>`;
-                    return;
-                }
-
-                let html = '';
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const dateStr = d.timestamp ? d.timestamp.toDate().toLocaleString('vi-VN') : 'Vừa xong';
-                    html += `
-                        <div class="list-item">
-                            <div>
-                                <div class="item-title">${d.testId || 'Bài thi IELTS'}</div>
-                                <div class="item-sub">${dateStr}</div>
-                            </div>
-                            <div class="item-score">${d.score}/10</div>
-                        </div>
-                    `;
-                });
-                historyList.innerHTML = html;
-            } catch (err) {
-                console.error("Lỗi tải lịch sử:", err);
-                historyList.innerHTML = `<div style="color: red; font-size: 13px;">Lỗi tải dữ liệu. Cần tạo Index trên Firebase.</div>`;
-            }
-        }
-
-        // 2. TẢI BẢNG XẾP HẠNG (Top người cày nhiều bài nhất)
-        async function loadLeaderboard() {
-            const board = document.getElementById('leaderboard-list');
-            try {
-                // Quét kết quả để gom nhóm (Giới hạn 500 bài gần nhất để nhẹ server)
-                const q = query(collection(db, "results"), orderBy("timestamp", "desc"), limit(500));
-                const snap = await getDocs(q);
-                
-                const userStats = {};
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const email = d.userEmail || "Ẩn danh";
-                    if(!userStats[email]) userStats[email] = { email: email, count: 0 };
-                    userStats[email].count += 1;
-                });
-
-                // Sắp xếp giảm dần theo số bài đã làm
-                const topUsers = Object.values(userStats).sort((a,b) => b.count - a.count).slice(0, 10);
-
-                if(topUsers.length === 0) {
-                    board.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 14px; margin-top:20px;">Chưa có dữ liệu xếp hạng.</div>`;
-                    return;
-                }
-
-                let html = '';
-                topUsers.forEach((u, index) => {
-                    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index+1}`;
-                    const color = index < 3 ? 'var(--primary)' : 'var(--text-main)';
-                    html += `
-                        <div class="list-item">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-weight: 800; font-size: 16px; color: ${color}; width: 25px;">${medal}</span>
-                                <span class="item-title">${u.email.split('@')[0]}</span>
-                            </div>
-                            <div class="item-score" style="border:none; background:transparent;">${u.count} bài</div>
-                        </div>
-                    `;
-                });
-                board.innerHTML = html;
-            } catch(err) {
-                console.error("Lỗi bảng xếp hạng:", err);
-            }
-        }
-
-        // 3. HỆ THỐNG GLOBAL CHAT REALTIME
-        function initGlobalChat() {
-            const chatBox = document.getElementById('chat-messages-container');
-            const input = document.getElementById('chat-input');
-            const btnSend = document.getElementById('btn-send-chat');
-
-            // Lắng nghe tin nhắn mới liên tục (Realtime)
-            const q = query(collection(db, "global_chat"), orderBy("timestamp", "asc"), limit(50));
-            onSnapshot(q, (snapshot) => {
-                let html = '';
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    const isMe = currentUser && d.email === currentUser.email;
-                    const wrapperClass = isMe ? 'mine' : 'others';
-                    const senderName = isMe ? 'Bạn' : d.email.split('@')[0];
-
-                    html += `
-                        <div class="chat-msg-wrapper ${wrapperClass}">
-                            <div class="chat-sender">${senderName}</div>
-                            <div class="chat-bubble">${d.text}</div>
-                        </div>
-                    `;
-                });
-                chatBox.innerHTML = html;
-                chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống cuối
-            });
-
-            // Gửi tin nhắn
-            const sendMessage = async () => {
-                const text = input.value.trim();
-                if (!text || !currentUser) return;
-                input.value = ''; // Xóa input ngay lập tức cho mượt
-                
-                try {
-                    await addDoc(collection(db, "global_chat"), {
-                        email: currentUser.email,
-                        text: text,
-                        timestamp: serverTimestamp()
-                    });
-                } catch(e) { console.error("Lỗi gửi chat:", e); }
-            };
-
-            btnSend.onclick = sendMessage;
-            input.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
-        }
-
-        // Đăng xuất
-        document.getElementById('btn-logout').onclick = () => signOut(auth);
-
-        // Upload Avatar (ImgBB API)
-        const avatarImg = document.getElementById('user-avatar-img');
-        const fileInput = document.getElementById('avatar-upload');
-        if (avatarImg && fileInput) {
-            avatarImg.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const originalSrc = avatarImg.src;
-                avatarImg.src = "https://i.gifer.com/ZKZg.gif"; 
-
-                try {
-                    if (!currentUser) throw new Error("Vui lòng đăng nhập!");
-                    const formData = new FormData();
-                    formData.append('image', file);
-                    const response = await fetch(`https://api.imgbb.com/1/upload?key=3c7e80bbe2dad5ce952ab3577ad0ca24`, { method: 'POST', body: formData });
-                    const data = await response.json();
-
-                    if (data.success) {
-                        await updateProfile(currentUser, { photoURL: data.data.url });
-                        avatarImg.src = data.data.url;
-                    } else throw new Error("Lỗi từ server ImgBB");
-                } catch (error) {
-                    avatarImg.src = originalSrc;
-                    alert("Upload thất bại!");
-                }
-            });
-        }
-    </script>
 </body>
 </html>
