@@ -1,0 +1,37 @@
+[
+  {
+    "id": "writing-task-1-math-graduates",
+    "band": "7.5+",
+    "type": "Task 1",
+    "category": "Line Graph & Table",
+    "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px;'><h3 style='margin: 0; color: #1e3a8a;'>Math vs Other Graduates Salary</h3><p>The line graph and table compare the employment rates and average salaries of Math graduates and other disciplines from 2004 to 2012. Math graduates maintained a more resilient employment rate, ending the period at 78%, while other graduates plummeted to 65%. In terms of salary, Math graduates reached a peak of $56,000, surpassing their counterparts by $5,000.</p></div>"
+  },
+  {
+    "id": "writing-task-1-renewable-energy",
+    "band": "7.5+",
+    "type": "Task 1",
+    "category": "Bar Chart",
+    "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px;'><h3 style='margin: 0; color: #1e3a8a;'>Renewable Energy Generation</h3><p>This bar chart illustrates electricity production from green sources in five countries between 2000 and 2020. Brazil consistently led with over 50% renewable energy share. Germany showed the most notable growth, nearly tripling its reliance on green sources from 12% to 35%.</p></div>"
+  },
+  {
+    "id": "writing-task-1-waste-recycling",
+    "band": "7.5+",
+    "type": "Task 1",
+    "category": "Mixed (Line & Donut)",
+    "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px;'><h3 style='margin: 0; color: #1e3a8a;'>Household Waste Recycling</h3><p>Comparing recycling volumes and efficiency across four nations from 2010 to 2022. Germany outperformed all others, recycling 60 million tonnes of waste, representing a 65% efficiency rate by 2022. Brazil lagged behind with an 18% recycling rate despite increasing its absolute volume.</p></div>"
+  },
+  {
+    "id": "writing-task-1-international-tourism",
+    "band": "7.5+",
+    "type": "Task 1",
+    "category": "Table",
+    "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px;'><h3 style='margin: 0; color: #1e3a8a;'>Global Tourism Arrivals</h3><p>The table detailing tourist arrivals from 2015 to 2023 shows Europe as the dominant destination with 860 million visitors. The Middle East experienced the most rapid growth rate, widening its lead over Africa by reaching 92 million arrivals by the end of the period.</p></div>"
+  },
+  {
+    "id": "writing-task-1-canadian-exports",
+    "band": "7.5+",
+    "type": "Task 1",
+    "category": "Line Graph",
+    "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px;'><h3 style='margin: 0; color: #1e3a8a;'>Canadian Export Trends</h3><p>Analysis of Canadian exports to four major partners from 1992 to 2014. A significant divergence occurred as exports to the USA declined to 17%, while China saw a meteoric rise to 27%, becoming Canada's primary export destination by 2014.</p></div>"
+  }
+]
