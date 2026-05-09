@@ -40,5 +40,13 @@
         "type": "Task 1",
         "category": "Process Diagram",
         "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px; border-left: 6px solid #f59e0b; margin-bottom: 35px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);'><h3 style='margin: 0; color: #1e3a8a; text-transform: uppercase;'>Brick Manufacturing Process</h3><p style='font-style: italic; color: #64748b;'>Industrial production of bricks from clay extraction to delivery.</p><hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;'><p><b>Introduction:</b> Multi-stage procedure in the construction sector...</p><p><b>Overview:</b> Linear sequence beginning with excavation and culminating in delivery. Key feature: Heat treatment stages.</p><p><b>Details:</b> Clay is excavated, filtered, and mixed. Bricks are shaped via wire cutter or mould, dried for 48h, fired in a kiln (up to 1300°C), and cooled before packaging.</p></div>"
+    },
+    {
+        "id": "writing-task-2-living-alone",
+        "band": "7.5+",
+        "type": "Task 2",
+        "category": "Opinion Essay",
+        "topic": "Society & Lifestyle",
+        "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px; border-left: 6px solid #ef4444; margin-bottom: 35px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);'><h3 style='margin: 0; color: #1e3a8a; text-transform: uppercase;'>The Trend of Living Alone</h3><p style='font-style: italic; color: #64748b;'>Reasons and evaluation of the solo living trend in modern society.</p><hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;'><p><b>Introduction:</b> Driven by socio-economic changes, I believe it's a negative development...</p><p><b>Reasons:</b> Economic independence, urbanization, and the pursuit of privacy.</p><p><b>Evaluation:</b> Fosters self-reliance but leads to social isolation and mental health issues.</p><p><b>Conclusion:</b> Social risks outweigh personal autonomy.</p></div>"
     }
 ]
