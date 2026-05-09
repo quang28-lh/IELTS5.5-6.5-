@@ -12,6 +12,7 @@
             --accent: #2563eb;
             --success: #22c55e;
             --ai-color: #8b5cf6;
+            --danger: #ef4444;
             --text-main: #1e293b;
             --text-sub: #64748b;
         }
@@ -81,13 +82,6 @@
             line-height: 1.8;
         }
 
-        .highlighted-text {
-            background-color: #fef08a;
-            border-bottom: 2px solid #eab308;
-            cursor: pointer;
-            border-radius: 2px;
-        }
-
         .action-container {
             display: flex;
             flex-direction: column;
@@ -105,55 +99,54 @@
             cursor: pointer;
             font-weight: 800;
             font-size: 16px;
-            transition: all 0.3s;
+            transition: all 0.2s;
             width: 100%;
             max-width: 400px;
             color: white;
+            text-align: center;
+            text-decoration: none;
         }
 
         .btn-submit {
             background: var(--success);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
         }
 
         .btn-ai {
             background: var(--ai-color);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
             display: none;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
         }
 
-        .btn-main:hover {
-            transform: translateY(-3px);
+        .btn-main:hover:not(:disabled) {
+            transform: translateY(-2px);
             filter: brightness(1.1);
         }
 
         .btn-main:disabled {
-            background: #cbd5e1;
+            background: #94a3b8;
             cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-transcript {
-            padding: 14px 30px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            display: none;
-            margin-top: 20px;
         }
 
         #ai-feedback-area {
             display: none;
             width: 100%;
-            text-align: left;
             margin-top: 40px;
             padding: 30px;
             background: #fdf4ff;
             border: 2px solid #d8b4fe;
             border-radius: 20px;
+            box-sizing: border-box;
+        }
+
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--ai-color);
+            font-weight: 700;
+            padding: 20px;
         }
 
         .timer-widget {
@@ -167,27 +160,14 @@
             z-index: 1000;
             text-align: center;
             min-width: 140px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
         .timer-display {
             font-size: 32px;
             font-weight: 800;
             color: #fbbf24;
-            font-family: 'Courier New', monospace;
-        }
-
-        #highlight-btn-pop {
-            position: absolute;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: none;
-            z-index: 9999;
-            font-weight: 800;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -198,9 +178,10 @@
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Time Remaining</div>
         <div class="timer-display" id="time-show">00:00</div>
         <div id="timer-setup-box" style="margin-top: 12px; display: flex; justify-content: center; gap: 8px;">
-            <input type="number" id="timer-minutes" style="width: 50px; text-align: center;" value="60">
-            <button onclick="startTimer()"
-                style="background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">BẮT
+            <input type="number" id="timer-minutes"
+                style="width: 50px; text-align: center; border-radius: 5px; border: none;" value="60">
+            <button onclick="window.startTimer()"
+                style="background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: 800;">BẮT
                 ĐẦU</button>
         </div>
     </div>
@@ -221,27 +202,25 @@
         <div id="display-content" class="test-content"></div>
 
         <div class="action-container">
-            <button id="btn-submit-main" class="btn-main btn-submit" onclick="checkAnswers()">NỘP BÀI & LƯU KẾT
+            <button id="btn-submit-main" class="btn-main btn-submit" onclick="window.checkAnswers()">NỘP BÀI & LƯU KẾT
                 QUẢ</button>
-            <button id="btn-ai-grade" class="btn-main btn-ai" onclick="gradeWithAI()">✨ GIÁM KHẢO AI CHẤM CHI
+            <button id="btn-ai-grade" class="btn-main btn-ai" onclick="window.gradeWithAI()">✨ GIÁM KHẢO AI CHẤM CHI
                 TIẾT</button>
 
             <div id="results-area" style="text-align: center; margin-top: 20px;"></div>
 
             <div id="ai-feedback-area">
-                <div id="ai-loading" style="display: none; text-align: center;">
+                <div id="ai-loading" class="loading-spinner" style="display: none;">
                     <img src="https://i.gifer.com/ZKZg.gif" width="30"> <span>Giám khảo AI đang chấm bài...</span>
                 </div>
                 <div id="ai-response-content"></div>
             </div>
 
-            <button id="btn-toggle" class="btn-transcript" onclick="toggleTranscript()">📖 XEM GIẢI THÍCH & BÀI
-                MẪU</button>
+            <button id="btn-toggle" class="btn-main" style="background: var(--primary); display:none; margin-top: 20px;"
+                onclick="window.toggleTranscript()">📖 XEM GIẢI THÍCH & BÀI MẪU</button>
         </div>
         <div id="transcript-container"></div>
     </div>
-
-    <button id="highlight-btn-pop">✏️ Highlight</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -265,142 +244,100 @@
         let currentAnswers = [];
         const testId = new URLSearchParams(window.location.search).get('id');
 
-        // Theo dõi trạng thái đăng nhập
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (!user) {
-                alert("Lưu ý: Bạn chưa đăng nhập. Kết quả sẽ không được lưu vào lịch sử.");
-            }
-        });
+        onAuthStateChanged(auth, user => { currentUser = user; });
 
-        // --- HÀM LƯU KẾT QUẢ LÊN FIREBASE (QUAN TRỌNG NHẤT) ---
-        async function saveToFirebase(finalScore) {
-            if (!currentUser) return;
-
-            const title = document.getElementById('display-title').innerText;
-            try {
-                await addDoc(collection(db, "results"), {
-                    userId: currentUser.uid,
-                    userEmail: currentUser.email,
-                    testId: testId,
-                    testTitle: title, // Đồng bộ tên bài thi cho trang index.html
-                    score: finalScore,
-                    timestamp: serverTimestamp()
-                });
-                console.log("✅ Đã lưu kết quả thành công!");
-            } catch (e) {
-                console.error("❌ Lỗi lưu Firebase:", e);
-            }
-        }
-
-        // --- HÀM CHẤM ĐIỂM ---
+        // --- 1. KHÔI PHỤC HÀM NỘP BÀI (FIX LỖI NOT A FUNCTION) ---
         window.checkAnswers = async function () {
             if (window.timerInterval) clearInterval(window.timerInterval);
             const btnSubmit = document.getElementById('btn-submit-main');
             btnSubmit.disabled = true;
-            btnSubmit.innerText = "⏳ ĐANG XỬ LÝ...";
+            btnSubmit.innerText = "⏳ ĐANG LƯU...";
 
             let score = 0;
-            // Nếu là bài trắc nghiệm (Reading/Listening)
-            if (currentAnswers.length > 0) {
-                currentAnswers.forEach((ans, index) => {
-                    const input = document.querySelector(`input[data-q="${index + 1}"]`);
-                    if (input) {
-                        const userVal = input.value.trim().toLowerCase();
-                        const corrects = ans.toString().toLowerCase().split('/').map(s => s.trim());
-                        if (corrects.includes(userVal)) {
-                            score++;
-                            input.style.background = "#dcfce7";
-                            input.style.borderColor = "#22c55e";
-                        } else {
-                            input.style.background = "#fee2e2";
-                            input.style.borderColor = "#ef4444";
-                        }
-                    }
+            const inputs = document.querySelectorAll('input[data-q]');
+            if (inputs.length > 0) {
+                inputs.forEach((input, index) => {
+                    const userVal = input.value.trim().toLowerCase();
+                    const correct = currentAnswers[index]?.toString().toLowerCase().split('/').map(s => s.trim()) || [];
+                    if (correct.includes(userVal) && userVal !== "") {
+                        score++;
+                        input.style.background = "#dcfce7";
+                    } else { input.style.background = "#fee2e2"; }
                 });
-
-                // Quy đổi về thang điểm 10 nếu cần, hoặc để nguyên score/total
-                // Ở đây mình cứ để nguyên số câu đúng để đồng bộ với index.html
-                document.getElementById('results-area').innerHTML = `<h3>Kết quả: <span style="color:#d32f2f;">${score}/${currentAnswers.length}</span> câu đúng!</h3>`;
-
-                // LƯU LÊN FIREBASE
-                await saveToFirebase(score);
-            } else {
-                // Nếu là bài Writing/Speaking (không có mảng answers sẵn)
-                alert("Đã ghi nhận bài làm của bạn!");
-                await saveToFirebase("N/A");
+                document.getElementById('results-area').innerHTML = `<h3>Kết quả: ${score}/${inputs.length}</h3>`;
             }
-
+            await saveToFirebase(score || "N/A");
             btnSubmit.innerText = "ĐÃ NỘP BÀI";
             document.getElementById('btn-toggle').style.display = 'block';
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
 
-        // --- HÀM CHẤM ĐIỂM AI ---
-        // --- HÀM CHẤM ĐIỂM AI NÂNG CẤP (CÓ BÁO LỖI CHI TIẾT) ---
+        // --- 2. HÀM CHẤM ĐIỂM AI: TỰ ĐỘNG XOAY TUA (AUTO-RETRY LOOP) ---
+        if (window.keyIndex === undefined) window.keyIndex = 0;
+
         window.gradeWithAI = async function () {
-            const essay = document.querySelector('textarea')?.value.trim();
-            const title = document.getElementById('display-title').innerText;
+    const essay = document.querySelector('textarea')?.value.trim();
+    if (!essay || essay.length < 50) return alert("Viết thêm đi ông giáo, ngắn quá AI không chấm được!");
 
-            if (!essay || essay.length < 50) {
-                alert("Bài viết quá ngắn! Cần ít nhất 50 chữ để Giám khảo AI làm việc nhé.");
-                return;
-            }
+    const content = document.getElementById('ai-response-content');
+    const loading = document.getElementById('ai-loading');
+    document.getElementById('ai-feedback-area').style.display = 'block';
+    loading.style.display = 'flex';
+    content.innerHTML = '';
 
-            const feedbackArea = document.getElementById('ai-feedback-area');
-            const loading = document.getElementById('ai-loading');
-            const content = document.getElementById('ai-response-content');
+    // 1. DANH SÁCH 3 KEY MỚI NHẤT
+    const apiKeys = [
+        "AIzaSyCwElxJ0Mqpo-ZaI-IsTpb_MmRzjApVn3o",
+        "AIzaSyD2H6it04KqfJiPuGzYg8e3McyM1eyZqFc",
+        "AIzaSyCpzJ5Kaprx779zvt_o6xlV2tukbzIoqrY"
+    ];
 
-            feedbackArea.style.display = 'block';
-            loading.style.display = 'block';
-            content.innerHTML = ''; // Xóa kết quả cũ
-            window.scrollTo({ top: feedbackArea.offsetTop - 100, behavior: 'smooth' });
+    let success = false;
+    // Tự động xoay tua thử từng Key
+    for (let i = 0; i < apiKeys.length; i++) {
+        const currentKey = apiKeys[window.keyIndex % apiKeys.length];
+        window.keyIndex++;
 
-            const apiKey = "AIzaSyBqhpD4KoNOkzwtTHh1nKyx1ArcjbfUyIo";
-
-            // Cập nhật lên bản ổn định v1
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-            try {
-                const res = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `Bạn là giám khảo IELTS chuyên nghiệp. Hãy chấm điểm Overall và nhận xét lỗi sai cho bài Writing này bằng tiếng Việt. Đề bài: ${title}. Bài làm: ${essay}. Trình bày đẹp bằng định dạng HTML (dùng thẻ <b>, <p>, <ul>...).`
-                            }]
+        try {
+            // URL PHẢI DÙNG V1BETA ĐỂ TRÁNH LỖI 404
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${currentKey}`;
+            
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Bạn là giám khảo IELTS. Chấm điểm bài viết sau (Đề: ${document.getElementById('display-title').innerText}): ${essay}. Trình bày bằng HTML đẹp.`
                         }]
-                    })
-                });
+                    }]
+                })
+            });
 
-                const data = await res.json();
+            const data = await res.json();
 
-                if (data.error) {
-                    console.error("Chi tiết lỗi API:", data.error);
-                    throw new Error(data.error.message || "Lỗi kết nối API");
-                }
-
-                if (data.candidates && data.candidates[0].content) {
-                    loading.style.display = 'none';
-                    let aiText = data.candidates[0].content.parts[0].text;
-                    // Gemini đôi khi trả về markdown bọc trong ```html ... ```
-                    aiText = aiText.replace(/```html|```/g, '');
-                    content.innerHTML = aiText;
-                } else {
-                    throw new Error("AI không trả về kết quả. Có thể nội dung vi phạm chính sách an toàn.");
-                }
-
-            } catch (error) {
-                if (error.message.includes("429")) {
-                    alert("Giám khảo AI đang chấm cho quá nhiều người, vui lòng đợi 1 phút rồi thử lại nhé!");
-                } else {
-                    alert("Có lỗi nhỏ xảy ra, bạn hãy kiểm tra lại kết nối mạng!");
-                }
+            if (res.ok) {
+                loading.style.display = 'none';
+                content.innerHTML = data.candidates[0].content.parts[0].text.replace(/```html|```/g, '');
+                success = true;
+                break; 
+            } else {
+                console.error("Lỗi từ Google:", data.error?.message || "Không xác định");
+                if (res.status === 429) continue; // Nếu quá tải thì thử Key tiếp theo
             }
-        };
+        } catch (e) { console.error("Lỗi kết nối:", e); }
+    }
 
-        // --- TIMER & UI ---
-        window.startTimer = function () {
+    if (!success) {
+        loading.style.display = 'none';
+        content.innerHTML = `<div style="background:#fee2e2; padding:20px; border-radius:12px; color:#ef4444; font-weight:700; border:1px solid #fecaca;">
+            ❌ LỖI HỆ THỐNG (400/429). <br>
+            Ông giáo hãy kiểm tra lại xem API Key có bị copy thiếu ký tự nào không, giữ nguyên 4G và thử lại nhé!
+        </div>`;
+    }
+};
+
+        // --- 3. CÁC HÀM TIỆN ÍCH ---
+        window.startTimer = () => {
             let time = parseInt(document.getElementById('timer-minutes').value) * 60;
             document.getElementById('timer-setup-box').style.display = 'none';
             window.timerInterval = setInterval(() => {
@@ -411,24 +348,36 @@
             }, 1000);
         };
 
-        window.toggleTranscript = function () {
+        window.toggleTranscript = () => {
             const box = document.getElementById('transcript-container');
-            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+            box.style.display = box.style.display === 'block' ? 'none' : 'block';
         };
 
-        // --- TẢI DỮ LIỆU ---
+        async function saveToFirebase(finalScore) {
+            if (!currentUser) return;
+            try {
+                await addDoc(collection(db, "results"), {
+                    userId: currentUser.uid,
+                    testId: testId,
+                    testTitle: document.getElementById('display-title').innerText,
+                    score: finalScore,
+                    timestamp: serverTimestamp()
+                });
+            } catch (e) { console.error(e); }
+        }
+
         async function loadRoom() {
             if (!testId) return;
-            const collections = ['listening_tests', 'reading_tests', 'writing_tests', 'speaking_tests'];
-            for (let col of collections) {
+            const cols = ['listening_tests', 'reading_tests', 'writing_tests', 'speaking_tests'];
+            for (let col of cols) {
                 const snap = await getDoc(doc(db, col, testId));
                 if (snap.exists()) {
                     const data = snap.data();
                     currentAnswers = data.answers || [];
                     document.getElementById('display-title').innerText = data.title;
-                    document.getElementById('display-info').innerText = col.split('_')[0].toUpperCase();
+                    document.getElementById('display-info').innerText = col.toUpperCase();
                     document.getElementById('display-content').innerHTML = data.content;
-                    document.getElementById('transcript-container').innerHTML = data.explain || data.transcript || "Không có giải thích.";
+                    document.getElementById('transcript-container').innerHTML = data.explain || "Không có giải thích.";
                     if (data.audioUrl) {
                         document.getElementById('audio-area').style.display = 'block';
                         document.getElementById('main-audio').src = data.audioUrl;
