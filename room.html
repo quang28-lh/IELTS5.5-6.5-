@@ -356,12 +356,10 @@
             content.innerHTML = ''; // Xóa kết quả cũ
             window.scrollTo({ top: feedbackArea.offsetTop - 100, behavior: 'smooth' });
 
-            // SỬA TẠI ĐÂY: Dùng chung API Key ở FirebaseConfig nếu bạn đã bật AI trên Google Cloud
-            // Hoặc lấy Key mới tại: https://aistudio.google.com/app/apikey
-            const apiKey = "AIzaSyDXMG1KKDImHpJifR76JvS9rPT44CiJYuE";
+            const apiKey = "AIzaSyBqhpD4KoNOkzwtTHh1nKyx1ArcjbfUyIo";
 
             // Cập nhật lên bản ổn định v1
-           const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
             try {
                 const res = await fetch(url, {
                     method: "POST",
@@ -393,14 +391,11 @@
                 }
 
             } catch (error) {
-                console.error("Lỗi hệ thống:", error);
-                loading.style.display = 'none';
-                content.innerHTML = `
-                    <div style="color:#b91c1c; padding:20px; border:2px solid #fca5a5; border-radius:15px; background:#fef2f2;">
-                        <b style="font-size:16px;">⚠️ GIÁM KHẢO AI ĐANG BẬN:</b><br>
-                        <p style="margin:10px 0; font-size:14px;">Lý do: <i>${error.message}</i></p>
-                        <small>Mẹo: Nếu lỗi báo 'API key not valid', hãy vào Google AI Studio tạo lại Key mới và dán vào code nhé!</small>
-                    </div>`;
+                if (error.message.includes("429")) {
+                    alert("Giám khảo AI đang chấm cho quá nhiều người, vui lòng đợi 1 phút rồi thử lại nhé!");
+                } else {
+                    alert("Có lỗi nhỏ xảy ra, bạn hãy kiểm tra lại kết nối mạng!");
+                }
             }
         };
 
