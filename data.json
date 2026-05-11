@@ -64,5 +64,13 @@
         "category": "Process Diagram",
         "topic": "Renewable Energy",
         "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px; border-left: 6px solid #3b82f6; margin-bottom: 35px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);'><h3 style='margin: 0; color: #1e3a8a; text-transform: uppercase;'>Renewable Energy: Hydro-Dam Process</h3><p style='font-style: italic; color: #64748b;'>Operation of a hydroelectric power station during day and night cycles.</p><hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;'><p><b>Introduction:</b> Paraphrasing the dual-cycle operation of a power station...</p><p><b>Overview:</b> Reciprocal stages of generation and storage using a reversible turbine.</p><p><b>Day Cycle:</b> Gravity-fed water drives the turbine to generate electricity for the grid.</p><p><b>Night Cycle:</b> Grid electricity is used to pump water back to the upper reservoir, storing energy.</p></div>"
+    },
+    {
+        "id": "writing-task-1-solar-energy",
+        "band": "7.5+",
+        "type": "Task 1",
+        "category": "Process Diagram",
+        "topic": "Renewable Energy",
+        "content": "<div style='font-family: Inter, sans-serif; color: #1e293b; background: #ffffff; padding: 25px; border-radius: 15px; border-left: 6px solid #fbbf24; margin-bottom: 35px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);'><h3 style='margin: 0; color: #1e3a8a; text-transform: uppercase;'>Solar Energy Generation Process</h3><p style='font-style: italic; color: #64748b;'>Technical stages from sunlight capture to final power distribution.</p><hr style='border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;'><p><b>Introduction:</b> Paraphrasing the generation of electricity from solar energy...</p><p><b>Overview:</b> Multi-step procedure featuring energy conversion (DC to AC) and distribution routes.</p><p><b>Details:</b> Capture via solar panels, inversion of current, storage options, and transmission to homes and factories.</p></div>"
     }
 ]
